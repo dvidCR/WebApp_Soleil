@@ -1,6 +1,6 @@
 <?php
 header("Content-Type: application/json");
-$conn = new mysqli("localhost", "root", "", "../SQL/Fisioterapia");
+$conn = new mysqli("localhost", "root", "", "../SQL/Fisioterapia.sql");
 
 if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Error de conexión"]);

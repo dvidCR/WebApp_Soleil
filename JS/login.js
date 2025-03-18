@@ -3,7 +3,7 @@ async function login() {
     var password = document.getElementById("password").value;
     
     try {
-        let response = await fetch("login.php", {
+        let response = await fetch("../PHP/login.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ user, password })
