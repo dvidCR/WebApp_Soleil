@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador</title>
+    <link rel="stylesheet" type="text/css" href="../CSS/admin.css"/>
+</head>
+<body>
+    <nav>
+        <img src="../IMG/logo.png" alt="Logo">
+        <h1>Administrador</h1>
+        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+    </nav>
+    <div class="container">
+        <button class="btn" onclick="location.href='contabilidad.html'">Gestionar Contabilidad</button>
+        <button class="btn" onclick="location.href='empleados.html'">Gestionar Trabajo Empleados</button>
+    </div>
+    <script>
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
