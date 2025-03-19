@@ -11,13 +11,13 @@ $data = json_decode(file_get_contents("php://input"), true);
 $user = $conn->real_escape_string($data["user"]);
 $password = $conn->real_escape_string($data["password"]);
 
-$sql = "SELECT * FROM Usuarios WHERE usuario='$user' AND contrasena='$password'";
+$sql = "INSERT INTO Usuarios VALUES($user, $password, NULL)";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     echo json_encode(["success" => true]);
 } else {
-    echo json_encode(["success" => false, "message" => "Usuario o contraseña incorrectos"]);
+    echo json_encode(["success" => false, "message" => "Usuario o contraseña mal escritos"]);
 }
 
 $conn->close();

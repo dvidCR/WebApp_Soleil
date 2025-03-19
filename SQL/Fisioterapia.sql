@@ -1,4 +1,5 @@
 CREATE DATABASE IF NOT EXISTS Fisioterapia;
+USE Fisioterapia;
 
 CREATE TABLE IF NOT EXISTS Ingresos(
 	id INT AUTO_INCREMENT,
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS Empleados(
 
 CREATE TABLE IF NOT EXISTS Usuarios(
     usuario VARCHAR(20),
-    contraseña VARCHAR(20),
+    contrasena VARCHAR(20),
     rol VARCHAR(10),
-    PRIMARY KEY(usuario)
+    PRIMARY KEY(rol)
 );

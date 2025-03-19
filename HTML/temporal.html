@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" type="text/css" href="../CSS/login.css"/>
-    <script src="../JS/login.js" defer></script>
+    <script src="../JS/temporal.js" defer></script>
 </head>
 <body>
     <nav>
@@ -13,12 +13,11 @@
         <h1>Soleil Fisioterapia&Osteopatía</h1>
     </nav>
     <div class="login-container">
-        <h2>Iniciar Sesión</h2>
-        <input type="text" id="user" placeholder="Usuario">
-        <input type="password" id="password" placeholder="Contraseña">
-        <button onclick="login()">Ingresar</button>
+        <h2>Crear Usuario</h2>
+        <input type="text" id="user" placeholder="Pon el nombre de usuario">
+        <input type="password" id="password" placeholder="Pon su contraseña">
+        <button onclick="createUser()">Ingresar</button>
         <p id="message"></p>
     </div>
-    <a href="./temporal.html"><button id="temporal">Crear Usuario</button></a>
 </body>
 </html>
