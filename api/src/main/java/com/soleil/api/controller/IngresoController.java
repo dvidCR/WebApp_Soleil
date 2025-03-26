@@ -1,5 +1,5 @@
 package com.soleil.api.controller;
 
-public class IngresosController {
+public class IngresoController {
 
 }
