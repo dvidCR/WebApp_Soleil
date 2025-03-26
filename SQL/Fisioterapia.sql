@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS Ingresos(
     pago VARCHAR(5),
     tarifa DOUBLE,
     cantidad INT,
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    FOREIGN KEY(fisioterapeuta) REFERENCES Empleados(id)
 );
 
 CREATE TABLE IF NOT EXISTS Gastos(
