@@ -12,6 +12,11 @@
         .button:hover { background: #0056b3; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+        nav { display: flex; align-items: center; justify-content: space-between; background: #333; padding: 10px 20px; color: white; }
+        nav img { height: 50px; border-radius: 50%; }
+        nav h1 { flex-grow: 1; text-align: left; margin-left: 20px; }
+        .logout-btn { background: red; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 5px; }
+        .logout-btn:hover { background: darkred; }
     </style>
     <script>
         function showScreen(screenId) {
@@ -49,6 +54,11 @@
     </script>
 </head>
 <body onload="showScreen('login')">
+    <nav>
+        <a href="./index.html"><img src="../IMG/logo.png" alt="Logo"></a>
+        <h1>Administrador</h1>
+        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+    </nav>
     <div class="container">
         <!-- PANTALLA DE INICIO DE SESIÓN -->
         <div id="login" class="box">

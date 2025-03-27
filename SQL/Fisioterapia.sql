@@ -1,6 +1,48 @@
 CREATE DATABASE IF NOT EXISTS Fisioterapia;
 USE Fisioterapia;
 
+CREATE TABLE IF NOT EXISTS Empleado(
+    dni VARCHAR(9),
+    nombre VARCHAR(20),
+    apellidos VARCHAR(30),
+    correo VARCHAR(20),
+    usuario VARCHAR(20),
+    contrasena VARCHAR(20),
+    rol VARCHAR(10),
+    PRIMARY KEY(dni)
+);
+
+CREATE TABLE IF NOT EXISTS Sesion(
+    id INT AUTO_INCREMENT,
+    
+);
+
+CREATE TABLE IF NOT EXISTS Tratamiento(
+    id INT AUTO_INCREMENT,
+    
+);
+
+CREATE TABLE IF NOT EXISTS Paciente(
+    dni VARCHAR(9),
+    nombre VARCHAR(20),
+    apellidos VARCHAR(30),
+    PRIMARY KEY (dni)
+);
+
+-- Nombre anterior Ingreso
+CREATE TABLE IF NOT EXISTS Servicio(
+    id INT AUTO_INCREMENT,
+    servicio VARCHAR(30),
+    dia DATE,
+    dni_empleado INT,
+    dni_paciente INT,
+    modo_pago VARCHAR(5),
+    tarifa DOUBLE,
+    PRIMARY KEY(id),
+    FOREIGN KEY (dni_empleado) REFERENCES Empleado(dni),
+    FOREIGN KEY (dni_paciente) REFERENCES Paciente(dni)
+);
+
 CREATE TABLE IF NOT EXISTS Gasto(
 	id INT AUTO_INCREMENT,
     cantidad INT,
@@ -9,50 +51,13 @@ CREATE TABLE IF NOT EXISTS Gasto(
     PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS Usuario(
-    usuario VARCHAR(20),
-    contrasena VARCHAR(20),
-    rol VARCHAR(10),
-    PRIMARY KEY(usuario)
-);
-
-CREATE TABLE IF NOT EXISTS Empleado(
-	id INT AUTO_INCREMENT,
-    nombre VARCHAR(20),
-    usuario VARCHAR(20),
-    apellidos VARCHAR(30),
-    dni VARCHAR(9),
-    PRIMARY KEY(id),
-    FOREIGN KEY(usuario) REFERENCES Usuario(usuario)
-);
-
-CREATE TABLE IF NOT EXISTS Ingreso(
-	id INT AUTO_INCREMENT,
-    servicio VARCHAR(30),
-    dia DATE,
-    fisioterapeuta INT,
-    paciente INT,
-    pago VARCHAR(5),
-    tarifa DOUBLE,
-    cantidad INT,
-    PRIMARY KEY(id),
-    FOREIGN KEY (fisioterapeuta) REFERENCES Empleado(id),
-    FOREIGN KEY (paciente) REFERENCES Paciente(id)
-);
-
+-- Calcular las horas de manera externa sin guardarlas en la bd (opcional).
 CREATE TABLE IF NOT EXISTS Fichaje(
-	id INT AUTO_INCREMENT,
+	id_fichaje INT AUTO_INCREMENT,
+    fecha DATE,
     hora_entrada DATE,
     hora_salida DATE,
-    empleado INT,
+    dni_empleado VARCHAR(9),
     PRIMARY KEY(id),
-    FOREIGN KEY(empleado) REFERENCES Empleado(id)
-);
-
-CREATE TABLE IF NOT EXISTS Paciente(
-	id INT AUTO_INCREMENT,
-    dni VARCHAR(9),
-    nombre VARCHAR(20),
-    apellidos VARCHAR(30),
-    PRIMARY KEY (id)
+    FOREIGN KEY(dni_empleado) REFERENCES Empleado(dni)
 );
