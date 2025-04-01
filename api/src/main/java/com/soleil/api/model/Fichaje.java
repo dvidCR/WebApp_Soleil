@@ -4,11 +4,15 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "fichaje")
@@ -16,7 +20,7 @@ public class Fichaje {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int id_fichaje;
 	
 	@Column(name = "hora_entrada")
 	private LocalDate hora_entrada;
@@ -24,12 +28,21 @@ public class Fichaje {
 	@Column(name = "hora_salida")
 	private LocalDate hora_salida;
 	
-	@Column(name = "empleado")
-	@NotNull(message = "Tienes que poner el id del empleado")
-	private int empleado;
+	@Column(name = "dni_empleado")
+	@Size(min = 9, max = 9)
+	@JoinColumn(name = "empleado", nullable = false)
+	@NotNull(message = "Tienes que poner el dni del empleado")
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Empleado dni_empleado;
 	
 	public Fichaje() {
 		
+	}
+
+	public Fichaje(LocalDate hora_entrada, LocalDate hora_salida, Empleado dni_empleado) {
+		this.hora_entrada = hora_entrada;
+		this.hora_salida = hora_salida;
+		this.dni_empleado = dni_empleado;
 	}
 
 	public LocalDate getHora_entrada() {
@@ -48,12 +61,12 @@ public class Fichaje {
 		this.hora_salida = hora_salida;
 	}
 
-	public int getEmpleado() {
-		return empleado;
+	public Empleado getEmpleado() {
+		return dni_empleado;
 	}
 
-	public void setEmpleado(int empleado) {
-		this.empleado = empleado;
+	public void setEmpleado(Empleado dni_empleado) {
+		this.dni_empleado = dni_empleado;
 	}
 	
 }

@@ -1,10 +1,12 @@
 package com.soleil.api.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,8 +16,10 @@ import jakarta.validation.constraints.Size;
 public class Empleado {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	@Column(name = "dni")
+	@Size(min = 9, max = 9)
+	@NotNull(message = "Tienes que poner el dni del empleado")
+	private String dni;
 	
 	@Column(name = "nombre")
 	@NotNull(message = "Tienes que ponerle un nombre al empleado")
@@ -25,26 +29,46 @@ public class Empleado {
 	@NotNull(message = "Tienes que ponerle los apellidos al empleado")
 	private String apellidos;
 	
+	@Column(name = "correo")
+	@NotNull(message = "Tienes que asignarle un correo al usuairo")
+	private String correo;
+	
 	@Column(name = "usuario")
 	@NotNull(message = "Tienes que asignarle un usuario")
 	private String usuario;
 	
-	@Column(name = "dni")
-	@Size(min = 9, max = 9)
-	@NotNull(message = "Tienes que poner el dni del empleado")
-	private String dni;
+	@Column(name = "contrasena")
+	@NotNull(message = "Tienes que poner una contraseña")
+	@Size(min = 8, max = 20)
+	private String contrasena;
 	
+	@Column(name = "rol")
+	@NotNull(message = "Tienes que poner el rol que tiene el usuario")
+	private String rol;
+	
+	@OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)
+	private List<Fichaje> fichaje;
+	
+	@OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)
+	private List<Servicio> servicio;
 	
 	public Empleado() {
 		
 	}
 
 
-	public Empleado(String nombre, String apellidos, String usuario, String dni) {
+	public Empleado(String dni) {
+		this.dni = dni;
+	}
+	
+	public Empleado(String dni, String nombre, String apellidos, String correo, String usuario, String contrasena, String rol) {
+		this.dni = dni;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
+		this.correo = correo;
 		this.usuario = usuario;
-		this.dni = dni;
+		this.contrasena = contrasena;
+		this.rol = rol;
 	}
 
 
@@ -67,6 +91,16 @@ public class Empleado {
 		this.apellidos = apellidos;
 	}
 
+	
+	public String getCorreo() {
+		return correo;
+	}
+
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+	
 
 	public String getUsuario() {
 		return usuario;
@@ -85,6 +119,46 @@ public class Empleado {
 
 	public void setDni(String dni) {
 		this.dni = dni;
+	}
+
+
+	public String getContrasena() {
+		return contrasena;
+	}
+
+
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
+	}
+
+
+	public String getRol() {
+		return rol;
+	}
+
+
+	public void setRol(String rol) {
+		this.rol = rol;
+	}
+
+
+	public List<Fichaje> getFichaje() {
+		return fichaje;
+	}
+
+
+	public void setFichaje(List<Fichaje> fichaje) {
+		this.fichaje = fichaje;
+	}
+
+
+	public List<Servicio> getServicio() {
+		return servicio;
+	}
+
+
+	public void setServicio(List<Servicio> servicio) {
+		this.servicio = servicio;
 	}
 	
 }

@@ -1,10 +1,12 @@
 package com.soleil.api.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,10 +15,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "paciente")
 public class Paciente {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
+	@Id	
 	@Column(name = "dni")
 	@Size(min = 9, max = 9)
 	@NotNull(message = "El paciente debe de tener un dni")
@@ -30,8 +29,15 @@ public class Paciente {
 	@NotNull(message = "El paciente debe tener apellidos")
 	private String apellidos;
 	
+	@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
+	private List<Tratamiento> tratamiento;
+	
 	public Paciente() {
 		
+	}
+	
+	public Paciente(String dni) {
+		this.dni = dni;
 	}
 
 	public Paciente(String dni, String nombre, String apellidos) {
@@ -62,6 +68,14 @@ public class Paciente {
 
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
+	}
+
+	public List<Tratamiento> getTratamiento() {
+		return tratamiento;
+	}
+
+	public void setTratamiento(List<Tratamiento> tratamiento) {
+		this.tratamiento = tratamiento;
 	}
 	
 }

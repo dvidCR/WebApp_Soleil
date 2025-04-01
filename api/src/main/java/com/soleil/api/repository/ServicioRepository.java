@@ -5,9 +5,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.soleil.api.model.Ingreso;
+import com.soleil.api.model.Servicio;
 
 @Repository
-public interface IngresoRepository extends JpaRepository<Ingreso, Integer> {
-	Page<Ingreso> findAll(Pageable pageable);
+public interface ServicioRepository extends JpaRepository<Servicio, Integer> {
+	Page<Servicio> findAll(Pageable pageable);
 }
