@@ -41,6 +41,12 @@ public class Servicio {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Paciente dni_paciente;
 	
+	@Column(name = "id_tratamiento")
+	@JoinColumn(name = "tratamiento", nullable = false)
+	@NotNull(message = "Tienes que poner el id del tratamiento")
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Tratamiento id_tratamiento;
+	
 	@Column(name = "modo_pago")
 	@NotNull(message = "Tienes que poner el tipo de pago")
 	private String modo_pago;
@@ -61,10 +67,11 @@ public class Servicio {
 		
 	}
 
-	public Servicio(Date fecha_cita, Empleado dni_empleado, Paciente dni_paciente, String modo_pago, Double tarifa, String concepto, int num_sesiones) {
+	public Servicio(Date fecha_cita, Empleado dni_empleado, Paciente dni_paciente, Tratamiento id_tratamiento, String modo_pago, Double tarifa, String concepto, int num_sesiones) {
 		this.fecha_cita = fecha_cita;
 		this.dni_empleado = dni_empleado;
 		this.dni_paciente = dni_paciente;
+		this.id_tratamiento = id_tratamiento;
 		this.modo_pago = modo_pago;
 		this.tarifa = tarifa;
 		this.concepto = concepto;

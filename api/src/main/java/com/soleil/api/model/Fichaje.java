@@ -38,7 +38,7 @@ public class Fichaje {
 	public Fichaje() {
 		
 	}
-
+	
 	public Fichaje(LocalDate hora_entrada, LocalDate hora_salida, Empleado dni_empleado) {
 		this.hora_entrada = hora_entrada;
 		this.hora_salida = hora_salida;

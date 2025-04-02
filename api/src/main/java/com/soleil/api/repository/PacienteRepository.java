@@ -8,6 +8,6 @@ import org.springframework.data.domain.Pageable;
 import com.soleil.api.model.Paciente;
 
 @Repository
-public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
+public interface PacienteRepository extends JpaRepository<Paciente, String> {
 	Page<Paciente> findAll(Pageable pageable);
 }

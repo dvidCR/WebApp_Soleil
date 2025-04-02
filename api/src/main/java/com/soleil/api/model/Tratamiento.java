@@ -36,7 +36,7 @@ public class Tratamiento {
 	private Paciente dni_paciente;
 	
 	@OneToMany(mappedBy = "tratamiento", cascade = CascadeType.ALL)
-	private List<Sesion> sesion;
+	private List<Servicio> servicio;
 	
 	public Tratamiento() {
 		
@@ -75,12 +75,12 @@ public class Tratamiento {
 		this.dni_paciente = dni_paciente;
 	}
 
-	public List<Sesion> getSesion() {
-		return sesion;
+	public List<Servicio> getServicio() {
+		return servicio;
 	}
 
-	public void setSesion(List<Sesion> sesion) {
-		this.sesion = sesion;
+	public void setServicio(List<Servicio> servicio) {
+		this.servicio = servicio;
 	}
 	
 }
