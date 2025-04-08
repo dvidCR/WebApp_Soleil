@@ -49,7 +49,7 @@ public class PacienteController {
     	servicio.actualizarPaciente(dni, paciente);
     }
     
-    @GetMapping("/{dni}")
+    @GetMapping("/{dni}/verTratamiento")
     public Map<String, Integer> verTratamiento(@PathVariable String dni) {
     	return servicio.verTratamiento(dni);
     }

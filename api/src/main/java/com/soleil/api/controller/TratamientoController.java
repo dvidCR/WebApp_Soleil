@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.soleil.api.model.Gasto;
 import com.soleil.api.model.Tratamiento;
 import com.soleil.api.service.TratamientoService;
 
@@ -46,7 +45,7 @@ public class TratamientoController {
     
     @PutMapping("/{id}")
     public void actualizarTratamiento(@PathVariable int id, @RequestBody Tratamiento tratamiento) {
-    	servicio.actualizarGasto(id, tratamiento);
+    	servicio.actualizarTratmiento(id, tratamiento);
     }
 	
 }

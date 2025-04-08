@@ -29,7 +29,7 @@ public class Paciente {
 	@NotNull(message = "El paciente debe tener apellidos")
 	private String apellidos;
 	
-	@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "dni_paciente", cascade = CascadeType.ALL)
 	private List<Tratamiento> tratamiento;
 	
 	public Paciente() {

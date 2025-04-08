@@ -31,7 +31,7 @@ public class TratamientoService {
 		repositorio.deleteById(id);
 	}
 	
-	public Tratamiento actualizarGasto(int id, Tratamiento tratamientoActualizada) {
+	public Tratamiento actualizarTratmiento(int id, Tratamiento tratamientoActualizada) {
         return repositorio.findById(id).map(tratamiento -> {
         	tratamiento.setTipo_tratamiento(tratamientoActualizada.getTipo_tratamiento());
         	tratamiento.setDni_paciente(tratamientoActualizada.getDni_paciente());

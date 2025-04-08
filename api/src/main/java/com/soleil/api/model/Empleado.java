@@ -46,10 +46,10 @@ public class Empleado {
 	@NotNull(message = "Tienes que poner el rol que tiene el usuario")
 	private String rol;
 	
-	@OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "dni_empleado", cascade = CascadeType.ALL)
 	private List<Fichaje> fichaje;
 	
-	@OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "dni_empleado", cascade = CascadeType.ALL)
 	private List<Servicio> servicio;
 	
 	public Empleado() {

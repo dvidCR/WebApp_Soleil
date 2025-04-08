@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS Paciente(
 CREATE TABLE IF NOT EXISTS Tratamiento(
     id INT AUTO_INCREMENT,
     tipo_tratamiento VARCHAR(30),
+    descripcion VARCHAR(100),
     dni_paciente VARCHAR(9),
     PRIMARY KEY (id),
     FOREIGN KEY (dni_paciente) REFERENCES Paciente(dni)    

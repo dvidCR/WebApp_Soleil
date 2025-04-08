@@ -28,13 +28,17 @@ public class Tratamiento {
 	@NotNull(message = "Tienes que poner el tipo de tratamiento")
 	private String tipo_tratamiento;
 	
+	@Column(name = "descripcion")
+	@NotNull(message = "El tratamiento tiene que tener una descripcion de lo que porporciona")
+	private String descripcion;
+	
 	@Size(min = 9, max = 9)
 	@JoinColumn(name = "dni_paciente", nullable = false)
 	@NotNull(message = "Tienes que poner el dni del paciente")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Paciente dni_paciente;
 	
-	@OneToMany(mappedBy = "tratamiento", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "id_tratamiento", cascade = CascadeType.ALL)
 	private List<Servicio> servicio;
 	
 	public Tratamiento() {
