@@ -28,9 +28,8 @@ public class Tratamiento {
 	@NotNull(message = "Tienes que poner el tipo de tratamiento")
 	private String tipo_tratamiento;
 	
-	@Column(name = "dni_paciente")
 	@Size(min = 9, max = 9)
-	@JoinColumn(name = "paciente", nullable = false)
+	@JoinColumn(name = "dni_paciente", nullable = false)
 	@NotNull(message = "Tienes que poner el dni del paciente")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Paciente dni_paciente;

@@ -93,7 +93,7 @@
                     </descriptorRefs>
                 <archive>
                     <manifest>
-                        <mainClass>ApiApplication</mainClass>
+                        <mainClass>com.soleil.api.ApiApplication</mainClass>
                     </manifest>
                 </archive>
             </configuration>

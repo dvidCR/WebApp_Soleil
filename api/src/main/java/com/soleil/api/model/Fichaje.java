@@ -28,9 +28,8 @@ public class Fichaje {
 	@Column(name = "hora_salida")
 	private LocalDate hora_salida;
 	
-	@Column(name = "dni_empleado")
 	@Size(min = 9, max = 9)
-	@JoinColumn(name = "empleado", nullable = false)
+	@JoinColumn(name = "dni_empleado", nullable = false)
 	@NotNull(message = "Tienes que poner el dni del empleado")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Empleado dni_empleado;
