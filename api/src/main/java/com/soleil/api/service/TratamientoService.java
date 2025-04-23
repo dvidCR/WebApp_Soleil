@@ -34,6 +34,7 @@ public class TratamientoService {
 	public Tratamiento actualizarTratamiento(int id, Tratamiento tratamientoActualizada) {
         return repositorio.findById(id).map(tratamiento -> {
         	tratamiento.setTipo_tratamiento(tratamientoActualizada.getTipo_tratamiento());
+        	tratamiento.setDescripcion(tratamientoActualizada.getDescripcion());
         	tratamiento.setDni_paciente(tratamientoActualizada.getDni_paciente());
             return repositorio.save(tratamiento);
         }).orElseThrow(() -> new RuntimeException("Tratamiento no encontrado"));

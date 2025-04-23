@@ -45,7 +45,7 @@ public class TratamientoController {
     
     @PutMapping("/{id}")
     public void actualizarTratamiento(@PathVariable int id, @RequestBody Tratamiento tratamiento) {
-    	servicio.actualizarTratmiento(id, tratamiento);
+    	servicio.actualizarTratamiento(id, tratamiento);
     }
 	
 }

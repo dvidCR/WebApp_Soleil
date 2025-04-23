@@ -49,8 +49,9 @@ public class Tratamiento {
 		this.id_tratamiento = id_tratamiento;
 	}
 	
-	public Tratamiento(String tipo_tratamiento, Paciente dni_paciente) {
+	public Tratamiento(String tipo_tratamiento, String descripcion, Paciente dni_paciente) {
 		this.tipo_tratamiento = tipo_tratamiento;
+		this.descripcion = descripcion;
 		this.dni_paciente = dni_paciente;
 	}
 
@@ -68,6 +69,14 @@ public class Tratamiento {
 
 	public void setTipo_tratamiento(String tipo_tratamiento) {
 		this.tipo_tratamiento = tipo_tratamiento;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public Paciente getDni_paciente() {
