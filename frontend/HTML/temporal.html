@@ -3,20 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="../CSS/login.css"/>
-    <script src="../JS/temporal.js" defer></script>
+    <title>Crear Usuario</title>
+    <link rel="stylesheet" type="text/css" href="./CSS/login.css"/>
+    <script src="./JS/temporal.js" defer></script>
 </head>
 <body>
     <nav>
-        <a href="./index.html"><img src="../IMG/logo.png" alt="Logo"></a>
-        <h1>Soleil Fisioterapia&Osteopatía</h1>
+        <a href="./index.html"><img src="./IMG/logo.png" alt="Logo"></a>
+        <h1>Soleil Fisioterapia & Osteopatía</h1>
     </nav>
     <div class="login-container">
         <h2>Crear Usuario</h2>
-        <input type="text" id="user" placeholder="Pon el nombre de usuario">
-        <input type="password" id="password" placeholder="Pon su contraseña">
-        <button onclick="createUser()">Ingresar</button>
+        <input type="text" id="dni" placeholder="DNI">
+        <input type="text" id="nombre" placeholder="Nombre">
+        <input type="text" id="apellidos" placeholder="Apellidos">
+        <input type="email" id="correo" placeholder="Correo electrónico">
+        <input type="text" id="user" placeholder="Usuario">
+        <input type="password" id="password" placeholder="Contraseña">
+        <input type="text" id="rol" placeholder="Rol (ej. usuario/admin)">
+        <button onclick="createUser()">Crear cuenta</button>
         <p id="message"></p>
     </div>
 </body>

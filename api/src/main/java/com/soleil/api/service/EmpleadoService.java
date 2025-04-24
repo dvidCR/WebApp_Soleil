@@ -23,6 +23,10 @@ public class EmpleadoService {
 		return repositorio.findById(dni);
 	}
 	
+	public List<Empleado> obtenerUsuario(String usuario, String contrasena) {
+		return repositorio.findByUsuarioAndContrasena(usuario, contrasena);
+	}
+	
 	public Empleado guardarEmpleado(Empleado empleado) {
 		return repositorio.save(empleado);
 	}

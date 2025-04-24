@@ -3,28 +3,33 @@ async function login() {
     var password = document.getElementById("password").value;
     
     try {
-        let response = await fetch("../PHP/login.php", {
+        let response = await fetch("/api/empleado/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ user, password })
+            body: JSON.stringify({ usuario: user, contrasena: password })
         });
 
-        let result = await response.json();
-        
-        if (result.success) {
-            // Redirigir según el usuario
-            if (user.toLowerCase() === "admin") {
-                window.location.href = "admin.html";
-            } else if (user.toLowerCase() === "usuario") {
-                window.location.href = "user.html";
+        if (response.ok) {
+            let result = await response.json();
+
+            if (result.length > 0) {
+                const empleado = result[0]; // si hay mas de uno, usamos el primero
+
+                if (empleado.rol.toLowerCase() === "admin") {
+                    window.location.href = "admin.html";
+                } else if (empleado.rol.toLowerCase() === "usuario") {
+                    window.location.href = "user.html";
+                } else {
+                    alert("Usuario sin rol asignada");
+                }
             } else {
-                alert("Usuario no tiene una página asignada");
+                document.getElementById("message").textContent = "Usuario o contraseña incorrectos";
             }
         } else {
-            document.getElementById("message").textContent = "Usuario o contraseña incorrectos";
+            document.getElementById("message").textContent = "Error al iniciar sesion";
         }
     } catch (error) {
-        console.error("Error en la autenticación", error);
-        document.getElementById("message").textContent = "Error en la conexión con el servidor";
+        console.error("Error en la autenticarte:", error);
+        document.getElementById("message").textContent = "Error en la conexion con el servidor";
     }
 }

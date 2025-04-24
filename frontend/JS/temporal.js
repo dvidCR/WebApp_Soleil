@@ -1,17 +1,42 @@
 async function createUser() {
-    var user = document.getElementById("user").value;
-    var password = document.getElementById("password").value;
-    
+    const dni = document.getElementById("dni").value;
+    const nombre = document.getElementById("nombre").value;
+    const apellidos = document.getElementById("apellidos").value;
+    const correo = document.getElementById("correo").value;
+    const usuario = document.getElementById("user").value;
+    const contrasena = document.getElementById("password").value;
+    const rol = document.getElementById("rol").value;
+
+    // Validación básica
+    if (!dni || !nombre || !apellidos || !correo || !usuario || !contrasena || !rol) {
+        document.getElementById("message").textContent = "Por favor, completa todos los campos";
+        return;
+    }
+
     try {
-        await fetch("../PHP/temporal.php", {
+        const response = await fetch("/api/empleado", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ user, password })
+            body: JSON.stringify({
+                dni,
+                nombre,
+                apellidos,
+                correo,
+                usuario,
+                contrasena,
+                rol
+            })
         });
 
-        document.getElementById("message").textContent = "Usuario creado";
+        if (response.ok) {
+            document.getElementById("message").textContent = "Usuario creado correctamente";
+        } else {
+            const errorText = await response.text();
+            console.error("Error:", errorText);
+            document.getElementById("message").textContent = "Error al crear el usuario";
+        }
     } catch (error) {
-        console.error("Error en la autenticación", error);
-        document.getElementById("message").textContent = "Error al crear el usuario";
+        console.error("Error al crear usuario:", error);
+        document.getElementById("message").textContent = "Error en la conexión con el servidor";
     }
 }
