@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.soleil.api.model.Gasto;
@@ -38,6 +42,11 @@ public class GastoService {
         	gasto.setProveedor(gastoActualizada.getProveedor());
             return repositorio.save(gasto);
         }).orElseThrow(() -> new RuntimeException("Gasto no encontrado"));
+	}
+	
+	public Page<Gasto> listarEmpleadosPaginados(int page, int size) {
+	    Pageable pageable = PageRequest.of(page, size, Sort.by("proveedor").descending());
+	    return repositorio.findAll(pageable);
 	}
 	
 }

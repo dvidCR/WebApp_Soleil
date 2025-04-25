@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.soleil.api.model.Servicio;
@@ -43,6 +47,11 @@ public class ServicioService {
         	servicio.setNum_sesiones(servicoActualizada.getNum_sesiones());
             return repositorio.save(servicio);
         }).orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
+	}
+	
+	public Page<Servicio> listarEmpleadosPaginados(int page, int size) {
+	    Pageable pageable = PageRequest.of(page, size, Sort.by("dni_empleado").descending());
+	    return repositorio.findAll(pageable);
 	}
 	
 }
