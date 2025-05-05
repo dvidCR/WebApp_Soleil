@@ -1,5 +1,7 @@
 package com.soleil.api.controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.soleil.api.model.Empleado;
 import com.soleil.api.model.Fichaje;
 import com.soleil.api.service.FichajeService;
 
@@ -34,8 +37,8 @@ public class FichajeController {
     }
 
     @PostMapping
-    public Fichaje crearFichaje(@RequestBody Fichaje fichaje) {
-        return servicio.guardarFichaje(fichaje);
+    public Fichaje crearFichaje(@RequestBody Empleado dni_empleado) {
+        return servicio.guardarFichaje(new Fichaje(LocalDate.now(), LocalTime.now(), dni_empleado));
     }
 
     @DeleteMapping("/{id}")
@@ -43,14 +46,14 @@ public class FichajeController {
         servicio.eliminarFichaje(id);
     }
     
-    @PutMapping("/{id}/entrada")
-    public void actualizarHoraEntrada(@PathVariable int id, @RequestBody Fichaje fichaje) {
-    	servicio.actualizarHoraEntrada(id, fichaje);
-    }
+//    @PutMapping("/{id}/entrada")
+//    public void actualizarHoraEntrada(@PathVariable int id, @RequestBody Fichaje fichaje) {
+//    	servicio.actualizarHoraEntrada(id, fichaje);
+//    }
     
-    @PutMapping("/{id}/salida")
-    public void actualizarHoraSalida(@PathVariable int id, @RequestBody Fichaje fichaje) {
-    	servicio.actualizarHoraSalida(id, fichaje);
+    @PutMapping("/{id}")
+    public void actualizarHoraSalida(@PathVariable int id) {
+    	servicio.actualizarHoraSalida(id, new Fichaje(LocalTime.now()));
     }
 	
 }

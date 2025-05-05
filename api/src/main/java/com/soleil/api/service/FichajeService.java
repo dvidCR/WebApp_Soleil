@@ -35,12 +35,12 @@ public class FichajeService {
 		repositorio.deleteById(id);
 	}
 	
-	public Fichaje actualizarHoraEntrada(int id, Fichaje fichajeActualizada) {
-        return repositorio.findById(id).map(fichaje -> {
-        	fichaje.setHora_entrada(fichajeActualizada.getHora_entrada());
-            return repositorio.save(fichaje);
-        }).orElseThrow(() -> new RuntimeException("Dia no encontrado"));
-	}
+//	public Fichaje actualizarHoraEntrada(int id, Fichaje fichajeActualizada) {
+//        return repositorio.findById(id).map(fichaje -> {
+//        	fichaje.setHora_entrada(fichajeActualizada.getHora_entrada());
+//            return repositorio.save(fichaje);
+//        }).orElseThrow(() -> new RuntimeException("Dia no encontrado"));
+//	}
 	
 	public Fichaje actualizarHoraSalida(int id, Fichaje fichajeActualizada) {
         return repositorio.findById(id).map(fichaje -> {
