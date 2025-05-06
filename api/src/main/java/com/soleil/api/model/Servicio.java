@@ -30,18 +30,18 @@ public class Servicio {
 	@Size(min = 9, max = 9)
 	@JoinColumn(name = "dni_empleado", nullable = false)
 	@NotNull(message = "Tienes que poner el dni del empleado")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Empleado dni_empleado;
 	
 	@Size(min = 9, max = 9)
 	@JoinColumn(name = "paciente", nullable = false)
 	@NotNull(message = "Tienes que poner el dni del paciente")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Paciente dni_paciente;
 	
 	@JoinColumn(name = "tratamiento", nullable = false)
 	@NotNull(message = "Tienes que poner el id del tratamiento")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Tratamiento id_tratamiento;
 	
 	@Column(name = "modo_pago")

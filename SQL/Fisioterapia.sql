@@ -16,7 +16,9 @@ CREATE TABLE IF NOT EXISTS Paciente(
     dni VARCHAR(9),
     nombre VARCHAR(20),
     apellidos VARCHAR(30),
-    PRIMARY KEY (dni)
+    dni_empleado VARCHAR(9),
+    PRIMARY KEY (dni),
+    FOREIGN KEY (dni_empleado) REFERENCES Empleado(dni)
 );
 
 CREATE TABLE IF NOT EXISTS Tratamiento(

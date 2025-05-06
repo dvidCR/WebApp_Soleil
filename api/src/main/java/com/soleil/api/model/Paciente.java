@@ -2,10 +2,17 @@ package com.soleil.api.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +20,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "paciente")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Paciente {
 	
 	@Id	
@@ -29,7 +37,13 @@ public class Paciente {
 	@NotNull(message = "El paciente debe tener apellidos")
 	private String apellidos;
 	
+	@JoinColumn(name = "dni_empleado", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonManagedReference
+	private Empleado dni_empleado;
+	
 	@OneToMany(mappedBy = "dni_paciente", cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<Tratamiento> tratamiento;
 	
 	public Paciente() {
@@ -40,10 +54,11 @@ public class Paciente {
 		this.dni = dni;
 	}
 
-	public Paciente(String dni, String nombre, String apellidos) {
+	public Paciente(String dni, String nombre, String apellidos, Empleado dni_empleado) {
 		this.dni = dni;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
+		this.dni_empleado = dni_empleado;
 	}
 
 	public String getDni() {
@@ -68,6 +83,14 @@ public class Paciente {
 
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
+	}
+
+	public Empleado getDni_empleado() {
+		return dni_empleado;
+	}
+
+	public void setDni_empleado(Empleado dni_empleado) {
+		this.dni_empleado = dni_empleado;
 	}
 
 	public List<Tratamiento> getTratamiento() {

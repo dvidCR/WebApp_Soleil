@@ -49,6 +49,11 @@ public class PacienteController {
     	servicio.actualizarPaciente(dni, paciente);
     }
     
+    @PutMapping("/dni/{dni}")
+    public void actualizarDni(@PathVariable String dni, @RequestBody Paciente paciente) {
+    	servicio.actualizarDni(dni, paciente);
+    }
+    
     @GetMapping("/{dni}/verTratamiento")
     public Map<String, Integer> verTratamiento(@PathVariable String dni) {
     	return servicio.verTratamiento(dni);

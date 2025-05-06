@@ -14,7 +14,7 @@ public class Gasto {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int id_gasto;
 	
 	@Column(name = "cantidad")
 	@NotNull(message = "Tienes que poner cuanto has gastado")
@@ -36,6 +36,10 @@ public class Gasto {
 		this.cantidad = cantidad;
 		this.motivo = motivo;
 		this.proveedor = proveedor;
+	}
+
+	public int getId_gasto() {
+		return id_gasto;
 	}
 
 	public int getCantidad() {

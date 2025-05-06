@@ -34,7 +34,7 @@ class PacienteServiceTest {
 
     @BeforeEach
     void setUp() {
-        paciente = new Paciente("12345678A", "Laura", "Gómez");
+        paciente = new Paciente("12345678A", "Laura", "Gómez", null);
     }
 
     @Test
@@ -75,7 +75,7 @@ class PacienteServiceTest {
 
     @Test
     void testActualizarPaciente() {
-        Paciente actualizado = new Paciente("12345678A", "Lucía", "Fernández");
+        Paciente actualizado = new Paciente("12345678A", "Lucía", "Fernández", null);
 
         when(pacienteRepository.findById("12345678A")).thenReturn(Optional.of(paciente));
         when(pacienteRepository.save(any(Paciente.class))).thenAnswer(i -> i.getArgument(0));

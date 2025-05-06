@@ -11,6 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.soleil.api.model.Empleado;
+import com.soleil.api.model.Fichaje;
+import com.soleil.api.model.Paciente;
+import com.soleil.api.model.Servicio;
 import com.soleil.api.repository.EmpleadoRepository;
 
 @Service
@@ -49,6 +52,44 @@ public class EmpleadoService {
         	empleado.setRol(empleadoActualizada.getRol());
             return repositorio.save(empleado);
         }).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+	}
+	
+	public Empleado actualizarDni(String dni, String nuevoDni) {
+        if (obtenerPorDni(nuevoDni).isPresent()) {
+            throw new RuntimeException("El nuevo DNI ya esta registrado en otro empleado");
+        }
+        
+        Optional<Empleado> empleadoViejoOpt = repositorio.findById(dni);
+        Empleado empleadoViejo = empleadoViejoOpt.get();
+        
+        Empleado empleadoNuevo = new Empleado(
+        			nuevoDni,
+        			empleadoViejo.getNombre(),
+                    empleadoViejo.getApellidos(),
+                    empleadoViejo.getCorreo(),
+                    empleadoViejo.getContrasena(),
+                    empleadoViejo.getUsuario(),
+                    empleadoViejo.getRol()
+        		);
+        
+        actualizarRelaciones(empleadoViejo, empleadoNuevo);
+        eliminarEmpleado(dni);
+        
+        return repositorio.save(empleadoNuevo);
+	}
+	
+	private void actualizarRelaciones(Empleado empleadoViejo, Empleado empleadoNuevo) {
+	    for (Fichaje fichaje : empleadoViejo.getFichaje()) {
+	        fichaje.setEmpleado(empleadoNuevo);
+	    }
+
+	    for (Paciente paciente : empleadoViejo.getPaciente()) {
+	        paciente.setDni_empleado(empleadoNuevo);
+	    }
+
+	    for (Servicio servicio : empleadoViejo.getServicio()) {
+	        servicio.setDni_empleado(empleadoNuevo);
+	    }
 	}
 	
 	public Page<Empleado> listarEmpleadosPaginados(int page, int size) {

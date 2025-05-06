@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.soleil.api.dto.EmpleadoDTO;
 import com.soleil.api.model.Empleado;
 import com.soleil.api.service.EmpleadoService;
 
@@ -62,6 +63,13 @@ public class EmpleadoController {
     @PutMapping("/{dni}")
     public void actualizarEmpleado(@PathVariable String dni, @RequestBody Empleado empleado) {
     	servicio.actualizarEmpleado(dni, empleado);
+    }
+    
+    @PutMapping("/dni/{dni}")
+    public void actualizarDni(@PathVariable String dni, @RequestBody EmpleadoDTO nuevoDni) {
+    	Empleado empleadoActualizado = new Empleado();
+        empleadoActualizado.setDni(nuevoDni.getDni());
+    	servicio.actualizarDni(dni, nuevoDni.getDni());
     }
 	
 }

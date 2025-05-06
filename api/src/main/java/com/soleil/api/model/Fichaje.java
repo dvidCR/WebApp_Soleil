@@ -3,6 +3,8 @@ package com.soleil.api.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,8 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "fichaje")
@@ -32,10 +32,9 @@ public class Fichaje {
 	@Column(name = "hora_salida")
 	private LocalTime hora_salida;
 	
-	@Size(min = 9, max = 9)
 	@JoinColumn(name = "dni_empleado", nullable = false)
-	@NotNull(message = "Tienes que poner el dni del empleado")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private Empleado dni_empleado;
 	
 	public Fichaje() {

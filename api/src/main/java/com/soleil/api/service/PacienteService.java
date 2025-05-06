@@ -49,6 +49,13 @@ public class PacienteService {
         }).orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
 	}
 	
+	public Paciente actualizarDni(String dni, Paciente pacienteActualizada) {
+        return repositorio.findById(dni).map(paciente -> {
+        	paciente.setDni(pacienteActualizada.getDni());
+            return repositorio.save(paciente);
+        }).orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+	}
+	
 	public Map<String, Integer> verTratamiento(String dni) {
         List<Object[]> resultados = tratamientoRepository.verTratamiento(dni);
         Map<String, Integer> tratamientoPorDni = new LinkedHashMap<>();

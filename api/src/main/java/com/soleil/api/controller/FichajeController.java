@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.soleil.api.dto.EmpleadoDTO;
+import com.soleil.api.dto.FichajeDTO;
 import com.soleil.api.model.Empleado;
 import com.soleil.api.model.Fichaje;
 import com.soleil.api.service.FichajeService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/fichaje")
@@ -27,9 +31,18 @@ public class FichajeController {
 	private FichajeService servicio;
 	
 	@GetMapping
-    public List<Fichaje> listarFichaje() {
-        return servicio.obtenerTodos();
-    }
+	public List<FichajeDTO> listarFichaje() {
+	    return servicio.obtenerTodos().stream().map(f -> {
+	        FichajeDTO dto = new FichajeDTO();
+	        dto.setId_fichaje(f.getId_fichaje());
+	        dto.setFecha(f.getFecha());
+	        dto.setHora_entrada(f.getHora_entrada());
+	        dto.setHora_salida(f.getHora_salida());
+	        dto.setDni_empleado(f.getEmpleado().getDni());
+	        return dto;
+	    }).toList();
+	}
+
 
     @GetMapping("/{id}")
     public Optional<Fichaje> obtenerFichaje(@PathVariable int id) {
@@ -37,8 +50,9 @@ public class FichajeController {
     }
 
     @PostMapping
-    public Fichaje crearFichaje(@RequestBody Empleado dni_empleado) {
-        return servicio.guardarFichaje(new Fichaje(LocalDate.now(), LocalTime.now(), dni_empleado));
+    public Fichaje crearFichaje(@RequestBody @Valid EmpleadoDTO dto) {
+        Empleado empleado = new Empleado(dto.getDni());
+        return servicio.guardarFichaje(new Fichaje(LocalDate.now(), LocalTime.now(), empleado));
     }
 
     @DeleteMapping("/{id}")
