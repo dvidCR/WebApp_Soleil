@@ -40,7 +40,7 @@ public class ServicioService {
         	servicio.setFecha_cita(servicoActualizada.getFecha_cita());
         	servicio.setDni_empleado(servicoActualizada.getDni_empleado());
         	servicio.setDni_paciente(servicoActualizada.getDni_paciente());
-        	servicio.setId_servicio(servicoActualizada.getId_servicio());
+        	servicio.setId_tratamiento(servicoActualizada.getId_tratamiento());
         	servicio.setModo_pago(servicoActualizada.getModo_pago());
         	servicio.setTarifa(servicoActualizada.getTarifa());
         	servicio.setConcepto(servicoActualizada.getConcepto());

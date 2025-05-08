@@ -1,8 +1,6 @@
 package com.soleil.api.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.soleil.api.dto.PacienteDTO;
+import com.soleil.api.dto.PacienteDniDTO;
+import com.soleil.api.dto.TratamientoDTO;
 import com.soleil.api.model.Paciente;
 import com.soleil.api.service.PacienteService;
 
@@ -25,13 +26,27 @@ public class PacienteController {
 	private PacienteService servicio;
 	
 	@GetMapping
-    public List<Paciente> listarPaciente() {
-        return servicio.obtenerTodos();
+    public List<PacienteDTO> listarPaciente() {
+		return servicio.obtenerTodos().stream().map(paciente -> {
+	        PacienteDTO dto = new PacienteDTO();
+	        dto.setDni(paciente.getDni());
+	        dto.setNombre(paciente.getNombre());
+	        dto.setApellidos(paciente.getApellidos());
+	        dto.setDni_empleado(paciente.getDni_empleado().getDni());
+	        return dto;
+	    }).toList();
     }
 
     @GetMapping("/{dni}")
-    public Optional<Paciente> obtenerPaciente(@PathVariable String dni) {
-        return servicio.obtenerPorDni(dni);
+    public List<PacienteDTO> obtenerPaciente(@PathVariable String dni) {
+        return servicio.obtenerPorDni(dni).stream().map(paciente -> {
+	        PacienteDTO dto = new PacienteDTO();
+	        dto.setDni(paciente.getDni());
+	        dto.setNombre(paciente.getNombre());
+	        dto.setApellidos(paciente.getApellidos());
+	        dto.setDni_empleado(paciente.getDni_empleado().getDni());
+	        return dto;
+	    }).toList();
     }
 
     @PostMapping
@@ -50,13 +65,16 @@ public class PacienteController {
     }
     
     @PutMapping("/dni/{dni}")
-    public void actualizarDni(@PathVariable String dni, @RequestBody Paciente paciente) {
-    	servicio.actualizarDni(dni, paciente);
+    public void actualizarDni(@PathVariable String dni, @RequestBody PacienteDniDTO nuevoDni) {
+    	Paciente pacienteActualizado = new Paciente();
+        pacienteActualizado.setDni(nuevoDni.getDni());
+    	servicio.actualizarDni(dni, nuevoDni.getDni());
     }
     
     @GetMapping("/{dni}/verTratamiento")
-    public Map<String, Integer> verTratamiento(@PathVariable String dni) {
-    	return servicio.verTratamiento(dni);
+    public List<TratamientoDTO> verTratamiento(@PathVariable String dni) {
+        return servicio.verTratamiento(dni);
     }
+
 	
 }

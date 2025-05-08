@@ -1,7 +1,6 @@
 package com.soleil.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.soleil.api.dto.GastoDTO;
 import com.soleil.api.model.Gasto;
 import com.soleil.api.service.GastoService;
 
@@ -24,13 +24,27 @@ public class GastoController {
 	private GastoService servicio;
 	
 	@GetMapping
-    public List<Gasto> listarGasto() {
-        return servicio.obtenerTodos();
+    public List<GastoDTO> listarGasto() {
+        return servicio.obtenerTodos().stream().map(gasto -> {
+	        GastoDTO dto = new GastoDTO();
+	        dto.setId_gasto(gasto.getId_gasto());
+	        dto.setCantidad(gasto.getCantidad());
+	        dto.setMotivo(gasto.getMotivo());
+	        dto.setProveedor(gasto.getProveedor());
+	        return dto;
+	    }).toList();
     }
 
     @GetMapping("/{id}")
-    public Optional<Gasto> obtenerGasto(@PathVariable int id) {
-        return servicio.obtenerPorId(id);
+    public List<GastoDTO> obtenerGasto(@PathVariable int id) {
+        return servicio.obtenerPorId(id).stream().map(gasto -> {
+	        GastoDTO dto = new GastoDTO();
+	        dto.setId_gasto(gasto.getId_gasto());
+	        dto.setCantidad(gasto.getCantidad());
+	        dto.setMotivo(gasto.getMotivo());
+	        dto.setProveedor(gasto.getProveedor());
+	        return dto;
+	    }).toList();
     }
 
     @PostMapping

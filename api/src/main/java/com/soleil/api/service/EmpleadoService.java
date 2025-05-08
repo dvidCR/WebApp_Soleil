@@ -9,18 +9,31 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.soleil.api.model.Empleado;
 import com.soleil.api.model.Fichaje;
 import com.soleil.api.model.Paciente;
 import com.soleil.api.model.Servicio;
 import com.soleil.api.repository.EmpleadoRepository;
+import com.soleil.api.repository.FichajeRepository;
+import com.soleil.api.repository.PacienteRepository;
+import com.soleil.api.repository.ServicioRepository;
 
 @Service
 public class EmpleadoService {
 	
 	@Autowired
     private EmpleadoRepository repositorio;
+	
+	@Autowired
+    private FichajeRepository fichajeRepository;
+	
+	@Autowired
+    private PacienteRepository pacienteRepository;
+	
+	@Autowired
+    private ServicioRepository servicioRepository;
 	
 	public List<Empleado> obtenerTodos() {
 		return repositorio.findAll();
@@ -54,42 +67,48 @@ public class EmpleadoService {
         }).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
 	}
 	
+	@Transactional
 	public Empleado actualizarDni(String dni, String nuevoDni) {
-        if (obtenerPorDni(nuevoDni).isPresent()) {
-            throw new RuntimeException("El nuevo DNI ya esta registrado en otro empleado");
-        }
-        
-        Optional<Empleado> empleadoViejoOpt = repositorio.findById(dni);
-        Empleado empleadoViejo = empleadoViejoOpt.get();
-        
-        Empleado empleadoNuevo = new Empleado(
-        			nuevoDni,
-        			empleadoViejo.getNombre(),
-                    empleadoViejo.getApellidos(),
-                    empleadoViejo.getCorreo(),
-                    empleadoViejo.getContrasena(),
-                    empleadoViejo.getUsuario(),
-                    empleadoViejo.getRol()
-        		);
-        
-        actualizarRelaciones(empleadoViejo, empleadoNuevo);
-        eliminarEmpleado(dni);
-        
-        return repositorio.save(empleadoNuevo);
-	}
-	
-	private void actualizarRelaciones(Empleado empleadoViejo, Empleado empleadoNuevo) {
-	    for (Fichaje fichaje : empleadoViejo.getFichaje()) {
-	        fichaje.setEmpleado(empleadoNuevo);
+	    if (obtenerPorDni(nuevoDni).isPresent()) {
+	        throw new RuntimeException("El nuevo DNI ya esta registrado");
 	    }
 
-	    for (Paciente paciente : empleadoViejo.getPaciente()) {
-	        paciente.setDni_empleado(empleadoNuevo);
-	    }
+	    Empleado empleadoViejo = repositorio.findById(dni)
+	        .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
 
-	    for (Servicio servicio : empleadoViejo.getServicio()) {
-	        servicio.setDni_empleado(empleadoNuevo);
+	    Empleado empleadoNuevo = new Empleado(
+	        nuevoDni,
+	        empleadoViejo.getNombre(),
+	        empleadoViejo.getApellidos(),
+	        empleadoViejo.getCorreo(),
+	        empleadoViejo.getUsuario(),
+	        empleadoViejo.getContrasena(),
+	        empleadoViejo.getRol()
+	    );
+
+	    empleadoNuevo = repositorio.save(empleadoNuevo);
+
+	    List<Fichaje> nuevosFichajes = empleadoViejo.getFichaje();
+	    for (Fichaje f : nuevosFichajes) {
+	        f.setEmpleado(empleadoNuevo);
 	    }
+	    fichajeRepository.saveAll(nuevosFichajes);
+
+	    List<Paciente> nuevosPacientes = empleadoViejo.getPaciente();
+	    for (Paciente p : nuevosPacientes) {
+	        p.setDni_empleado(empleadoNuevo);
+	    }
+	    pacienteRepository.saveAll(nuevosPacientes);
+
+	    List<Servicio> nuevosServicios = empleadoViejo.getServicio();
+	    for (Servicio s : nuevosServicios) {
+	        s.setDni_empleado(empleadoNuevo);
+	    }
+	    servicioRepository.saveAll(nuevosServicios);
+
+	    eliminarEmpleado(dni);
+
+	    return empleadoNuevo;
 	}
 	
 	public Page<Empleado> listarEmpleadosPaginados(int page, int size) {

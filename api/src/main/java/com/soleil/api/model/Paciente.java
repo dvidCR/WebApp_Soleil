@@ -37,14 +37,20 @@ public class Paciente {
 	@NotNull(message = "El paciente debe tener apellidos")
 	private String apellidos;
 	
-	@JoinColumn(name = "dni_empleado", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonManagedReference
+	@JoinColumn(name = "dni_empleado", nullable = false)
+	@JsonBackReference(value = "empleado-paciente")
 	private Empleado dni_empleado;
-	
-	@OneToMany(mappedBy = "dni_paciente", cascade = CascadeType.ALL)
-	@JsonBackReference
+
+	@OneToMany(mappedBy = "dni_paciente", cascade = CascadeType.MERGE)
+	@JsonManagedReference(value = "paciente-tratamiento")
 	private List<Tratamiento> tratamiento;
+
+
+	@OneToMany(mappedBy = "dni_paciente", cascade = CascadeType.MERGE)
+	@JsonManagedReference(value = "paciente-servicio")
+	private List<Servicio> servicio;
+
 	
 	public Paciente() {
 		
@@ -99,6 +105,14 @@ public class Paciente {
 
 	public void setTratamiento(List<Tratamiento> tratamiento) {
 		this.tratamiento = tratamiento;
+	}
+
+	public List<Servicio> getServicio() {
+		return servicio;
+	}
+
+	public void setServicio(List<Servicio> servicio) {
+		this.servicio = servicio;
 	}
 	
 }

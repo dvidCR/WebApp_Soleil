@@ -3,7 +3,7 @@ package com.soleil.api.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,10 +32,11 @@ public class Fichaje {
 	@Column(name = "hora_salida")
 	private LocalTime hora_salida;
 	
-	@JoinColumn(name = "dni_empleado", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonManagedReference
+	@JoinColumn(name = "dni_empleado", nullable = false)
+	@JsonBackReference(value = "empleado-fichaje")
 	private Empleado dni_empleado;
+
 	
 	public Fichaje() {
 		

@@ -3,7 +3,6 @@ package com.soleil.api.controller;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.soleil.api.dto.EmpleadoDTO;
+import com.soleil.api.dto.EmpleadoDniDTO;
 import com.soleil.api.dto.FichajeDTO;
 import com.soleil.api.model.Empleado;
 import com.soleil.api.model.Fichaje;
@@ -32,25 +31,33 @@ public class FichajeController {
 	
 	@GetMapping
 	public List<FichajeDTO> listarFichaje() {
-	    return servicio.obtenerTodos().stream().map(f -> {
+	    return servicio.obtenerTodos().stream().map(fichaje -> {
 	        FichajeDTO dto = new FichajeDTO();
-	        dto.setId_fichaje(f.getId_fichaje());
-	        dto.setFecha(f.getFecha());
-	        dto.setHora_entrada(f.getHora_entrada());
-	        dto.setHora_salida(f.getHora_salida());
-	        dto.setDni_empleado(f.getEmpleado().getDni());
+	        dto.setId_fichaje(fichaje.getId_fichaje());
+	        dto.setFecha(fichaje.getFecha());
+	        dto.setHora_entrada(fichaje.getHora_entrada());
+	        dto.setHora_salida(fichaje.getHora_salida());
+	        dto.setDni_empleado(fichaje.getEmpleado().getDni());
 	        return dto;
 	    }).toList();
 	}
 
 
     @GetMapping("/{id}")
-    public Optional<Fichaje> obtenerFichaje(@PathVariable int id) {
-        return servicio.obtenerPorId(id);
+    public List<FichajeDTO> obtenerFichaje(@PathVariable int id) {
+        return servicio.obtenerPorId(id).stream().map(fichaje -> {
+	        FichajeDTO dto = new FichajeDTO();
+	        dto.setId_fichaje(fichaje.getId_fichaje());
+	        dto.setFecha(fichaje.getFecha());
+	        dto.setHora_entrada(fichaje.getHora_entrada());
+	        dto.setHora_salida(fichaje.getHora_salida());
+	        dto.setDni_empleado(fichaje.getEmpleado().getDni());
+	        return dto;
+	    }).toList();
     }
 
     @PostMapping
-    public Fichaje crearFichaje(@RequestBody @Valid EmpleadoDTO dto) {
+    public Fichaje crearFichaje(@RequestBody @Valid EmpleadoDniDTO dto) {
         Empleado empleado = new Empleado(dto.getDni());
         return servicio.guardarFichaje(new Fichaje(LocalDate.now(), LocalTime.now(), empleado));
     }
