@@ -93,9 +93,10 @@ class FichajeServiceTest {
 
         Fichaje resultado = servicio.actualizarHoraSalida(1, actualizado);
 
-        assertEquals(actualizado, resultado.getHora_salida());
+        assertEquals(actualizado.getHora_salida(), resultado.getHora_salida());
         verify(repositorio).save(any(Fichaje.class));
     }
+
 
 //    @Test
 //    void testActualizarHoraEntradaConIdInexistente() {
