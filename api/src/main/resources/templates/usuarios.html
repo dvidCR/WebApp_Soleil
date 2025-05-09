@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,7 +55,7 @@
 </head>
 <body onload="showScreen('login')">
     <nav>
-        <a href="./index.html"><img src="./IMG/logo.png" alt="Logo"></a>
+        <a th:href="@{/}"><img th:src="@{/IMG/logo.png}" alt="Logo"></a>
         <h1>Administrador</h1>
         <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
     </nav>

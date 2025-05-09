@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador</title>
+    <link rel="stylesheet" th:href="@{/CSS/admin.css}" />
+    <script th:src="@{/JS/script.js}" defer></script>
+</head>
+<body>
+    <nav>
+        <a th:href="@{/}"><img th:src="@{/IMG/logo.png}" alt="Logo"></a>
+        <h1>Administrador</h1>
+        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+    </nav>
+    <div class="container">
+        <button class="btn" th:onclick="'location.href=\'contabilidad.html\''">Gestionar Contabilidad</button>
+        <button class="btn" th:onclick="'location.href=\'empleados.html\''">Gestionar Trabajo Empleados</button>
+        <button class="btn" th:onclick="'location.href=\'temporal.html\''">Crear Usuario</button>
+    </div>
+</body>
+</html>

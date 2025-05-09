@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS Paciente(
     dni VARCHAR(9),
     nombre VARCHAR(20),
     apellidos VARCHAR(30),
-    dni_empleado VARCHAR(9),
+    dni_empleado VARCHAR(9) NOT NULL,
     PRIMARY KEY (dni),
     FOREIGN KEY (dni_empleado) REFERENCES Empleado(dni)
 );
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Tratamiento(
     id_tratamiento INT AUTO_INCREMENT,
     tipo_tratamiento VARCHAR(30),
     descripcion VARCHAR(100),
-    dni_paciente VARCHAR(9),
+    dni_paciente VARCHAR(9) NOT NULL,
     PRIMARY KEY (id_tratamiento),
     FOREIGN KEY (dni_paciente) REFERENCES Paciente(dni)    
 );
@@ -34,9 +34,9 @@ CREATE TABLE IF NOT EXISTS Tratamiento(
 CREATE TABLE IF NOT EXISTS Servicio(
     id_servicio INT AUTO_INCREMENT,
     fecha_cita DATE,
-    dni_empleado VARCHAR(9),
-    dni_paciente VARCHAR(9),
-    id_tratamiento INT,
+    dni_empleado VARCHAR(9) NOT NULL,
+    dni_paciente VARCHAR(9) NOT NULL,
+    id_tratamiento INT NOT NULL,
     modo_pago VARCHAR(5),
     tarifa DOUBLE,
     concepto VARCHAR(30),
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS Fichaje(
     fecha DATE,
     hora_entrada TIME,
     hora_salida TIME,
-    dni_empleado VARCHAR(9),
+    dni_empleado VARCHAR(9) NOT NULL,
     PRIMARY KEY(id_fichaje),
     FOREIGN KEY(dni_empleado) REFERENCES Empleado(dni)
 );
