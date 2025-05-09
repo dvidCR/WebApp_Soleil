@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar Contabilidad</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/CSS/admin.css}"/>
-    <script th:src="@{/JS/script.js}" defer></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}"/>
+    <script th:src="@{/js/script.js}" defer></script>
 </head>
 <body>
     <nav>
-        <a th:href="@{/}"><img th:src="@{/IMG/logo.png}" alt="Logo"></a>
+        <a th:href="@{/}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
         <h1>Gestionar Contabilidad</h1>
         <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
     </nav>
@@ -52,6 +52,6 @@
 
     <h2 id="beneficios">Beneficios: </h2>
 
-    <button class="btn" th:onclick="'location.href=\'admin.html\''">Retroceder</button>
+    <button class="btn" th:onclick="|location.href='@{/admin}'|">Retroceder</button>
 </body>
 </html>

@@ -1,4 +1,5 @@
 function logout() {
     localStorage.clear();
-    window.location.href = 'index.html';
+    const homeUrl = document.body.dataset.homeUrl;
+    window.location.href = homeUrl;
 }

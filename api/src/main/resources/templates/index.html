@@ -14,10 +14,12 @@
     </nav>
     <div class="login-container">
         <h2>Iniciar Sesión</h2>
-        <input type="text" id="user" placeholder="Usuario">
-        <input type="password" id="password" placeholder="Contraseña">
-        <button onclick="login()">Ingresar</button>
-        <p id="message"></p>
+        <form action="/login" method="post">
+            <input type="text" id="user" name="usuario" placeholder="Usuario">
+            <input type="password" id="password" name="contrasena" placeholder="Contraseña">
+            <button type="submit">Ingresar</button>
+        </form>
+        <p th:text="${error}" style="color:red;"></p>  <!-- Muestra el error si hay -->
     </div>
 </body>
 </html>

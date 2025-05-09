@@ -1,11 +1,8 @@
 package com.soleil.api.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,19 +53,6 @@ public class EmpleadoController {
 	        return dto;
 	    }).toList();
     }
-    
-    @PostMapping("/login")
-	public ResponseEntity<List<Empleado>> obtenerUsuario(@RequestBody Map<String, String> datos) {
-		String usuario = datos.get("usuario");
-		String contrasena = datos.get("contrasena");
-		List<Empleado> empleados = servicio.obtenerUsuario(usuario, contrasena);
-
-		if (empleados.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		} else {
-			return ResponseEntity.ok(empleados);
-		}
-	}
 
     @PostMapping
     public Empleado crearEmpleado(@RequestBody Empleado empleado) {
