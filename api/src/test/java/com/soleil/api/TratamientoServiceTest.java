@@ -32,7 +32,7 @@ class TratamientoServiceTest {
     @BeforeEach
     void setUp() {
         Paciente paciente = new Paciente("12345678A");
-        tratamiento = new Tratamiento("Terapia física", paciente);
+        tratamiento = new Tratamiento("Terapia física", "Masaje, Acupultura", paciente);
         tratamiento.setId_tratamiento(1);
     }
 
@@ -74,7 +74,7 @@ class TratamientoServiceTest {
 
     @Test
     void testActualizarGasto() {
-        Tratamiento actualizado = new Tratamiento("Terapia ocupacional", new Paciente("87654321Z"));
+        Tratamiento actualizado = new Tratamiento("Terapia ocupacional", "Prueba", new Paciente("87654321Z"));
         actualizado.setId_tratamiento(1);
 
         when(tratamientoRepository.findById(1)).thenReturn(Optional.of(tratamiento));

@@ -3,6 +3,9 @@ package com.soleil.api.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "servicio")
@@ -23,27 +25,26 @@ public class Servicio {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id_servicio;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "fecha_cita")
 	@NotNull(message = "Tienes que poner poner la fecha")
 	private Date fecha_cita;
 	
-	@Size(min = 9, max = 9)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dni_empleado", nullable = false)
-	@NotNull(message = "Tienes que poner el dni del empleado")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonBackReference(value = "empleado-servicio")
 	private Empleado dni_empleado;
-	
-	@Size(min = 9, max = 9)
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "paciente", nullable = false)
-	@NotNull(message = "Tienes que poner el dni del paciente")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonBackReference(value = "paciente-servicio")
 	private Paciente dni_paciente;
-	
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tratamiento", nullable = false)
-	@NotNull(message = "Tienes que poner el id del tratamiento")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonBackReference(value = "tratamiento-servicio")
 	private Tratamiento id_tratamiento;
-	
+
 	@Column(name = "modo_pago")
 	@NotNull(message = "Tienes que poner el tipo de pago")
 	private String modo_pago;
@@ -105,6 +106,14 @@ public class Servicio {
 
 	public void setDni_paciente(Paciente dni_paciente) {
 		this.dni_paciente = dni_paciente;
+	}
+
+	public Tratamiento getId_tratamiento() {
+		return id_tratamiento;
+	}
+
+	public void setId_tratamiento(Tratamiento id_tratamiento) {
+		this.id_tratamiento = id_tratamiento;
 	}
 
 	public String getModo_pago() {

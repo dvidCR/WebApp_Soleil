@@ -1,6 +1,9 @@
 package com.soleil.api;
 
+import com.soleil.api.dto.TratamientoDTO;
+import com.soleil.api.model.Empleado;
 import com.soleil.api.model.Paciente;
+import com.soleil.api.model.Tratamiento;
 import com.soleil.api.repository.PacienteRepository;
 import com.soleil.api.repository.TratamientoRepository;
 import com.soleil.api.service.PacienteService;
@@ -34,7 +37,8 @@ class PacienteServiceTest {
 
     @BeforeEach
     void setUp() {
-        paciente = new Paciente("12345678A", "Laura", "Gómez");
+    	Empleado empleado = new Empleado("55555555C");
+        paciente = new Paciente("12345678A", "Laura", "Gómez", empleado);
     }
 
     @Test
@@ -75,7 +79,7 @@ class PacienteServiceTest {
 
     @Test
     void testActualizarPaciente() {
-        Paciente actualizado = new Paciente("12345678A", "Lucía", "Fernández");
+        Paciente actualizado = new Paciente("12345678A", "Lucía", "Fernández", null);
 
         when(pacienteRepository.findById("12345678A")).thenReturn(Optional.of(paciente));
         when(pacienteRepository.save(any(Paciente.class))).thenAnswer(i -> i.getArgument(0));
@@ -98,16 +102,19 @@ class PacienteServiceTest {
 
     @Test
     void testVerTratamiento() {
-        List<Object[]> mockResultados = new ArrayList<>();
-        mockResultados.add(new Object[]{"Fisioterapia", 5});
-        mockResultados.add(new Object[]{"Psicología", 3});
+        Tratamiento tratamiento1 = new Tratamiento("Fisioterapia", "Ejercicios de movilidad", new Paciente("12345678A"));
+        Tratamiento tratamiento2 = new Tratamiento("Psicología", "Sesiones de apoyo emocional", new Paciente("12345678A"));
 
-        when(tratamientoRepository.verTratamiento("12345678A")).thenReturn(mockResultados);
+        when(tratamientoRepository.buscarTratamientosPorDniPaciente("12345678A"))
+            .thenReturn(List.of(tratamiento1, tratamiento2));
 
-        Map<String, Integer> resultado = pacienteService.verTratamiento("12345678A");
+        List<TratamientoDTO> resultado = pacienteService.verTratamiento("12345678A");
 
         assertEquals(2, resultado.size());
-        assertEquals(5, resultado.get("Fisioterapia"));
-        assertEquals(3, resultado.get("Psicología"));
+        assertEquals("Fisioterapia", resultado.get(0).getTipo_tratamiento());
+        assertEquals("Ejercicios de movilidad", resultado.get(0).getDescripcion());
+        assertEquals("Psicología", resultado.get(1).getTipo_tratamiento());
+        assertEquals("Sesiones de apoyo emocional", resultado.get(1).getDescripcion());
     }
+
 }

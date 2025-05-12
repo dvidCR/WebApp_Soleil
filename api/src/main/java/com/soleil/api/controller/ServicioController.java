@@ -1,7 +1,6 @@
 package com.soleil.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.soleil.api.dto.ServicioDTO;
 import com.soleil.api.model.Servicio;
 import com.soleil.api.service.ServicioService;
 
@@ -24,13 +24,35 @@ public class ServicioController {
 	private ServicioService servicio;
 	
 	@GetMapping
-    public List<Servicio> listarServicio() {
-        return servicio.obtenerTodos();
+    public List<ServicioDTO> listarServicio() {
+		return servicio.obtenerTodos().stream().map(servicio -> {
+	        ServicioDTO dto = new ServicioDTO();
+	        dto.setId_servicio(servicio.getId_servicio());
+	        dto.setDni_empleado(servicio.getDni_empleado().getDni());
+	        dto.setDni_paciente(servicio.getDni_paciente().getDni());
+	        dto.setId_tratamiento(servicio.getId_tratamiento().getId_tratamiento());
+	        dto.setModo_pago(servicio.getModo_pago());
+	        dto.setTarifa(servicio.getTarifa());
+	        dto.setConcepto(servicio.getConcepto());
+	        dto.setNum_sesiones(servicio.getNum_sesiones());
+	        return dto;
+	    }).toList();
     }
 
     @GetMapping("/{id}")
-    public Optional<Servicio> obtenerServicio(@PathVariable int id) {
-        return servicio.obtenerPorId(id);
+    public List<ServicioDTO> obtenerServicio(@PathVariable int id) {
+        return servicio.obtenerPorId(id).stream().map(servicio -> {
+	        ServicioDTO dto = new ServicioDTO();
+	        dto.setId_servicio(servicio.getId_servicio());
+	        dto.setDni_empleado(servicio.getDni_empleado().getDni());
+	        dto.setDni_paciente(servicio.getDni_paciente().getDni());
+	        dto.setId_tratamiento(servicio.getId_tratamiento().getId_tratamiento());
+	        dto.setModo_pago(servicio.getModo_pago());
+	        dto.setTarifa(servicio.getTarifa());
+	        dto.setConcepto(servicio.getConcepto());
+	        dto.setNum_sesiones(servicio.getNum_sesiones());
+	        return dto;
+	    }).toList();
     }
 
     @PostMapping

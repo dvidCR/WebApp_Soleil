@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fichaje</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+    <script th:src="@{/js/script.js}" defer></script>
+</head>
+<body data-home-url="/">
+    <nav>
+        <a th:href="@{/portalEmpleado}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
+        <h1>Fichaje</h1>
+        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+    </nav>
+    <div class="container">
+        <input type="hidden" id="dniEmpleado" th:value="${empleado.dni}" />
+		<button class="btn" onclick="fichar()">Fichar Entrada / Salida</button>
+		<p id="mensajeFichaje" style="margin-top: 10px; color: green;"></p>
+
+        <button class="btn" th:onclick="|location.href='@{/añadirServicio}'|">Añadir Servicio</button>
+    </div>
+</body>
+</html>

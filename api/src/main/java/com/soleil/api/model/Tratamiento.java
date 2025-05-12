@@ -2,6 +2,9 @@ package com.soleil.api.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +17,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tratamiento")
@@ -32,14 +34,15 @@ public class Tratamiento {
 	@NotNull(message = "El tratamiento tiene que tener una descripcion de lo que porporciona")
 	private String descripcion;
 	
-	@Size(min = 9, max = 9)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dni_paciente", nullable = false)
-	@NotNull(message = "Tienes que poner el dni del paciente")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonBackReference(value = "paciente-tratamiento")
 	private Paciente dni_paciente;
-	
-	@OneToMany(mappedBy = "id_tratamiento", cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "id_tratamiento", cascade = CascadeType.MERGE)
+	@JsonManagedReference(value = "tratamiento-servicio")
 	private List<Servicio> servicio;
+
 	
 	public Tratamiento() {
 		
@@ -49,8 +52,9 @@ public class Tratamiento {
 		this.id_tratamiento = id_tratamiento;
 	}
 	
-	public Tratamiento(String tipo_tratamiento, Paciente dni_paciente) {
+	public Tratamiento(String tipo_tratamiento, String descripcion, Paciente dni_paciente) {
 		this.tipo_tratamiento = tipo_tratamiento;
+		this.descripcion = descripcion;
 		this.dni_paciente = dni_paciente;
 	}
 
@@ -68,6 +72,14 @@ public class Tratamiento {
 
 	public void setTipo_tratamiento(String tipo_tratamiento) {
 		this.tipo_tratamiento = tipo_tratamiento;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public Paciente getDni_paciente() {

@@ -1,6 +1,9 @@
 package com.soleil.api.model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "fichaje")
@@ -22,41 +23,67 @@ public class Fichaje {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id_fichaje;
 	
+	@Column(name = "fecha")
+	private LocalDate fecha;
+	
 	@Column(name = "hora_entrada")
-	private LocalDate hora_entrada;
+	private LocalTime hora_entrada;
 	
 	@Column(name = "hora_salida")
-	private LocalDate hora_salida;
+	private LocalTime hora_salida;
 	
-	@Size(min = 9, max = 9)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dni_empleado", nullable = false)
-	@NotNull(message = "Tienes que poner el dni del empleado")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonBackReference(value = "empleado-fichaje")
 	private Empleado dni_empleado;
+
 	
 	public Fichaje() {
 		
 	}
 	
-	public Fichaje(LocalDate hora_entrada, LocalDate hora_salida, Empleado dni_empleado) {
+	public Fichaje(LocalDate fecha, LocalTime hora_entrada, Empleado dni_empleado) {
+		this.fecha = fecha;
+		this.hora_entrada = hora_entrada;
+		this.dni_empleado = dni_empleado;
+	}
+	
+	public Fichaje(LocalTime hora_salida) {
+		this.hora_salida = hora_salida;
+	}
+	
+	public Fichaje(LocalDate fecha, LocalTime hora_entrada, LocalTime hora_salida, Empleado dni_empleado) {
+		this.fecha = fecha;
 		this.hora_entrada = hora_entrada;
 		this.hora_salida = hora_salida;
 		this.dni_empleado = dni_empleado;
 	}
 
-	public LocalDate getHora_entrada() {
+	public int getId_fichaje() {
+		return id_fichaje;
+	}
+
+	public LocalDate getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
+	}
+
+	public LocalTime getHora_entrada() {
 		return hora_entrada;
 	}
 
-	public void setHora_entrada(LocalDate hora_entrada) {
+	public void setHora_entrada(LocalTime hora_entrada) {
 		this.hora_entrada = hora_entrada;
 	}
 
-	public LocalDate getHora_salida() {
+	public LocalTime getHora_salida() {
 		return hora_salida;
 	}
 
-	public void setHora_salida(LocalDate hora_salida) {
+	public void setHora_salida(LocalTime hora_salida) {
 		this.hora_salida = hora_salida;
 	}
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>Gestionar Trabajo Empleados</title>
+	    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}"/>
+	    <script th:src="@{/js/empleados.js}" defer></script>
+	    <script th:src="@{/js/script.js}" defer></script>
+	</head>
+	<body data-home-url="/">
+	    <nav>
+	        <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
+	        <h1>Gestionar Trabajo Empleados</h1>
+	        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+	    </nav>
+	    
+	    <h2>Tabla de Ingresos</h2>
+		<table border="1">
+		    <thead>
+		        <tr>
+		            <th>ID</th>
+		            <th>Fecha</th>
+		            <th>Fisioterapeuta</th>
+		            <th>Paciente</th>
+		            <th>Tratamiento</th>
+		            <th>Pago</th>
+		            <th>Tarifa</th>
+		            <th>Concepto</th>
+		            <th>Cantidad</th>
+		        </tr>
+		    </thead>
+	       <tbody id="tabla-ingresos">
+	           <!-- Aquí se cargarán los datos dinámicamente -->
+	       </tbody>
+	    </table>
+	</body>
+</html>

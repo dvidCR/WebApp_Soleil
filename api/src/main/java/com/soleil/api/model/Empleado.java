@@ -2,6 +2,9 @@ package com.soleil.api.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +16,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "empleado")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Empleado {
 	
 	@Id
@@ -46,16 +50,22 @@ public class Empleado {
 	@NotNull(message = "Tienes que poner el rol que tiene el usuario")
 	private String rol;
 	
-	@OneToMany(mappedBy = "dni_empleado", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "dni_empleado", cascade = CascadeType.MERGE)
+	@JsonManagedReference(value = "empleado-fichaje")
 	private List<Fichaje> fichaje;
-	
-	@OneToMany(mappedBy = "dni_empleado", cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "dni_empleado", cascade = CascadeType.MERGE)
+	@JsonManagedReference(value = "empleado-paciente")
+	private List<Paciente> paciente;
+
+	@OneToMany(mappedBy = "dni_empleado", cascade = CascadeType.MERGE)
+	@JsonManagedReference(value = "empleado-servicio")
 	private List<Servicio> servicio;
+
 	
 	public Empleado() {
 		
 	}
-
 
 	public Empleado(String dni) {
 		this.dni = dni;
@@ -145,17 +155,22 @@ public class Empleado {
 	public List<Fichaje> getFichaje() {
 		return fichaje;
 	}
-
-
+	
 	public void setFichaje(List<Fichaje> fichaje) {
 		this.fichaje = fichaje;
 	}
 
+	public List<Paciente> getPaciente() {
+		return paciente;
+	}
 
+	public void setPaciente(List<Paciente> paciente) {
+		this.paciente = paciente;
+	}
+	
 	public List<Servicio> getServicio() {
 		return servicio;
 	}
-
 
 	public void setServicio(List<Servicio> servicio) {
 		this.servicio = servicio;

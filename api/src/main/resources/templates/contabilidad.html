@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>Gestionar Contabilidad</title>
+	    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}" />
+	    <script th:src="@{/js/script.js}" defer></script>
+	</head>
+	<body data-home-url="/">
+		<nav>
+		    <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo" /></a>
+		    <h1>Gestionar Contabilidad</h1>
+		    <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+		</nav>
+		
+		<h2>Tabla de Ingresos</h2>
+		<table border="1">
+		    <thead>
+		        <tr>
+		            <th>ID</th>
+		            <th>Fecha</th>
+		            <th>Fisioterapeuta</th>
+		            <th>Paciente</th>
+		            <th>Tratamiento</th>
+		            <th>Pago</th>
+		            <th>Tarifa</th>
+		            <th>Concepto</th>
+		            <th>Cantidad</th>
+		        </tr>
+		    </thead>
+		    <tbody id="tabla-ingresos">
+			    <tr th:each="servicio : ${servicios}">
+			        <td th:text="${servicio.id_servicio}"></td>
+			        <td th:text="${servicio.concepto}"></td>
+			        <td th:text="${#dates.format(servicio.fecha_cita, 'dd/MM/yyyy')}"></td>
+			        <td th:text="${servicio.dni_empleado}"></td>
+			        <td th:text="${servicio.dni_paciente}"></td>
+			        <td th:text="${servicio.modo_pago}"></td>
+			        <td th:text="${servicio.tarifa}"></td>
+			        <td th:text="${servicio.num_sesiones}"></td>
+			    </tr>
+			</tbody>
+		</table>
+		<p><strong>Total Ingresos:</strong> <span th:text="${totalIngresos}"></span> €</p>
+		<h2>Tabla de Gastos</h2>
+		<table border="1">
+		    <thead>
+		        <tr>
+		            <th>ID</th>
+		            <th>Cantidad</th>
+		            <th>Motivo</th>
+		            <th>Proveedor</th>
+		        </tr>
+		    </thead>
+		    <tbody id="tabla-gastos">
+			    <tr th:each="gasto : ${gastos}">
+			        <td th:text="${gasto.id_gasto}"></td>
+			        <td th:text="${gasto.cantidad}"></td>
+			        <td th:text="${gasto.motivo}"></td>
+			        <td th:text="${gasto.proveedor}"></td>
+			    </tr>
+			</tbody>
+		</table>
+		<p><strong>Total Gastos:</strong> <span th:text="${totalGastos}"></span> €</p>
+	    <br>
+	    <p><strong>Beneficio:</strong> <span th:text="${beneficio}"></span> €</p>
+	</body>
+</html>

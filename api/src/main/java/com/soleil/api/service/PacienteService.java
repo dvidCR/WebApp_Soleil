@@ -1,14 +1,19 @@
 package com.soleil.api.service;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.soleil.api.dto.TratamientoDTO;
 import com.soleil.api.model.Paciente;
+import com.soleil.api.model.Tratamiento;
 import com.soleil.api.repository.PacienteRepository;
 import com.soleil.api.repository.TratamientoRepository;
 
@@ -45,13 +50,46 @@ public class PacienteService {
         }).orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
 	}
 	
-	public Map<String, Integer> verTratamiento(String dni) {
-        List<Object[]> resultados = tratamientoRepository.verTratamiento(dni);
-        Map<String, Integer> tratamientoPorDni = new LinkedHashMap<>();
-        for (Object[] resultado : resultados) {
-        	tratamientoPorDni.put(resultado[0].toString(), ((Number) resultado[1]).intValue());
-        }
-        return tratamientoPorDni;
-    }
+	@Transactional
+	public Paciente actualizarDni(String dniAntiguo, String nuevoDni) {
+	    if (repositorio.existsById(nuevoDni)) {
+	        throw new RuntimeException("El nuevo DNI ya esta en uso por otro paciente");
+	    }
+
+	    Paciente pacienteViejo = repositorio.findById(dniAntiguo)
+	            .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+
+	    Paciente pacienteNuevo = new Paciente(
+	        nuevoDni,
+	        pacienteViejo.getNombre(),
+	        pacienteViejo.getApellidos(),
+	        pacienteViejo.getDni_empleado()
+	    );
+	    repositorio.save(pacienteNuevo);
+	    repositorio.flush();
+
+	    List<Tratamiento> nuevoTratamiento = pacienteViejo.getTratamiento();
+	    for (Tratamiento tratamiento : nuevoTratamiento) {
+	        tratamiento.setDni_paciente(pacienteNuevo);
+	    }
+	    tratamientoRepository.saveAll(nuevoTratamiento);
+
+	    eliminarPaciente(dniAntiguo);
+
+	    return pacienteNuevo;
+	}
+
+	
+	public List<TratamientoDTO> verTratamiento(String dni) {
+	    return tratamientoRepository.buscarTratamientosPorDniPaciente(dni).stream()
+	        .map(t -> new TratamientoDTO(t.getTipo_tratamiento(), t.getDescripcion()))
+	        .toList();
+	}
+
+	
+	public Page<Paciente> listarEmpleadosPaginados(int page, int size) {
+	    Pageable pageable = PageRequest.of(page, size, Sort.by("nombre").descending());
+	    return repositorio.findAll(pageable);
+	}
 	
 }

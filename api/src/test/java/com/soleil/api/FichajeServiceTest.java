@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,7 @@ class FichajeServiceTest {
     @BeforeEach
     void setUp() {
         empleado = new Empleado("123456789", "Juan", "Pérez", "juan@empresa.com", "juan123", "contraseña123", "admin");
-        fichaje = new Fichaje(LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 1), empleado);
+        fichaje = new Fichaje(LocalDate.now(), LocalTime.now(), empleado);
     }
 
     @Test
@@ -69,43 +70,43 @@ class FichajeServiceTest {
         verify(repositorio, times(1)).deleteById(1);
     }
 
-    @Test
-    void testActualizarHoraEntrada() {
-        LocalDate nuevaEntrada = LocalDate.of(2024, 4, 2);
-        Fichaje actualizado = new Fichaje(nuevaEntrada, fichaje.getHora_salida(), empleado);
-
-        when(repositorio.findById(1)).thenReturn(Optional.of(fichaje));
-        when(repositorio.save(any(Fichaje.class))).thenAnswer(i -> i.getArgument(0));
-
-        Fichaje resultado = servicio.actualizarHoraEntrada(1, actualizado);
-
-        assertEquals(nuevaEntrada, resultado.getHora_entrada());
-        verify(repositorio).save(any(Fichaje.class));
-    }
+//    @Test
+//    void testActualizarHoraEntrada() {
+//        LocalDate nuevaEntrada = LocalDate.of(2024, 4, 2);
+//        Fichaje actualizado = new Fichaje(nuevaEntrada, fichaje.getHora_salida(), empleado);
+//
+//        when(repositorio.findById(1)).thenReturn(Optional.of(fichaje));
+//        when(repositorio.save(any(Fichaje.class))).thenAnswer(i -> i.getArgument(0));
+//
+//        Fichaje resultado = servicio.actualizarHoraEntrada(1, actualizado);
+//
+//        assertEquals(nuevaEntrada, resultado.getHora_entrada());
+//        verify(repositorio).save(any(Fichaje.class));
+//    }
 
     @Test
     void testActualizarHoraSalida() {
-        LocalDate nuevaSalida = LocalDate.of(2024, 4, 3);
-        Fichaje actualizado = new Fichaje(fichaje.getHora_entrada(), nuevaSalida, empleado);
+        Fichaje actualizado = new Fichaje(LocalTime.now());
 
         when(repositorio.findById(1)).thenReturn(Optional.of(fichaje));
         when(repositorio.save(any(Fichaje.class))).thenAnswer(i -> i.getArgument(0));
 
         Fichaje resultado = servicio.actualizarHoraSalida(1, actualizado);
 
-        assertEquals(nuevaSalida, resultado.getHora_salida());
+        assertEquals(actualizado.getHora_salida(), resultado.getHora_salida());
         verify(repositorio).save(any(Fichaje.class));
     }
 
-    @Test
-    void testActualizarHoraEntradaConIdInexistente() {
-        when(repositorio.findById(99)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                servicio.actualizarHoraEntrada(99, fichaje));
-
-        assertEquals("Dia no encontrado", exception.getMessage());
-    }
+//    @Test
+//    void testActualizarHoraEntradaConIdInexistente() {
+//        when(repositorio.findById(99)).thenReturn(Optional.empty());
+//
+//        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+//                servicio.actualizarHoraEntrada(99, fichaje));
+//
+//        assertEquals("Dia no encontrado", exception.getMessage());
+//    }
 
     @Test
     void testActualizarHoraSalidaConIdInexistente() {

@@ -17,4 +17,8 @@ public interface TratamientoRepository extends JpaRepository<Tratamiento, Intege
 	
 	@Query("SELECT t.tipo_tratamiento, COUNT(t) FROM Tratamiento t WHERE t.dni_paciente.dni = :dni GROUP BY t.tipo_tratamiento")
 	List<Object[]> verTratamiento(@Param("dni") String dni);
+	
+	@Query("SELECT t FROM Tratamiento t WHERE t.dni_paciente.dni = :dni")
+	List<Tratamiento> buscarTratamientosPorDniPaciente(@Param("dni") String dni);
+	
 }
