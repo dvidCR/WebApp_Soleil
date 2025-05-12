@@ -3,37 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionar Trabajo Empleados</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/CSS/admin.css}"/>
-    <script th:src="@{/JS/empleados.js}" defer></script>
-    <script th:src="@{/JS/script.js}" defer></script>
+    <title>Fichaje</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+    <script th:src="@{/js/script.js}" defer></script>
 </head>
-<body>
+<body data-home-url="/">
     <nav>
-        <a th:href="@{/}"><img th:src="@{/IMG/logo.png}" alt="Logo"></a>
-        <h1>Gestionar Trabajo Empleados</h1>
+        <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
+        <h1>Fichaje</h1>
         <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
     </nav>
-    
-    <h2>Tabla de Ingresos</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Servicio</th>
-                <th>Día</th>
-                <th>Fisioterapeuta</th>
-                <th>Paciente</th>
-                <th>Pago</th>
-                <th>Tarifa</th>
-                <th>Cantidad</th>
-            </tr>
-        </thead>
-        <tbody id="tabla-ingresos">
-            <!-- Aquí se cargarán los datos dinámicamente -->
-        </tbody>
-    </table>
-
-    <button class="btn" th:onclick="'location.href=\'admin.html\''">Retroceder</button>
+    <div class="container">
+        <button class="btn" th:onclick="|location.href='@{/fichar}'|">Fichar Entrada / Salida</button>
+        <button class="btn" th:onclick="|location.href='@{/añadirServicio}'|">Añadir Servicio</button>
+    </div>
 </body>
 </html>

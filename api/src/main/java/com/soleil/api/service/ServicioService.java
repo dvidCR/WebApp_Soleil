@@ -49,6 +49,12 @@ public class ServicioService {
         }).orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
 	}
 	
+	public double calcularTotalIngresos() {
+        return repositorio.findAll().stream()
+            .mapToDouble(s -> s.getTarifa() * s.getNum_sesiones())
+            .sum();
+    }
+	
 	public Page<Servicio> listarEmpleadosPaginados(int page, int size) {
 	    Pageable pageable = PageRequest.of(page, size, Sort.by("dni_empleado").descending());
 	    return repositorio.findAll(pageable);

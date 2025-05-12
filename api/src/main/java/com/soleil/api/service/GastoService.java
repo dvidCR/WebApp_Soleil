@@ -43,6 +43,12 @@ public class GastoService {
             return repositorio.save(gasto);
         }).orElseThrow(() -> new RuntimeException("Gasto no encontrado"));
 	}
+
+    public double calcularTotalGastos() {
+        return repositorio.findAll().stream()
+            .mapToDouble(Gasto::getCantidad)
+            .sum();
+    }
 	
 	public Page<Gasto> listarEmpleadosPaginados(int page, int size) {
 	    Pageable pageable = PageRequest.of(page, size, Sort.by("proveedor").descending());
