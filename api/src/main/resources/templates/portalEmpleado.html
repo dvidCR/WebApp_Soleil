@@ -9,12 +9,15 @@
 </head>
 <body data-home-url="/">
     <nav>
-        <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
+        <a th:href="@{/portalEmpleado}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
         <h1>Fichaje</h1>
         <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
     </nav>
     <div class="container">
-        <button class="btn" th:onclick="|location.href='@{/fichar}'|">Fichar Entrada / Salida</button>
+        <input type="hidden" id="dniEmpleado" th:value="${empleado.dni}" />
+		<button class="btn" onclick="fichar()">Fichar Entrada / Salida</button>
+		<p id="mensajeFichaje" style="margin-top: 10px; color: green;"></p>
+
         <button class="btn" th:onclick="|location.href='@{/añadirServicio}'|">Añadir Servicio</button>
     </div>
 </body>
