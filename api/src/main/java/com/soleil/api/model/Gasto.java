@@ -1,5 +1,7 @@
 package com.soleil.api.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +20,7 @@ public class Gasto {
 	
 	@Column(name = "cantidad")
 	@NotNull(message = "Tienes que poner cuanto has gastado")
-	private int cantidad;
+	private double cantidad;
 	
 	@Column(name = "motivo")
 	@NotNull(message = "Tienes que poner el porque de este gasto")
@@ -28,25 +30,30 @@ public class Gasto {
 	@NotNull(message = "Tienes que poner de donde viene ese gasto")
 	private String proveedor;
 	
+	@Column(name = "fecha")
+	@NotNull(message = "Tienes que poner la fecha en la que se hizo la compra")
+	private Date fecha;
+	
 	public Gasto() {
 		
 	}
 
-	public Gasto(int cantidad, String motivo, String proveedor) {
+	public Gasto(double cantidad, String motivo, String proveedor, Date fecha) {
 		this.cantidad = cantidad;
 		this.motivo = motivo;
 		this.proveedor = proveedor;
+		this.fecha = fecha;
 	}
 
 	public int getId_gasto() {
 		return id_gasto;
 	}
 
-	public int getCantidad() {
+	public double getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(int cantidad) {
+	public void setCantidad(double cantidad) {
 		this.cantidad = cantidad;
 	}
 
@@ -64,6 +71,18 @@ public class Gasto {
 
 	public void setProveedor(String proveedor) {
 		this.proveedor = proveedor;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public void setId_gasto(int id_gasto) {
+		this.id_gasto = id_gasto;
 	}
 	
 }

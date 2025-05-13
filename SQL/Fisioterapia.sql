@@ -49,9 +49,10 @@ CREATE TABLE IF NOT EXISTS Servicio(
 
 CREATE TABLE IF NOT EXISTS Gasto(
     id_gasto INT AUTO_INCREMENT,
-    cantidad INT,
+    cantidad DOUBLE,
     motivo VARCHAR(30),
     proveedor VARCHAR(30),
+    fecha DATE,
     PRIMARY KEY(id_gasto)
 );
 
