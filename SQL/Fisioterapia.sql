@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS Gasto(
     cantidad INT,
     motivo VARCHAR(30),
     proveedor VARCHAR(30),
+    fecha DATE,
     PRIMARY KEY(id_gasto)
 );
 
@@ -65,3 +66,4 @@ CREATE TABLE IF NOT EXISTS Fichaje(
     PRIMARY KEY(id_fichaje),
     FOREIGN KEY(dni_empleado) REFERENCES Empleado(dni)
 );
+

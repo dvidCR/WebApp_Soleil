@@ -1,25 +1,29 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" th:href="@{/css/login.css}" />
-    <script th:src="@{/js/login.js}" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar Sesión</title>
+  <link rel="stylesheet" href="css/login.css" />
 </head>
 <body>
-    <nav>
-        <a th:href="@{/}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
-        <h1>Soleil Fisioterapia&Osteopatía</h1>
-    </nav>
-    <div class="login-container">
-        <h2>Iniciar Sesión</h2>
-        <form action="/login" method="post">
-            <input type="text" id="user" name="usuario" placeholder="Usuario">
-            <input type="password" id="password" name="contrasena" placeholder="Contraseña">
-            <button type="submit">Ingresar</button>
-        </form>
-        <p th:text="${error}" style="color:red;"></p>  <!-- Muestra el error si hay -->
+  <header class="header">
+    <div class="logo">
+      <a href="#"><img src="img/logo.png" alt="Logo Colegio Lagomar" /></a>
     </div>
+    <h1>Soleil Fisioterapia & Osteopatía</h1>
+  </header>
+
+  <main class="login-main">
+    <section class="login-container">
+      <h2>Iniciar Sesión</h2>
+      <form action="/login" method="post">
+        <input type="text" id="user" name="usuario" placeholder="Usuario" required />
+        <input type="password" id="password" name="contrasena" placeholder="Contraseña" required />
+        <button type="submit">Ingresar</button>
+      </form>
+      <p id="message">Usuario o contraseña incorrectos</p> <!-- este se muestra condicionalmente -->
+    </section>
+  </main>
 </body>
 </html>

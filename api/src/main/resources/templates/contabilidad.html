@@ -51,6 +51,7 @@
 		            <th>Cantidad</th>
 		            <th>Motivo</th>
 		            <th>Proveedor</th>
+					<th>Fecha</th>
 		        </tr>
 		    </thead>
 		    <tbody id="tabla-gastos">
@@ -59,6 +60,7 @@
 			        <td th:text="${gasto.cantidad}"></td>
 			        <td th:text="${gasto.motivo}"></td>
 			        <td th:text="${gasto.proveedor}"></td>
+					<td th:text="${gasto.fecha}"></td>
 			    </tr>
 			</tbody>
 		</table>
