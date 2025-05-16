@@ -40,6 +40,7 @@ public class GastoService {
         	gasto.setCantidad(gastoActualizada.getCantidad());
         	gasto.setMotivo(gastoActualizada.getMotivo());
         	gasto.setProveedor(gastoActualizada.getProveedor());
+        	gasto.setFecha(gastoActualizada.getFecha());
             return repositorio.save(gasto);
         }).orElseThrow(() -> new RuntimeException("Gasto no encontrado"));
 	}
@@ -51,7 +52,7 @@ public class GastoService {
     }
 	
 	public Page<Gasto> listarEmpleadosPaginados(int page, int size) {
-	    Pageable pageable = PageRequest.of(page, size, Sort.by("proveedor").descending());
+	    Pageable pageable = PageRequest.of(page, size, Sort.by("fecha").descending());
 	    return repositorio.findAll(pageable);
 	}
 	
