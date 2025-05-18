@@ -26,6 +26,7 @@ body {
 
 .logo img {
     height: 60px;
+    border-radius: 50%;
 }
 
 .header h1 {

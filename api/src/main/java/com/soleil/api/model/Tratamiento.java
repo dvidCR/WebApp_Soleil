@@ -3,6 +3,7 @@ package com.soleil.api.model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -20,11 +21,12 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tratamiento")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Tratamiento {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id_tratamiento;
+	private Integer id_tratamiento;
 	
 	@Column(name = "tipo_tratamiento")
 	@NotNull(message = "Tienes que poner el tipo de tratamiento")
@@ -35,7 +37,7 @@ public class Tratamiento {
 	private String descripcion;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "dni_paciente", nullable = false)
+	@JoinColumn(name = "dni_paciente", nullable = true)
 	@JsonBackReference(value = "paciente-tratamiento")
 	private Paciente dni_paciente;
 
@@ -48,7 +50,7 @@ public class Tratamiento {
 		
 	}
 	
-	public Tratamiento(int id_tratamiento) {
+	public Tratamiento(Integer id_tratamiento) {
 		this.id_tratamiento = id_tratamiento;
 	}
 	
@@ -58,11 +60,11 @@ public class Tratamiento {
 		this.dni_paciente = dni_paciente;
 	}
 
-	public int getId_tratamiento() {
+	public Integer getId_tratamiento() {
 		return id_tratamiento;
 	}
 
-	public void setId_tratamiento(int id_tratamiento) {
+	public void setId_tratamiento(Integer id_tratamiento) {
 		this.id_tratamiento = id_tratamiento;
 	}
 

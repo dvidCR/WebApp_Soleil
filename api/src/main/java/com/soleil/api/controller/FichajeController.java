@@ -37,7 +37,7 @@ public class FichajeController {
 	        dto.setFecha(fichaje.getFecha());
 	        dto.setHora_entrada(fichaje.getHora_entrada());
 	        dto.setHora_salida(fichaje.getHora_salida());
-	        dto.setDni_empleado(fichaje.getEmpleado().getDni());
+	        dto.setDni_empleado(fichaje.getDni_empleado().getDni());
 	        return dto;
 	    }).toList();
 	}
@@ -51,7 +51,7 @@ public class FichajeController {
 	        dto.setFecha(fichaje.getFecha());
 	        dto.setHora_entrada(fichaje.getHora_entrada());
 	        dto.setHora_salida(fichaje.getHora_salida());
-	        dto.setDni_empleado(fichaje.getEmpleado().getDni());
+	        dto.setDni_empleado(fichaje.getDni_empleado().getDni());
 	        return dto;
 	    }).toList();
     }

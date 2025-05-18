@@ -90,7 +90,7 @@ public class EmpleadoService {
 
 	    List<Fichaje> nuevosFichajes = empleadoViejo.getFichaje();
 	    for (Fichaje f : nuevosFichajes) {
-	        f.setEmpleado(empleadoNuevo);
+	        f.setDni_empleado(empleadoNuevo);
 	    }
 	    fichajeRepository.saveAll(nuevosFichajes);
 

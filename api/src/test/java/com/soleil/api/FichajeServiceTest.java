@@ -53,7 +53,7 @@ class FichajeServiceTest {
         when(repositorio.findById(1)).thenReturn(Optional.of(fichaje));
         Optional<Fichaje> resultado = servicio.obtenerPorId(1);
         assertTrue(resultado.isPresent());
-        assertEquals(empleado.getDni(), resultado.get().getEmpleado().getDni());
+        assertEquals(empleado.getDni(), resultado.get().getDni_empleado().getDni());
     }
 
     @Test
@@ -61,7 +61,7 @@ class FichajeServiceTest {
         when(repositorio.save(fichaje)).thenReturn(fichaje);
         Fichaje guardado = servicio.guardarFichaje(fichaje);
         assertNotNull(guardado);
-        assertEquals(fichaje.getEmpleado().getDni(), guardado.getEmpleado().getDni());
+        assertEquals(fichaje.getDni_empleado().getDni(), guardado.getDni_empleado().getDni());
     }
 
     @Test

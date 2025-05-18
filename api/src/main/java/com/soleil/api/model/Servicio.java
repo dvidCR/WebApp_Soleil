@@ -1,10 +1,12 @@
 package com.soleil.api.model;
 
-
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,33 +17,38 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "servicio")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Servicio {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id_servicio;
+	private Integer id_servicio;
 	
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "fecha_cita")
 	@NotNull(message = "Tienes que poner poner la fecha")
 	private Date fecha_cita;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "dni_empleado", nullable = false)
+	@JoinColumn(name = "dni_empleado", nullable = true)
 	@JsonBackReference(value = "empleado-servicio")
 	private Empleado dni_empleado;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "paciente", nullable = false)
+	@JoinColumn(name = "dni_paciente", nullable = true)
 	@JsonBackReference(value = "paciente-servicio")
 	private Paciente dni_paciente;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "tratamiento", nullable = false)
+	@JoinColumn(name = "id_tratamiento", nullable = false)
 	@JsonBackReference(value = "tratamiento-servicio")
 	private Tratamiento id_tratamiento;
 
@@ -76,11 +83,11 @@ public class Servicio {
 		this.num_sesiones = num_sesiones;
 	}
 
-	public int getId_servicio() {
+	public Integer getId_servicio() {
 		return id_servicio;
 	}
 
-	public void setId_servicio(int id_servicio) {
+	public void setId_servicio(Integer id_servicio) {
 		this.id_servicio = id_servicio;
 	}
 

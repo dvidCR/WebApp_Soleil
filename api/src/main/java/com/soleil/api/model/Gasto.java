@@ -2,6 +2,11 @@ package com.soleil.api.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,11 +17,12 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "gasto")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Gasto {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id_gasto;
+	private Integer id_gasto;
 	
 	@Column(name = "cantidad")
 	@NotNull(message = "Tienes que poner cuanto has gastado")
@@ -30,6 +36,8 @@ public class Gasto {
 	@NotNull(message = "Tienes que poner de donde viene ese gasto")
 	private String proveedor;
 	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "fecha")
 	@NotNull(message = "Tienes que poner la fecha en la que se hizo la compra")
 	private Date fecha;
@@ -45,8 +53,12 @@ public class Gasto {
 		this.fecha = fecha;
 	}
 
-	public int getId_gasto() {
+	public Integer getId_gasto() {
 		return id_gasto;
+	}
+	
+	public void setId_gasto(Integer id_gasto) {
+		this.id_gasto = id_gasto;
 	}
 
 	public double getCantidad() {
@@ -79,10 +91,6 @@ public class Gasto {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
-	}
-
-	public void setId_gasto(int id_gasto) {
-		this.id_gasto = id_gasto;
 	}
 	
 }

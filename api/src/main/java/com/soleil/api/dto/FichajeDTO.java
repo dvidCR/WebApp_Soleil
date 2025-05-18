@@ -5,17 +5,17 @@ import java.time.LocalTime;
 
 public class FichajeDTO {
 	
-    private int id_fichaje;
+    private Integer id_fichaje;
     private LocalDate fecha;
     private LocalTime hora_entrada;
     private LocalTime hora_salida;
     private String dni_empleado;
     
-    public int getId_fichaje() {
+    public Integer getId_fichaje() {
 		return id_fichaje;
 	}
     
-	public void setId_fichaje(int id_fichaje) {
+	public void setId_fichaje(Integer id_fichaje) {
 		this.id_fichaje = id_fichaje;
 	}
 

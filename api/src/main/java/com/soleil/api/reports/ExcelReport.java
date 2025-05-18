@@ -105,7 +105,7 @@ public class ExcelReport {
         int rowIdx = 1;
 
         for (GastoDTO expense : expenses) {
-            LocalDate fecha = expense.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        	LocalDate fecha = expense.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             if (!debeIncluirFecha(fecha)) continue;
 
             Row row = sheet.createRow(rowIdx++);

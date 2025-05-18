@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class TratamientoDTO {
 
-	private int id_tratamiento;
+	private Integer id_tratamiento;
 	
 	@NotNull(message = "Tienes que poner el tipo de tratamiento")
 	private String tipo_tratamiento;
@@ -23,18 +23,18 @@ public class TratamientoDTO {
         this.descripcion = descripcion;
     }
 
-	public TratamientoDTO(int id_tratamiento, String tipo_tratamiento, String descripcion, String dni_paciente) {
+	public TratamientoDTO(Integer id_tratamiento, String tipo_tratamiento, String descripcion, String dni_paciente) {
 		this.id_tratamiento = id_tratamiento;
 		this.tipo_tratamiento = tipo_tratamiento;
 		this.descripcion = descripcion;
 		this.dni_paciente = dni_paciente;
 	}
 
-	public int getId_tratamiento() {
+	public Integer getId_tratamiento() {
 		return id_tratamiento;
 	}
 
-	public void setId_tratamiento(int id_tratamiento) {
+	public void setId_tratamiento(Integer id_tratamiento) {
 		this.id_tratamiento = id_tratamiento;
 	}
 

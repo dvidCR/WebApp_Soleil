@@ -2,11 +2,15 @@ package com.soleil.api.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotNull;
 
 public class GastoDTO {
 	
-	private int id_gasto;
+	private Integer id_gasto;
 	
 	@NotNull(message = "Tienes que poner cuanto has gastado")
 	private double cantidad;
@@ -17,14 +21,16 @@ public class GastoDTO {
 	@NotNull(message = "Tienes que poner de donde viene ese gasto")
 	private String proveedor;
 	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@NotNull(message = "Tienes que poner la fecha en la que se hizo la compra")
 	private Date fecha;
 
-	public int getId_gasto() {
+	public Integer getId_gasto() {
 		return id_gasto;
 	}
 
-	public void setId_gasto(int id_gasto) {
+	public void setId_gasto(Integer id_gasto) {
 		this.id_gasto = id_gasto;
 	}
 

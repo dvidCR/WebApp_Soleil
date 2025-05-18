@@ -38,7 +38,7 @@ public class Paciente {
 	private String apellidos;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "dni_empleado", nullable = false)
+	@JoinColumn(name = "dni_empleado", nullable = true)
 	@JsonBackReference(value = "empleado-paciente")
 	private Empleado dni_empleado;
 

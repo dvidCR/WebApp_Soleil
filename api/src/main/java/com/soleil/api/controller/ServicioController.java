@@ -28,6 +28,7 @@ public class ServicioController {
 		return servicio.obtenerTodos().stream().map(servicio -> {
 	        ServicioDTO dto = new ServicioDTO();
 	        dto.setId_servicio(servicio.getId_servicio());
+	        dto.setFecha_cita(servicio.getFecha_cita());
 	        dto.setDni_empleado(servicio.getDni_empleado().getDni());
 	        dto.setDni_paciente(servicio.getDni_paciente().getDni());
 	        dto.setId_tratamiento(servicio.getId_tratamiento().getId_tratamiento());
@@ -44,6 +45,7 @@ public class ServicioController {
         return servicio.obtenerPorId(id).stream().map(servicio -> {
 	        ServicioDTO dto = new ServicioDTO();
 	        dto.setId_servicio(servicio.getId_servicio());
+	        dto.setFecha_cita(servicio.getFecha_cita());
 	        dto.setDni_empleado(servicio.getDni_empleado().getDni());
 	        dto.setDni_paciente(servicio.getDni_paciente().getDni());
 	        dto.setId_tratamiento(servicio.getId_tratamiento().getId_tratamiento());

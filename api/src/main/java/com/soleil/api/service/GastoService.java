@@ -27,6 +27,15 @@ public class GastoService {
 		return repositorio.findById(id);
 	}
 	
+	public List<Gasto> buscarPorProveedor(String proveedor) {
+	    return repositorio.buscarPorProveedor(proveedor);
+	}
+	
+	public List<String> obtenerTodosProveedoresUnicos() {
+	    return repositorio.findProveedoresUnicos();
+	}
+
+	
 	public Gasto guardarGasto(Gasto gasto) {
 		return repositorio.save(gasto);
 	}

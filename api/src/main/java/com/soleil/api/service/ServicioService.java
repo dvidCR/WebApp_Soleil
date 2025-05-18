@@ -27,6 +27,10 @@ public class ServicioService {
 		return repositorio.findById(id);
 	}
 	
+	public List<Servicio> buscarServiciosPorFiltroEmpleado(String filtro) {
+	    return repositorio.buscarPorFiltroEmpleado(filtro);
+	}
+	
 	public Servicio guardarServicio(Servicio servicio) {
 		return repositorio.save(servicio);
 	}

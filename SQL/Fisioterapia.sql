@@ -16,34 +16,34 @@ CREATE TABLE IF NOT EXISTS Paciente(
     dni VARCHAR(9),
     nombre VARCHAR(20),
     apellidos VARCHAR(30),
-    dni_empleado VARCHAR(9) NOT NULL,
+    dni_empleado VARCHAR(9),
     PRIMARY KEY (dni),
-    FOREIGN KEY (dni_empleado) REFERENCES Empleado(dni)
+    FOREIGN KEY (dni_empleado) REFERENCES Empleado(dni) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS Tratamiento(
     id_tratamiento INT AUTO_INCREMENT,
     tipo_tratamiento VARCHAR(30),
     descripcion VARCHAR(100),
-    dni_paciente VARCHAR(9) NOT NULL,
+    dni_paciente VARCHAR(9),
     PRIMARY KEY (id_tratamiento),
-    FOREIGN KEY (dni_paciente) REFERENCES Paciente(dni)    
+    FOREIGN KEY (dni_paciente) REFERENCES Paciente(dni) ON DELETE SET NULL
 );
 
 -- Nombre anterior Ingreso
 CREATE TABLE IF NOT EXISTS Servicio(
     id_servicio INT AUTO_INCREMENT,
     fecha_cita DATE,
-    dni_empleado VARCHAR(9) NOT NULL,
-    dni_paciente VARCHAR(9) NOT NULL,
+    dni_empleado VARCHAR(9),
+    dni_paciente VARCHAR(9),
     id_tratamiento INT NOT NULL,
     modo_pago VARCHAR(5),
     tarifa DOUBLE,
     concepto VARCHAR(30),
     num_sesiones INT,
     PRIMARY KEY(id_servicio),
-    FOREIGN KEY (dni_empleado) REFERENCES Empleado(dni),
-    FOREIGN KEY (dni_paciente) REFERENCES Paciente(dni),
+    FOREIGN KEY (dni_empleado) REFERENCES Empleado(dni) ON DELETE SET NULL,
+    FOREIGN KEY (dni_paciente) REFERENCES Paciente(dni) ON DELETE SET NULL,
     FOREIGN KEY (id_tratamiento) REFERENCES Tratamiento(id_tratamiento)
 );
 
@@ -62,8 +62,7 @@ CREATE TABLE IF NOT EXISTS Fichaje(
     fecha DATE,
     hora_entrada TIME,
     hora_salida TIME,
-    dni_empleado VARCHAR(9) NOT NULL,
+    dni_empleado VARCHAR(9),
     PRIMARY KEY(id_fichaje),
-    FOREIGN KEY(dni_empleado) REFERENCES Empleado(dni)
+    FOREIGN KEY(dni_empleado) REFERENCES Empleado(dni) ON DELETE SET NULL
 );
-

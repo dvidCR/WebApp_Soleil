@@ -31,6 +31,7 @@ public class GastoController {
 	        dto.setCantidad(gasto.getCantidad());
 	        dto.setMotivo(gasto.getMotivo());
 	        dto.setProveedor(gasto.getProveedor());
+	        dto.setFecha(gasto.getFecha());
 	        return dto;
 	    }).toList();
     }
@@ -43,6 +44,7 @@ public class GastoController {
 	        dto.setCantidad(gasto.getCantidad());
 	        dto.setMotivo(gasto.getMotivo());
 	        dto.setProveedor(gasto.getProveedor());
+	        dto.setFecha(gasto.getFecha());
 	        return dto;
 	    }).toList();
     }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,11 +18,12 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "fichaje")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Fichaje {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id_fichaje;
+	private Integer id_fichaje;
 	
 	@Column(name = "fecha")
 	private LocalDate fecha;
@@ -33,7 +35,7 @@ public class Fichaje {
 	private LocalTime hora_salida;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "dni_empleado", nullable = false)
+	@JoinColumn(name = "dni_empleado", nullable = true)
 	@JsonBackReference(value = "empleado-fichaje")
 	private Empleado dni_empleado;
 
@@ -59,8 +61,12 @@ public class Fichaje {
 		this.dni_empleado = dni_empleado;
 	}
 
-	public int getId_fichaje() {
+	public Integer getId_fichaje() {
 		return id_fichaje;
+	}
+
+	public void setId_fichaje(Integer id_fichaje) {
+		this.id_fichaje = id_fichaje;
 	}
 
 	public LocalDate getFecha() {
@@ -87,11 +93,11 @@ public class Fichaje {
 		this.hora_salida = hora_salida;
 	}
 
-	public Empleado getEmpleado() {
+	public Empleado getDni_empleado() {
 		return dni_empleado;
 	}
 
-	public void setEmpleado(Empleado dni_empleado) {
+	public void setDni_empleado(Empleado dni_empleado) {
 		this.dni_empleado = dni_empleado;
 	}
 	

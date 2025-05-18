@@ -14,8 +14,19 @@
 	        <h1>Gestionar Trabajo Empleados</h1>
 	        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
 	    </nav>
-	    
-	    <h2>Tabla de Ingresos</h2>
+	    <h2>Gestión Empleados</h2>
+		<form action="/gestionEmpleado" method="get">
+		    <label for="filtroEmpleado">Filtrar por empleado:</label>
+		    <select name="filtroEmpleado" id="filtroEmpleado" onchange="this.form.submit()">
+		        <option value="">-- Todos --</option>
+		        <option th:each="empleado : ${empleados}"
+				        th:value="${empleado.dni}"
+				        th:text="|${empleado.nombre} ${empleado.apellidos} (${empleado.dni})|"
+				        th:selected="${filtroEmpleado} == ${empleado.dni}">
+				</option>
+		    </select>
+		    <input type="hidden" name="filtroProveedor" th:value="${filtroProveedor}" />
+		</form>
 		<table border="1">
 		    <thead>
 		        <tr>
@@ -30,9 +41,20 @@
 		            <th>Cantidad</th>
 		        </tr>
 		    </thead>
-	       <tbody id="tabla-ingresos">
-	           <!-- Aquí se cargarán los datos dinámicamente -->
-	       </tbody>
-	    </table>
+		    <tbody>
+			    <tr th:each="servicio : ${servicios}" th:if="${servicio.dni_empleado != null}">
+			        <td th:text="${servicio.id_servicio}"></td>
+			        <td th:text="${#dates.format(servicio.fecha_cita, 'yyyy/MM/dd')}"></td>
+			        <td th:text="${servicio.dni_empleado.nombre + ' ' + servicio.dni_empleado.apellidos}"></td>
+			        <td th:text="${servicio.dni_paciente != null ? servicio.dni_paciente.nombre + ' ' + servicio.dni_paciente.apellidos : 'Desconocido'}"></td>
+			        <td th:text="${servicio.id_tratamiento.tipo_tratamiento}"></td>
+			        <td th:text="${servicio.modo_pago}"></td>
+			        <td th:text="${servicio.tarifa}"></td>
+			        <td th:text="${servicio.concepto}"></td>
+			        <td th:text="${servicio.num_sesiones}"></td>
+			    </tr>
+			</tbody>
+		</table>
+		<p><strong>Total Ingresos:</strong> <span th:text="${totalIngresos}"></span> €</p>
 	</body>
 </html>
