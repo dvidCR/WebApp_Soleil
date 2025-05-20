@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Empleado(
     apellidos VARCHAR(30),
     correo VARCHAR(20),
     usuario VARCHAR(20),
-    contrasena VARCHAR(20),
+    contrasena VARCHAR(100),
     rol VARCHAR(10),
     PRIMARY KEY(dni)
 );

@@ -6,18 +6,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import com.soleil.api.dto.EmpleadoDTO;
 import com.soleil.api.model.Empleado;
 import com.soleil.api.model.Fichaje;
 import com.soleil.api.model.Gasto;
@@ -31,7 +28,7 @@ import com.soleil.api.service.PacienteService;
 import com.soleil.api.service.ServicioService;
 import com.soleil.api.service.TratamientoService;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class viewController {
@@ -60,11 +57,16 @@ public class viewController {
     }
     
     @GetMapping("/portalEmpleado")
-    public String mostrarPortalEmpleado(Model model, HttpSession session) {
-        Empleado empleado = (Empleado) session.getAttribute("empleadoActivo");
-        if (empleado == null) {
-            return "redirect:/login";
+    public String mostrarPortalEmpleado(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return "redirect:/index";
         }
+        Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+        if (empleadoOpt.isEmpty()) {
+            return "redirect:/index";
+        }
+        Empleado empleado = empleadoOpt.get();
+
         List<Fichaje> fichajesHoy = fichajeService.obtenerTodos().stream()
                 .filter(f -> f.getDni_empleado() != null &&
                              f.getDni_empleado().getDni().equals(empleado.getDni()) &&
@@ -76,20 +78,64 @@ public class viewController {
         return "portalEmpleado";
     }
     
-    @GetMapping("/anadirServicio")
-    public String mostrarServiciosDelEmpleado(HttpSession session, Model model) {
-        Empleado empleado = (Empleado) session.getAttribute("empleadoActivo");
+    @PostMapping("/ficharVista")
+    @ResponseBody
+    public String ficharVista(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return "Error: Usuario no autenticado.";
+        }
 
-        List<Servicio> servicios;
-        if (empleado != null) {
-            servicios = servicioService.obtenerTodos().stream()
-                .filter(s -> s.getDni_empleado() != null && s.getDni_empleado().getDni().equals(empleado.getDni()))
+        Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+        if (empleadoOpt.isEmpty()) {
+            return "Error: Empleado no encontrado.";
+        }
+
+        Empleado empleado = empleadoOpt.get();
+        LocalDate hoy = LocalDate.now();
+
+        List<Fichaje> fichajesDeHoy = fichajeService.obtenerTodos().stream()
+                .filter(f -> f.getDni_empleado() != null &&
+                             f.getDni_empleado().getDni().equals(empleado.getDni()) &&
+                             f.getFecha().equals(hoy))
                 .toList();
-            model.addAttribute("empleado", empleado);
+
+        if (!fichajesDeHoy.isEmpty()) {
+            Fichaje ultimoFichaje = fichajesDeHoy.get(fichajesDeHoy.size() - 1);
+
+            if (ultimoFichaje.getHora_salida() != null) {
+                return "Ya has fichado entrada y salida hoy.";
+            }
+
+            fichajeService.actualizarHoraSalida(
+                ultimoFichaje.getId_fichaje(),
+                new Fichaje(LocalTime.now())
+            );
+            return "Salida fichada correctamente";
+        }
+
+        fichajeService.guardarFichaje(new Fichaje(LocalDate.now(), LocalTime.now(), empleado));
+        return "Entrada fichada correctamente";
+    }
+    
+    @GetMapping("/anadirServicio")
+    public String mostrarServiciosDelEmpleado(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        List<Servicio> servicios;
+
+        if (userDetails != null) {
+            Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+            if (empleadoOpt.isPresent()) {
+                Empleado empleado = empleadoOpt.get();
+                servicios = servicioService.obtenerTodos().stream()
+                    .filter(s -> s.getDni_empleado() != null && s.getDni_empleado().getDni().equals(empleado.getDni()))
+                    .toList();
+                model.addAttribute("empleado", empleado);
+            } else {
+                servicios = servicioService.obtenerTodos();
+            }
         } else {
             servicios = servicioService.obtenerTodos();
         }
-        
+
         List<Paciente> pacientes = pacienteService.obtenerTodos();
         List<Tratamiento> tratamientos = tratamientoService.obtenerTodos();
         List<Empleado> empleados = empleadoService.obtenerTodos();
@@ -98,21 +144,28 @@ public class viewController {
         model.addAttribute("pacientes", pacientes);
         model.addAttribute("empleados", empleados);
         model.addAttribute("tratamientos", tratamientos);
+
         return "anadirServicio";
     }
     
     @PostMapping("/anadirServicio")
     public String empleadoAddServicio(@ModelAttribute Servicio servicio) {
-    	servicioService.guardarServicio(servicio);
+        servicioService.guardarServicio(servicio);
         return "redirect:/anadirServicio";
     }
     
     @GetMapping("/admin")
-    public String mostrarAdmin(Model model, HttpSession session) {
-    	Empleado empleado = (Empleado) session.getAttribute("empleadoActivo");
-        if (empleado == null) {
-            return "redirect:/login";
+    public String mostrarAdmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    	if (userDetails == null) {
+            return "redirect:/index";
         }
+    	
+        Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+        if (empleadoOpt.isEmpty()) {
+            return "redirect:/index";
+        }
+        
+        Empleado empleado = empleadoOpt.get();       
         model.addAttribute("empleado", empleado);
         return "admin";
     }
@@ -126,18 +179,26 @@ public class viewController {
     }
     
     @PostMapping("/configurarUsuarios")
-    public String crearEmpleado(@ModelAttribute Empleado empleado) {
-        empleadoService.guardarEmpleado(empleado);
+    public String crearEmpleado(@Valid @ModelAttribute EmpleadoDTO empleadoDTO, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("empleados", empleadoService.obtenerTodos());
+            return "configurarUsuarios";
+        }
+        empleadoService.guardarEmpleadoDesdeDTO(empleadoDTO);
         return "redirect:/configurarUsuarios";
     }
 
     @PutMapping("/configurarUsuarios/{dni}")
-    public String actualizarEmpleado(@PathVariable String dni, @ModelAttribute Empleado empleado) {
-        empleadoService.actualizarEmpleado(dni, empleado);
+    public String actualizarEmpleado(@PathVariable String dni, @Valid @ModelAttribute EmpleadoDTO empleadoDTO, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("empleados", empleadoService.obtenerTodos());
+            return "configurarUsuarios";
+        }
+        empleadoService.actualizarEmpleadoDesdeDTO(dni, empleadoDTO);
         return "redirect:/configurarUsuarios";
     }
     
-    @PutMapping("/configurarUsuarios/actualizarDNI/{dni}")
+    @PutMapping("/configurarUsuarios/actualizarEmpleadoDNI/{dni}")
     public String actualizarEmpleadoDni(@PathVariable String dni, @RequestParam String nuevoDni) {
         empleadoService.actualizarDni(dni, nuevoDni);
         return "redirect:/configurarUsuarios";
@@ -196,17 +257,16 @@ public class viewController {
 
     @PostMapping("/configurarTratamientos")
     public String crearTratamiento(@ModelAttribute Tratamiento tratamiento, @RequestParam(required = false) String dni_paciente) {
-    	if (dni_paciente != null && !dni_paciente.isEmpty()) {
-    	    Optional<Paciente> pacienteOpt = pacienteService.obtenerPorDni(dni_paciente);
-    	    if (pacienteOpt.isPresent()) {
-    	        tratamiento.setDni_paciente(pacienteOpt.get());
-    	    } else {
-    	        // Manejar el error o setear null si no existe
-    	        tratamiento.setDni_paciente(null);
-    	    }
-    	} else {
-    	    tratamiento.setDni_paciente(null);
-    	}
+        if (dni_paciente != null && !dni_paciente.isEmpty()) {
+            Optional<Paciente> pacienteOpt = pacienteService.obtenerPorDni(dni_paciente);
+            if (pacienteOpt.isPresent()) {
+                tratamiento.setDni_paciente(pacienteOpt.get());
+            } else {
+                tratamiento.setDni_paciente(null);
+            }
+        } else {
+            tratamiento.setDni_paciente(null);
+        }
         tratamientoService.guardarTratamiento(tratamiento);
         return "redirect:/configurarTratamientos";
     }
@@ -248,7 +308,7 @@ public class viewController {
 
     @GetMapping("/gestionEmpleado")
     public String mostrarTablaGestionEmpleado(@RequestParam(name = "filtroEmpleado", required = false) String dniEmpleado, Model model) {
-    	cargarServiciosFiltrados(dniEmpleado, model, true);
+        cargarServiciosFiltrados(dniEmpleado, model, true);
         model.addAttribute("filtroEmpleado", dniEmpleado);
         return "gestionEmpleado";
     }
@@ -284,52 +344,6 @@ public class viewController {
         return "contabilidad";
     }
     
-    private void cargarServiciosFiltrados(String dniEmpleado, Model model, boolean excluirEmpleadoNulo) {
-        List<Servicio> servicios;
-
-        if (dniEmpleado != null && !dniEmpleado.isEmpty()) {
-            servicios = servicioService.buscarServiciosPorFiltroEmpleado(dniEmpleado);
-        } else {
-            servicios = servicioService.obtenerTodos();
-        }
-        
-        if (excluirEmpleadoNulo) {
-            servicios = servicios.stream()
-                    .filter(s -> s.getDni_empleado() != null)
-                    .toList();
-        }
-
-        double totalIngresos = servicios.stream()
-                .mapToDouble(s -> s.getTarifa() * s.getNum_sesiones())
-                .sum();
-
-        List<Empleado> empleados = empleadoService.obtenerTodos();
-
-        model.addAttribute("servicios", servicios);
-        model.addAttribute("totalIngresos", totalIngresos);
-        model.addAttribute("empleados", empleados);
-    }
-    
-    private void cargarGastosFiltrados(String proveedor, Model model) {
-        List<Gasto> gastos;
-
-        if (proveedor != null && !proveedor.isEmpty()) {
-            gastos = gastoService.buscarPorProveedor(proveedor);
-        } else {
-            gastos = gastoService.obtenerTodos();
-        }
-
-        double totalGastos = gastos.stream()
-                .mapToDouble(Gasto::getCantidad)
-                .sum();
-
-        model.addAttribute("gastos", gastos);
-        model.addAttribute("totalGastos", totalGastos);
-        
-        model.addAttribute("proveedores", gastoService.obtenerTodosProveedoresUnicos());
-    }
-
-
     @PostMapping("/servicio/add")
     public String addServicio(@ModelAttribute Servicio servicio) {
         servicioService.guardarServicio(servicio);
@@ -365,6 +379,51 @@ public class viewController {
         gastoService.eliminarGasto(id_gasto);
         return "redirect:/contabilidad";
     }
+
+    private void cargarServiciosFiltrados(String dniEmpleado, Model model, boolean excluirEmpleadoNulo) {
+        List<Servicio> servicios;
+
+        if (dniEmpleado != null && !dniEmpleado.isEmpty()) {
+            servicios = servicioService.buscarServiciosPorFiltroEmpleado(dniEmpleado);
+        } else {
+            servicios = servicioService.obtenerTodos();
+        }
+        
+        if (excluirEmpleadoNulo) {
+            servicios = servicios.stream()
+                    .filter(s -> s.getDni_empleado() != null)
+                    .toList();
+        }
+
+        double totalIngresos = servicios.stream()
+                .mapToDouble(s -> s.getTarifa() * s.getNum_sesiones())
+                .sum();
+
+        List<Empleado> empleados = empleadoService.obtenerTodos();
+
+        model.addAttribute("servicios", servicios);
+        model.addAttribute("totalIngresos", totalIngresos);
+        model.addAttribute("empleados", empleados);
+    }
+
+    private void cargarGastosFiltrados(String proveedor, Model model) {
+        List<Gasto> gastos;
+
+        if (proveedor != null && !proveedor.isEmpty()) {
+            gastos = gastoService.buscarPorProveedor(proveedor);
+        } else {
+            gastos = gastoService.obtenerTodos();
+        }
+
+        double totalGastos = gastos.stream()
+                .mapToDouble(Gasto::getCantidad)
+                .sum();
+
+        model.addAttribute("gastos", gastos);
+        model.addAttribute("totalGastos", totalGastos);
+        
+        model.addAttribute("proveedores", gastoService.obtenerTodosProveedoresUnicos());
+    }
     
     @GetMapping("/verFichajes")
     public String mostrarFichajes(Model model) {
@@ -374,66 +433,5 @@ public class viewController {
         model.addAttribute("empleados", empleados);
         return "verFichajes";
     }
-
     
-    @PostMapping("/login")
-    public String procesarLogin(@RequestParam String usuario,
-                                 @RequestParam String contrasena,
-                                 Model model,
-                                 HttpSession session) {
-
-        List<Empleado> empleados = empleadoService.obtenerUsuario(usuario, contrasena);
-
-        if (empleados.isEmpty()) {
-            model.addAttribute("error", "Usuario o contraseña incorrectos");
-            return "index";
-        }
-
-        Empleado empleado = empleados.get(0);
-        session.setAttribute("empleadoActivo", empleado);
-
-        String rol = empleado.getRol();
-
-        if ("admin".equalsIgnoreCase(rol)) {
-            return "redirect:/admin";
-        } else if ("empleado".equalsIgnoreCase(rol)) {
-            return "redirect:/portalEmpleado";
-        } else {
-            model.addAttribute("error", "Rol no reconocido");
-            return "index";
-        }
-    }
-    
-    @PostMapping("/ficharVista")
-    @ResponseBody
-    public String ficharVista(HttpSession session) {
-        Empleado empleado = (Empleado) session.getAttribute("empleadoActivo");
-
-        if (empleado == null) {
-            return "Usuario no autenticado";
-        }
-
-        List<Fichaje> fichajesHoy = fichajeService.obtenerTodos().stream()
-                .filter(f -> f.getDni_empleado() != null &&
-                             f.getDni_empleado().getDni().equals(empleado.getDni()) &&
-                             f.getFecha().equals(LocalDate.now()))
-                .toList();
-
-        if (!fichajesHoy.isEmpty()) {
-            Fichaje ultimoFichaje = fichajesHoy.get(fichajesHoy.size() - 1);
-
-            if (ultimoFichaje.getHora_salida() != null) {
-                return "Ya has fichado entrada y salida hoy.";
-            }
-
-            fichajeService.actualizarHoraSalida(
-                ultimoFichaje.getId_fichaje(),
-                new Fichaje(LocalTime.now())
-            );
-            return "Salida fichada correctamente";
-        }
-
-        fichajeService.guardarFichaje(new Fichaje(LocalDate.now(), LocalTime.now(), empleado));
-        return "Entrada fichada correctamente";
-    }
 }
