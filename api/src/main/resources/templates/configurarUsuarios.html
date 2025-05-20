@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios</title>
+    <link rel="icon" th:href="@{/img/logo.ico}" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
     <script th:src="@{/js/script.js}" defer></script>
     <style>
@@ -39,7 +40,14 @@
     <div id="verUsuarios" class="formulario-section">
         <table>
             <thead>
-                <tr><th>DNI</th><th>Nombre</th><th>Apellidos</th><th>Correo</th><th>Usuario</th><th>Rol</th></tr>
+                <tr>
+                	<th>DNI</th>
+                	<th>Nombre</th>
+                	<th>Apellidos</th>
+                	<th>Correo</th>
+                	<th>Usuario</th>
+                	<th>Rol</th>
+               	</tr>
             </thead>
             <tbody>
                 <tr th:each="emp : ${empleados}">
@@ -77,7 +85,6 @@
 	                th:text="${emp.dni} + ' - ' + ${emp.nombre} + ' ' + ${emp.apellidos}"></option>
 	    </select>
 	
-	    <!-- Formulario para actualizar datos generales -->
 	    <form th:action="@{/configurarUsuarios/{dni}(dni=${empleadoSeleccionado})}" method="post">
 	        <input type="hidden" name="_method" value="put"/>
 	
@@ -90,8 +97,8 @@
 	        <input type="text" name="usuario" placeholder="Usuario" data-actualizar="usuario" required>
 	        <input type="password" name="contrasena" placeholder="Contraseña" minlength="8" maxlength="20" required>
 	        <select name="rol" data-actualizar="rol">
-	            <option value="empleado">Empleado</option>
-	            <option value="admin">Admin</option>
+	            <option value="empleado">EMPLEADO</option>
+	            <option value="admin">ADMIN</option>
 	        </select>
 	        <button type="submit" title="Este boton no cambia el DNI">Actualizar</button>
 	    </form>

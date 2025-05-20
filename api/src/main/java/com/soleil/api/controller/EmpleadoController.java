@@ -65,8 +65,8 @@ public class EmpleadoController {
     }
     
     @PutMapping("/{dni}")
-    public void actualizarEmpleado(@PathVariable String dni, @RequestBody Empleado empleado) {
-    	servicio.actualizarEmpleado(dni, empleado);
+    public void actualizarEmpleado(@PathVariable String dni, @RequestBody EmpleadoDTO empleado) {
+    	servicio.actualizarEmpleadoDesdeDTO(dni, empleado);
     }
     
     @PutMapping("/dni/{dni}")

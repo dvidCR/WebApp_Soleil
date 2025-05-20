@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,38 +37,38 @@ public class EmpleadoService {
 	@Autowired
     private ServicioRepository servicioRepository;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-//
-//    public void guardarEmpleadoDesdeDTO(EmpleadoDTO dto) {
-//        Empleado empleado = new Empleado();
-//        empleado.setDni(dto.getDni());
-//        empleado.setNombre(dto.getNombre());
-//        empleado.setApellidos(dto.getApellidos());
-//        empleado.setCorreo(dto.getCorreo());
-//        empleado.setUsuario(dto.getUsuario());
-//        if (dto.getContrasena() != null && !dto.getContrasena().isEmpty()) {
-//            empleado.setContrasena(passwordEncoder.encode(dto.getContrasena()));
-//        }
-//        empleado.setRol(dto.getRol());
-//        repositorio.save(empleado);
-//    }
-//
-//    public void actualizarEmpleadoDesdeDTO(String dni, EmpleadoDTO dto) {
-//        Optional<Empleado> optEmp = repositorio.findById(dni);
-//        if (optEmp.isPresent()) {
-//            Empleado empleado = optEmp.get();
-//            empleado.setNombre(dto.getNombre());
-//            empleado.setApellidos(dto.getApellidos());
-//            empleado.setCorreo(dto.getCorreo());
-//            empleado.setUsuario(dto.getUsuario());
-//            if (dto.getContrasena() != null && !dto.getContrasena().isEmpty()) {
-//                empleado.setContrasena(passwordEncoder.encode(dto.getContrasena()));
-//            }
-//            empleado.setRol(dto.getRol());
-//            repositorio.save(empleado);
-//        }
-//    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public void guardarEmpleadoDesdeDTO(EmpleadoDTO dto) {
+        Empleado empleado = new Empleado();
+        empleado.setDni(dto.getDni());
+        empleado.setNombre(dto.getNombre());
+        empleado.setApellidos(dto.getApellidos());
+        empleado.setCorreo(dto.getCorreo());
+        empleado.setUsuario(dto.getUsuario());
+        if (dto.getContrasena() != null && !dto.getContrasena().isEmpty()) {
+            empleado.setContrasena(passwordEncoder.encode(dto.getContrasena()));
+        }
+        empleado.setRol(dto.getRol());
+        repositorio.save(empleado);
+    }
+
+    public void actualizarEmpleadoDesdeDTO(String dni, EmpleadoDTO dto) {
+        Optional<Empleado> optEmp = repositorio.findById(dni);
+        if (optEmp.isPresent()) {
+            Empleado empleado = optEmp.get();
+            empleado.setNombre(dto.getNombre());
+            empleado.setApellidos(dto.getApellidos());
+            empleado.setCorreo(dto.getCorreo());
+            empleado.setUsuario(dto.getUsuario());
+            if (dto.getContrasena() != null && !dto.getContrasena().isEmpty()) {
+                empleado.setContrasena(passwordEncoder.encode(dto.getContrasena()));
+            }
+            empleado.setRol(dto.getRol());
+            repositorio.save(empleado);
+        }
+    }
 	
 	public List<Empleado> obtenerTodos() {
 		return repositorio.findAll();
@@ -92,18 +92,6 @@ public class EmpleadoService {
 	
 	public void eliminarEmpleado(String dni) {
 		repositorio.deleteById(dni);
-	}
-	
-	public Empleado actualizarEmpleado(String dni, Empleado empleadoActualizada) {
-        return repositorio.findById(dni).map(empleado -> {
-        	empleado.setNombre(empleadoActualizada.getNombre());
-        	empleado.setApellidos(empleadoActualizada.getApellidos());
-        	empleado.setCorreo(empleadoActualizada.getCorreo());
-        	empleado.setUsuario(empleadoActualizada.getUsuario());
-        	empleado.setContrasena(empleadoActualizada.getContrasena());
-        	empleado.setRol(empleadoActualizada.getRol());
-            return repositorio.save(empleado);
-        }).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
 	}
 	
 	@Transactional
