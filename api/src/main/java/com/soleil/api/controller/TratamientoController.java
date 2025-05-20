@@ -30,7 +30,11 @@ public class TratamientoController {
 	        dto.setId_tratamiento(tratamiento.getId_tratamiento());
 	        dto.setTipo_tratamiento(tratamiento.getTipo_tratamiento());
 	        dto.setDescripcion(tratamiento.getDescripcion());
-	        dto.setDni_paciente(tratamiento.getDni_paciente().getDni());
+	        if (tratamiento.getDni_paciente() != null) {
+	            dto.setDni_paciente(tratamiento.getDni_paciente().getDni());
+	        } else {
+	            dto.setDni_paciente(null);
+	        }
 	        return dto;
 	    }).toList();
     }
@@ -42,7 +46,11 @@ public class TratamientoController {
 	        dto.setId_tratamiento(tratamiento.getId_tratamiento());
 	        dto.setTipo_tratamiento(tratamiento.getTipo_tratamiento());
 	        dto.setDescripcion(tratamiento.getDescripcion());
-	        dto.setDni_paciente(tratamiento.getDni_paciente().getDni());
+	        if (tratamiento.getDni_paciente() != null) {
+	            dto.setDni_paciente(tratamiento.getDni_paciente().getDni());
+	        } else {
+	            dto.setDni_paciente(null);
+	        }
 	        return dto;
 	    }).toList();
     }

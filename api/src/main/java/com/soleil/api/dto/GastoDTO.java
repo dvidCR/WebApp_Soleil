@@ -1,6 +1,6 @@
 package com.soleil.api.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -24,7 +24,7 @@ public class GastoDTO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@NotNull(message = "Tienes que poner la fecha en la que se hizo la compra")
-	private Date fecha;
+	private LocalDate fecha;
 
 	public Integer getId_gasto() {
 		return id_gasto;
@@ -58,11 +58,11 @@ public class GastoDTO {
 		this.proveedor = proveedor;
 	}
 	
-	public Date getFecha() {
+	public LocalDate getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(LocalDate fecha) {
 		this.fecha = fecha;
 	}
 	

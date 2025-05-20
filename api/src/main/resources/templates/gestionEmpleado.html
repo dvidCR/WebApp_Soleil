@@ -12,7 +12,9 @@
 	    <nav>
 	        <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
 	        <h1>Gestionar Trabajo Empleados</h1>
-	        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+	        <form th:action="@{/logout}" method="post">
+    			<button type="submit" class="logout-btn">Cerrar Sesión</button>
+			</form>
 	    </nav>
 	    <h2>Gestión Empleados</h2>
 		<form action="/gestionEmpleado" method="get">
@@ -44,7 +46,7 @@
 		    <tbody>
 			    <tr th:each="servicio : ${servicios}" th:if="${servicio.dni_empleado != null}">
 			        <td th:text="${servicio.id_servicio}"></td>
-			        <td th:text="${#dates.format(servicio.fecha_cita, 'yyyy/MM/dd')}"></td>
+			        <td th:text="${#temporals.format(servicio.fecha_cita, 'yyyy/MM/dd')}"></td>
 			        <td th:text="${servicio.dni_empleado.nombre + ' ' + servicio.dni_empleado.apellidos}"></td>
 			        <td th:text="${servicio.dni_paciente != null ? servicio.dni_paciente.nombre + ' ' + servicio.dni_paciente.apellidos : 'Desconocido'}"></td>
 			        <td th:text="${servicio.id_tratamiento.tipo_tratamiento}"></td>

@@ -1,9 +1,8 @@
 package com.soleil.api.reports;
 
-import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +15,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReport {
 
-    private String filePath;
-    private String fileName;
+//    private String filePath;
+//    private String fileName;
 
     private boolean filtrarUltimoMes = false;
     private Integer mesFiltrado = null;
@@ -27,20 +26,27 @@ public class ExcelReport {
 
     private ServicioController serviceController;
     private GastoController gastoController;
-
-    public ExcelReport(String filePath, String fileName) {
-        this.filePath = filePath;
-        this.fileName = fileName;
-        this.filtrarUltimoMes = true;
+    
+    private final OutputStream outputStream;
+    
+    public ExcelReport(OutputStream outputStream, ServicioController serviceController, GastoController gastoController) {
+        this.outputStream = outputStream;
+        this.serviceController = serviceController;
+        this.gastoController = gastoController;
     }
     
-    public ExcelReport(String filePath, String fileName, int mes, int anio) {
-        this.filePath = filePath;
-        this.fileName = fileName;
+    public void setFiltroUltimoMes(boolean filtrarUltimoMes) {
+        this.filtrarUltimoMes = filtrarUltimoMes;
+        this.mesFiltrado = null;
+        this.anioFiltrado = null;
+    }
+
+    public void setFiltroMesYAnio(int mes, int anio) {
+        this.filtrarUltimoMes = false;
         this.mesFiltrado = mes;
         this.anioFiltrado = anio;
     }
-
+    
     public void start() {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet earningsSheet = workbook.createSheet("Ingresos");
@@ -49,9 +55,8 @@ public class ExcelReport {
             generateEarnings(earningsSheet);
             generateExpenses(expensesSheet);
 
-            try (FileOutputStream fileOut = new FileOutputStream(filePath + "/" + fileName)) {
-                workbook.write(fileOut);
-            }
+            workbook.write(this.outputStream);
+            this.outputStream.flush();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,7 +75,7 @@ public class ExcelReport {
         int rowIdx = 1;
 
         for (ServicioDTO service : services) {
-            LocalDate fecha = service.getFecha_cita().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate fecha = service.getFecha_cita();
             if (!debeIncluirFecha(fecha)) continue;
 
             Row row = sheet.createRow(rowIdx++);
@@ -105,7 +110,7 @@ public class ExcelReport {
         int rowIdx = 1;
 
         for (GastoDTO expense : expenses) {
-        	LocalDate fecha = expense.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        	LocalDate fecha = expense.getFecha();
             if (!debeIncluirFecha(fecha)) continue;
 
             Row row = sheet.createRow(rowIdx++);

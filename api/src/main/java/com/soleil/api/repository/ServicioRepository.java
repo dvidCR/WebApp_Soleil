@@ -24,5 +24,7 @@ public interface ServicioRepository extends JpaRepository<Servicio, Integer> {
 		        LOWER(s.dni_empleado.dni) LIKE LOWER(CONCAT('%', :filtro, '%'))
 		""")
 		List<Servicio> buscarPorFiltroEmpleado(@Param("filtro") String filtro);
-
+		
+	@Query("SELECT s FROM Servicio s WHERE s.dni_empleado.dni = :dniEmpleado")
+    List<Servicio> findByDniEmpleadoDni(@Param("dniEmpleado") String dniEmpleado);
 }

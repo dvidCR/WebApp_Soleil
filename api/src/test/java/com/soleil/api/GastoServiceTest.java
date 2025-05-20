@@ -12,8 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +33,7 @@ class GastoServiceTest {
 
     @BeforeEach
     void setUp() {
-        gasto = new Gasto(100, "Compra material", "Amazon", new Date());
+        gasto = new Gasto(100, "Compra material", "Amazon", LocalDate.now());
     }
 
     @Test
@@ -74,7 +74,7 @@ class GastoServiceTest {
 
     @Test
     void testActualizarGasto() {
-        Gasto actualizado = new Gasto(200, "Renovación equipo", "MediaMarkt", new Date());
+        Gasto actualizado = new Gasto(200, "Renovación equipo", "MediaMarkt", LocalDate.now());
 
         when(repositorio.findById(1)).thenReturn(Optional.of(gasto));
         when(repositorio.save(any(Gasto.class))).thenAnswer(i -> i.getArgument(0));

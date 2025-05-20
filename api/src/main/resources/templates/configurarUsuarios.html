@@ -23,10 +23,12 @@
 </head>
 <body>
     <nav>
-        <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo" /></a>
-        <h1>Soleil Fisioterapia & Osteopatía</h1>
+        <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
+        <h1>Configurar Usuarios</h1>
+        <form th:action="@{/logout}" method="post">
+    		<button type="submit" class="logout-btn">Cerrar Sesión</button>
+		</form>
     </nav>
-
     <div class="botonera">
         <button onclick="mostrarSeccion('verUsuarios')">Ver Usuarios</button>
         <button onclick="mostrarSeccion('crearUsuario')">Crear Usuario</button>
@@ -54,12 +56,12 @@
 
     <div id="crearUsuario" class="formulario-section">
         <form th:action="@{/configurarUsuarios}" method="post">
-            <input type="text" name="dni" placeholder="DNI">
-            <input type="text" name="nombre" placeholder="Nombre">
-            <input type="text" name="apellidos" placeholder="Apellidos">
-            <input type="email" name="correo" placeholder="Correo electrónico">
-            <input type="text" name="usuario" placeholder="Usuario">
-            <input type="password" name="contrasena" placeholder="Contraseña">
+            <input type="text" name="dni" placeholder="DNI" required>
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="text" name="apellidos" placeholder="Apellidos" required>
+            <input type="email" name="correo" placeholder="Correo electrónico" required>
+            <input type="text" name="usuario" placeholder="Usuario" required>
+            <input type="password" name="contrasena" placeholder="Contraseña" minlength="8" maxlength="20" required>
             <select name="rol">
                 <option value="empleado">Empleado</option>
                 <option value="admin">Admin</option>
@@ -79,14 +81,14 @@
 	    <form th:action="@{/configurarUsuarios/{dni}(dni=${empleadoSeleccionado})}" method="post">
 	        <input type="hidden" name="_method" value="put"/>
 	
-	        <input type="text" id="dni-input" placeholder="Dni" data-borrar="dni">
-	        <button type="button" onclick="cambiarDni()">Cambiar DNI</button>
+	        <input type="text" id="dni-input-empleado" placeholder="DNI nuevo">
+			<button type="button" onclick="cambiarDniEmpleado()">Cambiar DNI</button>
 	
-	        <input type="text" name="nombre" placeholder="Nombre" data-actualizar="nombre">
-	        <input type="text" name="apellidos" placeholder="Apellidos" data-actualizar="apellidos">
-	        <input type="email" name="correo" placeholder="Correo" data-actualizar="correo">
-	        <input type="text" name="usuario" placeholder="Usuario" data-actualizar="usuario">
-	        <input type="password" name="contrasena" placeholder="Contraseña" data-actualizar="contrasena">
+	        <input type="text" name="nombre" placeholder="Nombre" data-actualizar="nombre" required>
+	        <input type="text" name="apellidos" placeholder="Apellidos" data-actualizar="apellidos" required>
+	        <input type="email" name="correo" placeholder="Correo" data-actualizar="correo" required>
+	        <input type="text" name="usuario" placeholder="Usuario" data-actualizar="usuario" required>
+	        <input type="password" name="contrasena" placeholder="Contraseña" minlength="8" maxlength="20" required>
 	        <select name="rol" data-actualizar="rol">
 	            <option value="empleado">Empleado</option>
 	            <option value="admin">Admin</option>

@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,7 @@ class ServicioServiceTest {
         Tratamiento tratamiento = new Tratamiento(1);
 
         servicio = new Servicio(
-            new Date(),
+            LocalDate.now(),
             empleado,
             paciente,
             tratamiento,
@@ -89,7 +90,7 @@ class ServicioServiceTest {
     @Test
     void testActualizarServicio() {
         Servicio servicioActualizado = new Servicio(
-            new Date(),
+            LocalDate.now(),
             new Empleado("99999999X"),
             new Paciente("11111111Y"),
             new Tratamiento(2),

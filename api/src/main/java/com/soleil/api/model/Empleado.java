@@ -1,6 +1,11 @@
 package com.soleil.api.model;
 
+import java.util.Collection;
 import java.util.List;
+
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -17,7 +22,7 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "empleado")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Empleado {
+public class Empleado /*implements UserDetails*/ {
 	
 	@Id
 	@Column(name = "dni")
@@ -43,7 +48,7 @@ public class Empleado {
 	
 	@Column(name = "contrasena")
 	@NotNull(message = "Tienes que poner una contraseña")
-	@Size(min = 8, max = 20)
+	@Size(min = 8, max = 9, message = "La contraseña tiene que ser entre 8 y 20 caracteres")
 	private String contrasena;
 	
 	@Column(name = "rol")
@@ -61,7 +66,17 @@ public class Empleado {
 	@OneToMany(mappedBy = "dni_empleado", cascade = CascadeType.MERGE)
 	@JsonManagedReference(value = "empleado-servicio")
 	private List<Servicio> servicio;
-
+	
+//	@Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of(new SimpleGrantedAuthority("ROLE_" + this.rol.toUpperCase()));
+//    }
+//    @Override public String getPassword() { return this.contrasena; }
+//    @Override public String getUsername() { return this.usuario; }
+//    @Override public boolean isAccountNonExpired() { return true; }
+//    @Override public boolean isAccountNonLocked() { return true; }
+//    @Override public boolean isCredentialsNonExpired() { return true; }
+//    @Override public boolean isEnabled() { return true; }
 	
 	public Empleado() {
 		

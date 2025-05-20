@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Añadir Servicio</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+    <script th:src="@{/js/script.js}" defer></script>
+</head>
+<body data-home-url="/">
+<nav>
+    <a th:href="${empleado != null and empleado.rol == 'empleado'} ? @{/portalEmpleado} : @{/}"><img th:src="@{/img/logo.png}" alt="Logo" /></a>
+    <h1>Gestión de Servicios</h1>
+    <form th:action="@{/logout}" method="post">
+    	<button type="submit" class="logout-btn">Cerrar Sesión</button>
+	</form>
+</nav>
+
+<section class="tabla-servicios">
+    <h2>Servicios del Empleado</h2>
+    <table border="1" style="width:100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>DNI Empleado</th>
+                <th>Nombre Empleado</th>
+                <th>Paciente</th>
+                <th>Tratamiento</th>
+                <th>Modo de pago</th>
+                <th>Tarifa</th>
+                <th>Concepto</th>
+                <th>Número de Sesiones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="servicio : ${servicios}">
+                <td th:text="${servicio.id_servicio}"></td>
+                <td th:text="${#temporals.format(servicio.fecha_cita, 'yyyy-MM-dd')}"></td>
+                <td th:text="${servicio.dni_empleado != null ? servicio.dni_empleado.dni : 'Desconocido'}"></td>
+                <td th:text="${servicio.dni_empleado != null ? servicio.dni_empleado.nombre + ' ' + servicio.dni_empleado.apellidos : 'Desconocido'}"></td>
+                <td th:text="${servicio.dni_paciente != null ? servicio.dni_paciente.nombre : 'Desconocido'}"></td>
+                <td th:text="${servicio.id_tratamiento.tipo_tratamiento}"></td>
+                <td th:text="${servicio.modo_pago}"></td>
+                <td th:text="${servicio.tarifa} + ' €'"></td>
+                <td th:text="${servicio.concepto}"></td>
+                <td th:text="${servicio.num_sesiones}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(servicios)}">
+                <td colspan="8" style="text-align:center;">No se encontraron servicios para este empleado.</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section class="formulario-servicio">
+    <h2>Añadir Nuevo Servicio</h2>
+    <form th:action="@{/anadirServicio}" method="post">
+        <label for="fecha">Fecha de la cita:</label>
+        <input type="date" id="fecha" name="fecha_cita" required />
+
+        <label for="empleado">DNI Empleado:</label>
+        <select id="empleado" name="dni_empleado">
+		    <option th:if="${empleado != null}"
+		    		th:value="${empleado.dni}"
+		    		th:text="|${empleado.nombre} ${empleado.apellidos} (${empleado.dni})|" selected></option>
+		    <option th:if="${empleado == null}" value="" disabled selected>Sin empleado activo</option>
+		    <option th:each="empleado : ${empleados}"
+				        th:value="${empleado.dni}"
+				        th:text="|${empleado.nombre} ${empleado.apellidos} (${empleado.dni})|"
+				        th:selected="${empleado} == ${empleado.dni}">
+				</option>
+		</select>
+        <label for="paciente">Paciente:</label>
+        <select id="paciente" name="dni_paciente" required>
+            <option value="" disabled selected>Selecciona un paciente</option>
+            <option th:each="paciente : ${pacientes}"
+                    th:value="${paciente.dni}"
+                    th:text="${paciente.nombre + ' ' + paciente.apellidos}">
+            </option>
+        </select>
+
+        <label for="tratamiento">Tratamiento:</label>
+        <select id="tratamiento" name="id_tratamiento" required>
+            <option value="" disabled selected>Selecciona un tratamiento</option>
+            <option th:each="tratamiento : ${tratamientos}"
+                    th:value="${tratamiento.id_tratamiento}"
+                    th:text="${tratamiento.tipo_tratamiento}">
+            </option>
+        </select>
+        
+        <label for="num_sesiones">Modo de pago: </label>
+        <input type="text" id="modo_pago" name="modo_pago" required />
+
+        <label for="tarifa">Tarifa (€):</label>
+        <input type="number" id="tarifa" name="tarifa" min="0" step="0.01" required />
+        
+        <label for="num_sesiones">Concepto: </label>
+        <input type="text" id="concepto" name="concepto" required />
+
+        <label for="num_sesiones">Número de Sesiones:</label>
+        <input type="number" id="num_sesiones" name="num_sesiones" min="1" required />
+
+        <button type="submit">Guardar Servicio</button>
+    </form>
+</section>
+</body>
+</html>

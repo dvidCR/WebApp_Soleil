@@ -3,6 +3,7 @@ package com.soleil.api.viewController;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.soleil.api.model.Empleado;
 import com.soleil.api.model.Fichaje;
 import com.soleil.api.model.Gasto;
+import com.soleil.api.model.Paciente;
 import com.soleil.api.model.Servicio;
+import com.soleil.api.model.Tratamiento;
 import com.soleil.api.service.EmpleadoService;
 import com.soleil.api.service.FichajeService;
 import com.soleil.api.service.GastoService;
@@ -62,8 +65,46 @@ public class viewController {
         if (empleado == null) {
             return "redirect:/login";
         }
+        List<Fichaje> fichajesHoy = fichajeService.obtenerTodos().stream()
+                .filter(f -> f.getDni_empleado() != null &&
+                             f.getDni_empleado().getDni().equals(empleado.getDni()) &&
+                             f.getFecha().equals(LocalDate.now()))
+                .toList();
+
         model.addAttribute("empleado", empleado);
+        model.addAttribute("fichajesHoy", fichajesHoy);
         return "portalEmpleado";
+    }
+    
+    @GetMapping("/anadirServicio")
+    public String mostrarServiciosDelEmpleado(HttpSession session, Model model) {
+        Empleado empleado = (Empleado) session.getAttribute("empleadoActivo");
+
+        List<Servicio> servicios;
+        if (empleado != null) {
+            servicios = servicioService.obtenerTodos().stream()
+                .filter(s -> s.getDni_empleado() != null && s.getDni_empleado().getDni().equals(empleado.getDni()))
+                .toList();
+            model.addAttribute("empleado", empleado);
+        } else {
+            servicios = servicioService.obtenerTodos();
+        }
+        
+        List<Paciente> pacientes = pacienteService.obtenerTodos();
+        List<Tratamiento> tratamientos = tratamientoService.obtenerTodos();
+        List<Empleado> empleados = empleadoService.obtenerTodos();
+
+        model.addAttribute("servicios", servicios);
+        model.addAttribute("pacientes", pacientes);
+        model.addAttribute("empleados", empleados);
+        model.addAttribute("tratamientos", tratamientos);
+        return "anadirServicio";
+    }
+    
+    @PostMapping("/anadirServicio")
+    public String empleadoAddServicio(@ModelAttribute Servicio servicio) {
+    	servicioService.guardarServicio(servicio);
+        return "redirect:/anadirServicio";
     }
     
     @GetMapping("/admin")
@@ -97,7 +138,7 @@ public class viewController {
     }
     
     @PutMapping("/configurarUsuarios/actualizarDNI/{dni}")
-    public String actualizarDni(@PathVariable String dni, @RequestParam String nuevoDni) {
+    public String actualizarEmpleadoDni(@PathVariable String dni, @RequestParam String nuevoDni) {
         empleadoService.actualizarDni(dni, nuevoDni);
         return "redirect:/configurarUsuarios";
     }
@@ -107,6 +148,102 @@ public class viewController {
     public String borrarEmpleado(@PathVariable String dni) {
         empleadoService.eliminarEmpleado(dni);
         return "redirect:/configurarUsuarios";
+    }
+    
+    @GetMapping("/configurarPacientes")
+    public String mostrarPaciente(Model model) {
+        List<Paciente> pacientes = pacienteService.obtenerTodos();
+        model.addAttribute("pacientes", pacientes);
+        model.addAttribute("dniSeleccionado", "");
+        return "configurarPacientes";
+    }
+    
+    @PostMapping("/configurarPacientes")
+    public String crearPaciente(@ModelAttribute Paciente paciente) {
+        pacienteService.guardarPaciente(paciente);
+        return "redirect:/configurarPacientes";
+    }
+
+    @PutMapping("/configurarPacientes/{dni}")
+    public String actualizarPaciente(@PathVariable String dni, @ModelAttribute Paciente paciente) {
+        pacienteService.actualizarPaciente(dni, paciente);
+        return "redirect:/configurarPacientes";
+    }
+    
+    @PutMapping("/configurarPacientes/actualizarPacienteDNI/{dni}")
+    public String actualizarPacienteDni(@PathVariable String dni, @RequestParam String nuevoDni) {
+        pacienteService.actualizarDni(dni, nuevoDni);
+        return "redirect:/configurarPacientes";
+    }
+    
+    @Transactional
+    @DeleteMapping("/configurarPacientes/{dni}")
+    public String borrarPaciente(@PathVariable String dni) {
+        pacienteService.eliminarPaciente(dni);
+        return "redirect:/configurarPacientes";
+    }
+    
+    @GetMapping("/configurarTratamientos")
+    public String mostrarTratamientos(Model model) {
+        List<Tratamiento> tratamientos = tratamientoService.obtenerTodos();
+        List<Paciente> pacientes = pacienteService.obtenerTodos();
+
+        model.addAttribute("tratamientos", tratamientos);
+        model.addAttribute("pacientes", pacientes);
+        model.addAttribute("tratamientoSeleccionado", "");
+        return "configurarTratamientos";
+    }
+
+    @PostMapping("/configurarTratamientos")
+    public String crearTratamiento(@ModelAttribute Tratamiento tratamiento, @RequestParam(required = false) String dni_paciente) {
+    	if (dni_paciente != null && !dni_paciente.isEmpty()) {
+    	    Optional<Paciente> pacienteOpt = pacienteService.obtenerPorDni(dni_paciente);
+    	    if (pacienteOpt.isPresent()) {
+    	        tratamiento.setDni_paciente(pacienteOpt.get());
+    	    } else {
+    	        // Manejar el error o setear null si no existe
+    	        tratamiento.setDni_paciente(null);
+    	    }
+    	} else {
+    	    tratamiento.setDni_paciente(null);
+    	}
+        tratamientoService.guardarTratamiento(tratamiento);
+        return "redirect:/configurarTratamientos";
+    }
+
+    @PutMapping("/configurarTratamientos/{id}")
+    public String actualizarTratamiento(@PathVariable Integer id, @ModelAttribute Tratamiento tratamiento, @RequestParam(required = false) String dni_paciente) {
+        Optional<Tratamiento> tratExistenteOpt = tratamientoService.obtenerPorId(id);
+        
+        if (tratExistenteOpt.isEmpty()) {
+            return "redirect:/configurarTratamientos";
+        }
+        
+        Tratamiento tratExistente = tratExistenteOpt.get();
+
+        tratExistente.setTipo_tratamiento(tratamiento.getTipo_tratamiento());
+        tratExistente.setDescripcion(tratamiento.getDescripcion());
+
+        if (dni_paciente != null && !dni_paciente.isEmpty()) {
+            Optional<Paciente> pacienteOpt = pacienteService.obtenerPorDni(dni_paciente);
+            if (pacienteOpt.isPresent()) {
+                tratExistente.setDni_paciente(pacienteOpt.get());
+            } else {
+                tratExistente.setDni_paciente(null);
+            }
+        } else {
+            tratExistente.setDni_paciente(null);
+        }
+
+        tratamientoService.actualizarTratamiento(id, tratExistente);
+        return "redirect:/configurarTratamientos";
+    }
+
+    @Transactional
+    @DeleteMapping("/configurarTratamientos/{id}")
+    public String borrarTratamiento(@PathVariable Integer id) {
+        tratamientoService.eliminarTratamiento(id);
+        return "redirect:/configurarTratamientos";
     }
 
     @GetMapping("/gestionEmpleado")
@@ -229,6 +366,16 @@ public class viewController {
         return "redirect:/contabilidad";
     }
     
+    @GetMapping("/verFichajes")
+    public String mostrarFichajes(Model model) {
+        List<Fichaje> fichajes = fichajeService.obtenerTodos();
+        List<Empleado> empleados = empleadoService.obtenerTodos();
+        model.addAttribute("fichajes", fichajes);
+        model.addAttribute("empleados", empleados);
+        return "verFichajes";
+    }
+
+    
     @PostMapping("/login")
     public String procesarLogin(@RequestParam String usuario,
                                  @RequestParam String contrasena,
@@ -266,16 +413,24 @@ public class viewController {
             return "Usuario no autenticado";
         }
 
-        List<Fichaje> fichajes = fichajeService.obtenerTodos().stream()
-            .filter(f -> f.getDni_empleado().getDni().equals(empleado.getDni()) &&
-                         f.getFecha().equals(LocalDate.now()))
-            .toList();
+        List<Fichaje> fichajesHoy = fichajeService.obtenerTodos().stream()
+                .filter(f -> f.getDni_empleado() != null &&
+                             f.getDni_empleado().getDni().equals(empleado.getDni()) &&
+                             f.getFecha().equals(LocalDate.now()))
+                .toList();
 
-        for (Fichaje f : fichajes) {
-            if (f.getHora_salida() == null) {
-                fichajeService.actualizarHoraSalida(f.getId_fichaje(), new Fichaje(LocalTime.now()));
-                return "Salida fichada correctamente";
+        if (!fichajesHoy.isEmpty()) {
+            Fichaje ultimoFichaje = fichajesHoy.get(fichajesHoy.size() - 1);
+
+            if (ultimoFichaje.getHora_salida() != null) {
+                return "Ya has fichado entrada y salida hoy.";
             }
+
+            fichajeService.actualizarHoraSalida(
+                ultimoFichaje.getId_fichaje(),
+                new Fichaje(LocalTime.now())
+            );
+            return "Salida fichada correctamente";
         }
 
         fichajeService.guardarFichaje(new Fichaje(LocalDate.now(), LocalTime.now(), empleado));

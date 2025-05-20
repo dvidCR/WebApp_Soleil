@@ -8,9 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.soleil.api.dto.EmpleadoDTO;
 import com.soleil.api.model.Empleado;
 import com.soleil.api.model.Fichaje;
 import com.soleil.api.model.Paciente;
@@ -34,6 +36,39 @@ public class EmpleadoService {
 	
 	@Autowired
     private ServicioRepository servicioRepository;
+
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+//
+//    public void guardarEmpleadoDesdeDTO(EmpleadoDTO dto) {
+//        Empleado empleado = new Empleado();
+//        empleado.setDni(dto.getDni());
+//        empleado.setNombre(dto.getNombre());
+//        empleado.setApellidos(dto.getApellidos());
+//        empleado.setCorreo(dto.getCorreo());
+//        empleado.setUsuario(dto.getUsuario());
+//        if (dto.getContrasena() != null && !dto.getContrasena().isEmpty()) {
+//            empleado.setContrasena(passwordEncoder.encode(dto.getContrasena()));
+//        }
+//        empleado.setRol(dto.getRol());
+//        repositorio.save(empleado);
+//    }
+//
+//    public void actualizarEmpleadoDesdeDTO(String dni, EmpleadoDTO dto) {
+//        Optional<Empleado> optEmp = repositorio.findById(dni);
+//        if (optEmp.isPresent()) {
+//            Empleado empleado = optEmp.get();
+//            empleado.setNombre(dto.getNombre());
+//            empleado.setApellidos(dto.getApellidos());
+//            empleado.setCorreo(dto.getCorreo());
+//            empleado.setUsuario(dto.getUsuario());
+//            if (dto.getContrasena() != null && !dto.getContrasena().isEmpty()) {
+//                empleado.setContrasena(passwordEncoder.encode(dto.getContrasena()));
+//            }
+//            empleado.setRol(dto.getRol());
+//            repositorio.save(empleado);
+//        }
+//    }
 	
 	public List<Empleado> obtenerTodos() {
 		return repositorio.findAll();
@@ -46,6 +81,10 @@ public class EmpleadoService {
 	public List<Empleado> obtenerUsuario(String usuario, String contrasena) {
 		return repositorio.findByUsuarioAndContrasena(usuario, contrasena);
 	}
+	
+	public Optional<Empleado> obtenerPorUsuario(String usuario) {
+        return repositorio.findByUsuario(usuario);
+    }
 	
 	public Empleado guardarEmpleado(Empleado empleado) {
 		return repositorio.save(empleado);

@@ -32,7 +32,11 @@ public class PacienteController {
 	        dto.setDni(paciente.getDni());
 	        dto.setNombre(paciente.getNombre());
 	        dto.setApellidos(paciente.getApellidos());
-	        dto.setDni_empleado(paciente.getDni_empleado().getDni());
+	        if (paciente.getDni_empleado() != null) {
+	            dto.setDni_empleado(paciente.getDni_empleado().getDni());
+	        } else {
+	            dto.setDni_empleado(null);
+	        }
 	        return dto;
 	    }).toList();
     }
@@ -44,7 +48,11 @@ public class PacienteController {
 	        dto.setDni(paciente.getDni());
 	        dto.setNombre(paciente.getNombre());
 	        dto.setApellidos(paciente.getApellidos());
-	        dto.setDni_empleado(paciente.getDni_empleado().getDni());
+	        if (paciente.getDni_empleado() != null) {
+	            dto.setDni_empleado(paciente.getDni_empleado().getDni());
+	        } else {
+	            dto.setDni_empleado(null);
+	        }
 	        return dto;
 	    }).toList();
     }

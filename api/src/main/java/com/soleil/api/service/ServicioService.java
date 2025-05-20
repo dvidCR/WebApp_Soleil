@@ -27,6 +27,10 @@ public class ServicioService {
 		return repositorio.findById(id);
 	}
 	
+	public List<Servicio> obtenerPorDniEmpleado(String dniEmpleado) {
+	    return repositorio.findByDniEmpleadoDni(dniEmpleado);
+	}
+	
 	public List<Servicio> buscarServiciosPorFiltroEmpleado(String filtro) {
 	    return repositorio.buscarPorFiltroEmpleado(filtro);
 	}

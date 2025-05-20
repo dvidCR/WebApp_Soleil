@@ -37,7 +37,11 @@ public class FichajeController {
 	        dto.setFecha(fichaje.getFecha());
 	        dto.setHora_entrada(fichaje.getHora_entrada());
 	        dto.setHora_salida(fichaje.getHora_salida());
-	        dto.setDni_empleado(fichaje.getDni_empleado().getDni());
+	        if (fichaje.getDni_empleado() != null) {
+	            dto.setDni_empleado(fichaje.getDni_empleado().getDni());
+	        } else {
+	            dto.setDni_empleado(null);
+	        }
 	        return dto;
 	    }).toList();
 	}
@@ -51,7 +55,11 @@ public class FichajeController {
 	        dto.setFecha(fichaje.getFecha());
 	        dto.setHora_entrada(fichaje.getHora_entrada());
 	        dto.setHora_salida(fichaje.getHora_salida());
-	        dto.setDni_empleado(fichaje.getDni_empleado().getDni());
+	        if (fichaje.getDni_empleado() != null) {
+	            dto.setDni_empleado(fichaje.getDni_empleado().getDni());
+	        } else {
+	            dto.setDni_empleado(null);
+	        }
 	        return dto;
 	    }).toList();
     }

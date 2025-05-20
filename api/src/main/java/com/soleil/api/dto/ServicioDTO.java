@@ -1,6 +1,6 @@
 package com.soleil.api.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,7 +18,7 @@ public class ServicioDTO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@NotNull(message = "Tienes que poner poner la fecha")
-	private Date fecha_cita;
+	private LocalDate fecha_cita;
 	
 	private String dni_empleado;
 
@@ -46,11 +46,11 @@ public class ServicioDTO {
 		this.id_servicio = id_servicio;
 	}
 
-	public Date getFecha_cita() {
+	public LocalDate getFecha_cita() {
 		return fecha_cita;
 	}
 
-	public void setFecha_cita(Date fecha_cita) {
+	public void setFecha_cita(LocalDate fecha_cita) {
 		this.fecha_cita = fecha_cita;
 	}
 

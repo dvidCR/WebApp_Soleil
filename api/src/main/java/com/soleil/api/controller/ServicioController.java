@@ -29,8 +29,16 @@ public class ServicioController {
 	        ServicioDTO dto = new ServicioDTO();
 	        dto.setId_servicio(servicio.getId_servicio());
 	        dto.setFecha_cita(servicio.getFecha_cita());
-	        dto.setDni_empleado(servicio.getDni_empleado().getDni());
-	        dto.setDni_paciente(servicio.getDni_paciente().getDni());
+	        if (servicio.getDni_empleado() != null) {
+	            dto.setDni_empleado(servicio.getDni_empleado().getDni());
+	        } else {
+	            dto.setDni_empleado(null);
+	        }
+	        if (servicio.getDni_paciente() != null) {
+	            dto.setDni_paciente(servicio.getDni_paciente().getDni());
+	        } else {
+	            dto.setDni_paciente(null);
+	        }
 	        dto.setId_tratamiento(servicio.getId_tratamiento().getId_tratamiento());
 	        dto.setModo_pago(servicio.getModo_pago());
 	        dto.setTarifa(servicio.getTarifa());
@@ -46,8 +54,16 @@ public class ServicioController {
 	        ServicioDTO dto = new ServicioDTO();
 	        dto.setId_servicio(servicio.getId_servicio());
 	        dto.setFecha_cita(servicio.getFecha_cita());
-	        dto.setDni_empleado(servicio.getDni_empleado().getDni());
-	        dto.setDni_paciente(servicio.getDni_paciente().getDni());
+	        if (servicio.getDni_empleado() != null) {
+	            dto.setDni_empleado(servicio.getDni_empleado().getDni());
+	        } else {
+	            dto.setDni_empleado(null);
+	        }
+	        if (servicio.getDni_paciente() != null) {
+	            dto.setDni_paciente(servicio.getDni_paciente().getDni());
+	        } else {
+	            dto.setDni_paciente(null);
+	        }
 	        dto.setId_tratamiento(servicio.getId_tratamiento().getId_tratamiento());
 	        dto.setModo_pago(servicio.getModo_pago());
 	        dto.setTarifa(servicio.getTarifa());

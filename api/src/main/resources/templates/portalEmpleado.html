@@ -9,16 +9,37 @@
 </head>
 <body data-home-url="/">
     <nav>
-        <a th:href="@{/portalEmpleado}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
+        <a th:href="${empleado.rol == 'admin'} ? @{/admin} : @{/portalEmpleado}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
         <h1>Fichaje</h1>
-        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+        <form th:action="@{/logout}" method="post">
+    		<button type="submit" class="logout-btn">Cerrar Sesión</button>
+		</form>
     </nav>
     <div class="container">
         <input type="hidden" id="dniEmpleado" th:value="${empleado.dni}" />
 		<button class="btn" onclick="fichar()">Fichar Entrada / Salida</button>
-		<p id="mensajeFichaje" style="margin-top: 10px; color: green;"></p>
-
-        <button class="btn" th:onclick="|location.href='@{/añadirServicio}'|">Añadir Servicio</button>
+		<div class="fichajes-hoy">
+		    <h3>Fichajes de hoy</h3>
+		    <table>
+		        <thead>
+		            <tr>
+		                <th>Fecha</th>
+		                <th>Hora de entrada</th>
+		                <th>Hora de salida</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <tr th:each="fichaje : ${fichajesHoy}">
+		                <td th:text="${fichaje.fecha}"></td>
+		                <td th:text="${fichaje.hora_entrada}"></td>
+		                <td th:text="${fichaje.hora_salida != null ? fichaje.hora_salida : '—'}"></td>
+		            </tr>
+		        </tbody>
+		    </table>
+		</div>
+		<p id="mensajeFichaje"></p>
+		<br>
+        <button class="btn" th:onclick="|location.href='@{/anadirServicio}'|">Añadir Servicio</button>
     </div>
 </body>
 </html>

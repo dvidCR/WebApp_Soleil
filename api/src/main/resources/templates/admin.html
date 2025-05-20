@@ -11,12 +11,67 @@
     <nav>
         <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
         <h1>Administrador</h1>
-        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+        <form th:action="@{/logout}" method="post">
+    		<button type="submit" class="logout-btn">Cerrar Sesión</button>
+		</form>
     </nav>
     <div class="container">
         <button class="btn" th:onclick="|location.href='@{/contabilidad}'|">Gestionar Contabilidad</button>
 		<button class="btn" th:onclick="|location.href='@{/gestionEmpleado}'|">Gestionar Trabajo Empleados</button>
         <button class="btn" th:onclick="|location.href='@{/configurarUsuarios}'|">Configurar Usuarios</button>
+        <button class="btn" th:onclick="|location.href='@{/configurarPacientes}'|">Configurar Pacientes</button>
+        <button class="btn" th:onclick="|location.href='@{/configurarTratamientos}'|">Configurar Tratamientos</button>
+        <button class="btn" th:onclick="|location.href='@{/verFichajes}'|">Ver Fichajes</button>
+        <button class="btn" th:onclick="|location.href='@{/portalEmpleado}'|">Fichar</button>
+		<form action="/reportes/generarReporteUltimoMes/pdf" method="get">
+		    <button type="submit">Descargar PDF Último Mes</button>
+		</form>
+		
+		<form action="/reportes/generarReporteUltimoMes/excel" method="get">
+		    <button type="submit">Descargar Excel Último Mes</button>
+		</form>
+		
+		<form action="/reportes/generarReportePorFecha/pdf" method="get">
+		   <label for="mes">Mes:</label>
+		    <select name="mes" id="mes" required>
+		        <option value="1">Enero</option>
+		        <option value="2">Febrero</option>
+		        <option value="3">Marzo</option>
+		        <option value="4">Abril</option>
+		        <option value="5">Mayo</option>
+		        <option value="6">Junio</option>
+		        <option value="7">Julio</option>
+		        <option value="8">Agosto</option>
+		        <option value="9">Septiembre</option>
+		        <option value="10">Octubre</option>
+		        <option value="11">Noviembre</option>
+		        <option value="12">Diciembre</option>
+		    </select>
+		    <label for="anio">Año:</label>
+		    <input type="number" name="anio" id="anio" min="2000" max="2100" required>		
+		    <button type="submit">Descargar PDF por Fecha</button>
+		</form>
+		
+		<form action="/reportes/generarReportePorFecha/excel" method="get">
+		    <label for="mes">Mes:</label>
+		    <select name="mes" id="mes" required>
+		        <option value="1">Enero</option>
+		        <option value="2">Febrero</option>
+		        <option value="3">Marzo</option>
+		        <option value="4">Abril</option>
+		        <option value="5">Mayo</option>
+		        <option value="6">Junio</option>
+		        <option value="7">Julio</option>
+		        <option value="8">Agosto</option>
+		        <option value="9">Septiembre</option>
+		        <option value="10">Octubre</option>
+		        <option value="11">Noviembre</option>
+		        <option value="12">Diciembre</option>
+		    </select>
+		    <label for="anio">Año:</label>
+		    <input type="number" name="anio" id="anio" min="2000" max="2100" required>		
+		    <button type="submit">Descargar Excel por Fecha</button>
+		</form>
     </div>
 </body>
 </html>

@@ -11,7 +11,9 @@
 		<nav>
 		    <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo" /></a>
 		    <h1>Gestionar Contabilidad</h1>
-		    <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+		    <form th:action="@{/logout}" method="post">
+    			<button type="submit" class="logout-btn">Cerrar Sesión</button>
+			</form>
 		</nav>
 		<h2>Tabla de Ingresos</h2>
 		<form action="/contabilidad" method="get">
@@ -43,7 +45,7 @@
 		    <tbody>
 		        <tr th:each="servicio : ${servicios}">
 		            <td th:text="${servicio.id_servicio}"></td>
-		            <td th:text="${#dates.format(servicio.fecha_cita, 'yyyy/MM/dd')}"></td>
+		            <td th:text="${#temporals.format(servicio.fecha_cita, 'yyyy/MM/dd')}"></td>
 		            <td th:text="${servicio.dni_empleado != null ? servicio.dni_empleado.nombre + ' ' + servicio.dni_empleado.apellidos : 'Desconocido'}"></td>
 		            <td th:text="${servicio.dni_paciente != null ? servicio.dni_paciente.nombre + ' ' + servicio.dni_paciente.apellidos : 'Desconocido'}"></td>
 		            <td th:text="${servicio.id_tratamiento.tipo_tratamiento}"></td>
@@ -85,7 +87,7 @@
 			      <td th:text="${gasto.cantidad}"></td>
 			      <td th:text="${gasto.motivo}"></td>
 			      <td th:text="${gasto.proveedor}"></td>
-			      <td th:text="${#dates.format(gasto.fecha, 'yyyy/MM/dd')}"></td>
+			      <td th:text="${#temporals.format(gasto.fecha, 'yyyy/MM/dd')}"></td>
 			    </tr>
 		  </tbody>
 		</table>
@@ -161,17 +163,30 @@
 
 <!-- Formulario simplificado para gastos -->
 <form id="formGasto" style="display:none;" method="post" action="">
+  <div id="gastoSelector" style="display:none;">
+    <label>ID Gasto:</label>
+    <select id="selectIdGasto" onchange="rellenarCamposGasto(this.value)">
+      <option value="">-- Selecciona --</option>
+      <option th:each="gasto : ${gastos}"
+              th:value="${gasto.id_gasto}"
+              th:text="${gasto.id_gasto}">
+      </option>
+    </select>
+  </div>
+
   <input type="hidden" name="id_gasto" id="id_gasto" />
-  Cantidad: <input type="number" step="0.01" name="cantidad" required /><br/>
-  Motivo: <input type="text" name="motivo" required /><br/>
-  Proveedor: <input type="text" name="proveedor" required /><br/>
-  Fecha: <input type="date" name="fecha" required /><br/>
-  <button type="submit">Enviar</button>
+  Cantidad: <input type="number" step="0.01" name="cantidad" id="cantidad" required /><br/>
+  Motivo: <input type="text" name="motivo" id="motivo" required /><br/>
+  Proveedor: <input type="text" name="proveedor" id="proveedor" required /><br/>
+  Fecha: <input type="date" name="fecha" id="fecha" required /><br/>
+  
+  <button type="submit" id="btnGastoSubmit">Enviar</button>
   <button type="button" onclick="cerrarForm('formGasto')">Cancelar</button>
 </form>
 <script th:inline="javascript">
     /*<![CDATA[*/
     window.serviciosMap = [[${servicios}]];
+    window.gastosMap = [[${gastos}]];
     /*]]>*/
 </script>
 </body>
