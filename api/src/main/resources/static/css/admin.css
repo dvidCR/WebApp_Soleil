@@ -1,19 +1,18 @@
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background: repeating-linear-gradient(
-        45deg,
-        #f0f0f0,
-        #f0f0f0 20px,
-        #e0e0e0 20px,
-        #e0e0e0 40px
-    );
-    background-attachment: fixed;
-    background-size: 40px 40px;
+/* Reset básico */
+* {
     margin: 0;
     padding: 0;
-    text-align: center;
+    box-sizing: border-box;
 }
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    padding-bottom: 50px;
+}
+
+/* NAV */
 nav {
     display: flex;
     align-items: center;
@@ -56,43 +55,156 @@ nav h1 {
     background-color: #a71d2a;
 }
 
+/* CONTENEDOR PRINCIPAL */
 .container {
-    margin-top: 100px;
+    max-width: 1000px;
+    margin: 100px auto 0;
+    padding: 20px;
 }
 
-.btn {
+/* BOTONERA */
+/* CORREGIDO: Asegura que el padding se incluya dentro del width */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: repeating-linear-gradient(
+        45deg,
+        #f0f0f0,
+        #f0f0f0 20px,
+        #e0e0e0 20px,
+        #e0e0e0 40px
+    );
+    background-attachment: fixed;
+    background-size: 40px 40px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #333;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 10px 20px;
+    height: 60px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+nav img {
+    height: 50px;
+    border-radius: 50%;
+}
+
+nav h1 {
+    flex-grow: 1;
+    text-align: left;
+    margin-left: 20px;
+    font-size: 1.4em;
+    color: #333;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #a71d2a;
+}
+
+.container {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.btn,
+.container form button {
     display: block;
-    width: 280px;
+    width: 460px;
     padding: 15px;
-    margin: 20px auto;
     font-size: 18px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.05);
-    transition: 0.3s ease;
-}
-
-.btn:hover {
-    transform: scale(1.03);
-}
-
-.btn:first-child {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, background-color 0.3s;
     background-color: #007bff;
     color: white;
 }
 
-.btn:first-child:hover {
+.btn:hover,
+.container form button:hover {
+    transform: scale(1.03);
     background-color: #0056b3;
 }
 
-.btn:last-child {
-    background-color: #28a745;
-    color: white;
+/* Específicos para tipos de descarga */
+form[action$="pdf"] button {
+    background-color: #ff5722;
 }
 
-.btn:last-child:hover {
-    background-color: #1e7e34;
+form[action$="pdf"] button:hover {
+    background-color: #d84315;
+}
+
+form[action$="excel"] button {
+    background-color: #4caf50;
+}
+
+form[action$="excel"] button:hover {
+    background-color: #388e3c;
+}
+
+/* Formularios generales */
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+}
+
+/* Corregido: aplica a inputs y selects para que no se desborden */
+form input,
+form select {
+    padding: 14px 12px;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+label {
+    font-weight: bold;
+    text-align: left;
+    font-size: 1.1rem;
 }
 
 table {
@@ -103,7 +215,8 @@ table {
     box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
 
-table th, table td {
+table th,
+table td {
     border: 1px solid #ccc;
     padding: 10px;
 }
@@ -117,4 +230,12 @@ h2 {
     margin-top: 100px;
     font-size: 1.5em;
     color: #444;
+}
+
+.main-content {
+    max-width: 1000px;
+    width: 95%;
+    margin: 120px auto 40px; /* espacio desde el nav */
+    padding: 20px;
+    box-sizing: border-box;
 }

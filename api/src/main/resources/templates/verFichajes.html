@@ -8,48 +8,54 @@
    <script th:src="@{/js/script.js}" defer></script>
 </head>
 <body data-home-url="/">
-	<nav>
-        <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
-        <h1>Administrador</h1>
-        <form th:action="@{/logout}" method="post">
-    		<button type="submit" class="logout-btn">Cerrar Sesión</button>
-		</form>
-    </nav>
-	<h1>Tabla de Fichajes</h1>
-	<label for="empleadoFilter">Filtrar por Empleado:</label>
-	<select id="empleadoFilter">
-	  <option value="">-- Todos --</option>
-	  <option th:each="empleado : ${empleados}"
-	          th:value="${empleado.dni}"
-	          th:text="|${empleado.nombre} ${empleado.apellidos} (${empleado.dni})|"
-	          th:selected="${empleadoFilter} == ${empleado.dni}">
-	  </option>
-	</select>
-	<label for="fechaFilter">Filtrar por Mes/Año:</label>
-	<input type="month" id="fechaFilter">
-	<table id="tablaFichajes">
-	  <thead>
-	    <tr>
-			<th>ID</th>
-			<th>DNI Empleado</th>
-			<th>Nombre</th>
-			<th>Apellidos</th>
-			<th>Fecha</th>
-			<th>Hora Entrada</th>
-			<th>Hora Salida</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-		  <tr th:each="fichaje : ${fichajes}">
-		  	<td th:text="${fichaje.id_fichaje}">ID</td>
-		    <td th:text="${fichaje.dni_empleado != null ? fichaje.dni_empleado.dni : 'Desconocido'}">DNI Empleado</td>
-		    <td th:text="${fichaje.dni_empleado != null ? fichaje.dni_empleado.nombre : 'Desconocido'}">Nombre</td>
-		    <td th:text="${fichaje.dni_empleado != null ? fichaje.dni_empleado.apellidos : 'Desconocido'}">Apellidos</td>
-		    <td th:text="${fichaje.fecha}">Fecha</td>
-		    <td th:text="${fichaje.hora_entrada}">Hora Entrada</td>
-		    <td th:text="${fichaje.hora_salida != null ? fichaje.hora_salida : '-'}">Hora Salida</td>
-		  </tr>
-	  </tbody>
-	</table>
+  <nav>
+    <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
+    <h1>Administrador</h1>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="logout-btn">Cerrar Sesión</button>
+    </form>
+  </nav>
+
+  <div class="main-content">
+    <h1>Tabla de Fichajes</h1>
+
+    <label for="empleadoFilter">Filtrar por Empleado:</label>
+    <select id="empleadoFilter">
+      <option value="">-- Todos --</option>
+      <option th:each="empleado : ${empleados}"
+              th:value="${empleado.dni}"
+              th:text="|${empleado.nombre} ${empleado.apellidos} (${empleado.dni})|"
+              th:selected="${empleadoFilter} == ${empleado.dni}">
+      </option>
+    </select>
+
+    <label for="fechaFilter">Filtrar por Mes/Año:</label>
+    <input type="month" id="fechaFilter">
+
+    <table id="tablaFichajes">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>DNI Empleado</th>
+          <th>Nombre</th>
+          <th>Apellidos</th>
+          <th>Fecha</th>
+          <th>Hora Entrada</th>
+          <th>Hora Salida</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="fichaje : ${fichajes}">
+          <td th:text="${fichaje.id_fichaje}">ID</td>
+          <td th:text="${fichaje.dni_empleado != null ? fichaje.dni_empleado.dni : 'Desconocido'}">DNI Empleado</td>
+          <td th:text="${fichaje.dni_empleado != null ? fichaje.dni_empleado.nombre : 'Desconocido'}">Nombre</td>
+          <td th:text="${fichaje.dni_empleado != null ? fichaje.dni_empleado.apellidos : 'Desconocido'}">Apellidos</td>
+          <td th:text="${fichaje.fecha}">Fecha</td>
+          <td th:text="${fichaje.hora_entrada}">Hora Entrada</td>
+          <td th:text="${fichaje.hora_salida != null ? fichaje.hora_salida : '-'}">Hora Salida</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>
