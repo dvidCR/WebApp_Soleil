@@ -13,6 +13,9 @@
       <a href="#"><img th:src="@{/img/logo.png}" alt="Logo" /></a>
     </div>
     <h1>Soleil Fisioterapia & Osteopatía</h1>
+    <div class="button-wrapper">
+  		<button class="btn add-servicio-btn" th:onclick="|location.href='@{/anadirServicio}'|">Añadir Servicio</button>
+	</div>
   </header>
 
   <main class="login-main">
@@ -26,7 +29,7 @@
       <div th:if="${errorLogin}" style="color:red;">
 	    <p th:text="${errorLogin}"></p>
 	  </div>
+	  </section>
   </main>
-  <button class="btn" th:onclick="|location.href='@{/anadirServicio}'|" style="color: white;">Añadir Servicio</button>
 </body>
 </html>

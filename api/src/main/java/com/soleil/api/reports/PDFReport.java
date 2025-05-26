@@ -12,6 +12,7 @@ import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
@@ -93,19 +94,17 @@ public class PDFReport {
         }
 
         for (ServicioDTO service : services) {
-            LocalDate fecha = service.getFecha_cita();
+            if (!debeIncluirFecha(service.getFecha_cita())) continue;
 
-            if (!debeIncluirFecha(fecha)) continue;
-
-            table.addCell(String.valueOf(service.getId_servicio()));
-            table.addCell(fecha.toString());
-            table.addCell(service.getDni_empleado());
-            table.addCell(service.getDni_paciente());
-            table.addCell(String.valueOf(service.getId_tratamiento()));
-            table.addCell(service.getModo_pago());
-            table.addCell(String.valueOf(service.getTarifa()));
-            table.addCell(service.getConcepto());
-            table.addCell(String.valueOf(service.getNum_sesiones()));
+            table.addCell(safeString(String.valueOf(service.getId_servicio())));
+            table.addCell(safeString(service.getFecha_cita().toString()));
+            table.addCell(safeString(service.getDni_empleado()));
+            table.addCell(safeString(service.getDni_paciente()));
+            table.addCell(safeString(String.valueOf(service.getId_tratamiento())));
+            table.addCell(safeString(service.getModo_pago()));
+            table.addCell(safeString(String.valueOf(service.getTarifa())));
+            table.addCell(safeString(service.getConcepto()));
+            table.addCell(safeString(String.valueOf(service.getNum_sesiones())));
 
             prices.add(service.getTarifa());
         }
@@ -115,7 +114,7 @@ public class PDFReport {
         prices.clear();
     }
 
-    private void generateExpenses(Document document) {
+	private void generateExpenses(Document document) {
         String[] headerNames = {"ID", "Cantidad", "Motivo", "Proveedor", "Fecha"};
         List<GastoDTO> expenses = gastoController.listarGasto();
 
@@ -129,11 +128,11 @@ public class PDFReport {
 
             if (!debeIncluirFecha(fecha)) continue;
 
-            table.addCell(String.valueOf(expense.getId_gasto()));
-            table.addCell(String.valueOf(expense.getCantidad()));
-            table.addCell(expense.getMotivo());
-            table.addCell(expense.getProveedor());
-            table.addCell(fecha.toString());
+            table.addCell(safeString(String.valueOf(expense.getId_gasto())));
+            table.addCell(safeString(String.valueOf(expense.getCantidad())));
+            table.addCell(safeString(expense.getMotivo()));
+            table.addCell(safeString(expense.getProveedor()));
+            table.addCell(safeString(fecha.toString()));
 
             prices.add(expense.getCantidad());
         }
@@ -161,4 +160,9 @@ public class PDFReport {
         }
         return total;
     }
+    
+    private String safeString(String input) {
+        return input != null ? input : "";
+    }
+    
 }
