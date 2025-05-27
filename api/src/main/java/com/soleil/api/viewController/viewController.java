@@ -121,21 +121,11 @@ public class viewController {
     
     @GetMapping("/anadirServicio")
     public String mostrarServiciosDelEmpleado(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        List<Servicio> servicios;
+        List<Servicio> servicios = servicioService.obtenerTodos();
 
         if (userDetails != null) {
-            Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
-            if (empleadoOpt.isPresent()) {
-                Empleado empleado = empleadoOpt.get();
-                servicios = servicioService.obtenerTodos().stream()
-                    .filter(s -> s.getDni_empleado() != null && s.getDni_empleado().getDni().equals(empleado.getDni()))
-                    .toList();
-                model.addAttribute("empleado", empleado);
-            } else {
-                servicios = servicioService.obtenerTodos();
-            }
-        } else {
-            servicios = servicioService.obtenerTodos();
+        	Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+            empleadoOpt.ifPresent(empleado -> model.addAttribute("empleado", empleado));
         }
 
         List<Paciente> pacientes = pacienteService.obtenerTodos();

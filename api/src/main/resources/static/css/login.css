@@ -110,10 +110,6 @@ button {
     box-sizing: border-box;
 }
 
-.add-servicio-btn:hover {
-    background-color: #218838;
-}
-
 button:hover {
     background-color: rgb(3, 64, 222);
 }
