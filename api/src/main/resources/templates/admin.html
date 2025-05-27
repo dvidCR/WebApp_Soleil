@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrador</title>
     <link rel="icon" th:href="@{/img/logo.ico}" type="image/x-icon"/>
-    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
     <script th:src="@{/js/script.js}" defer></script>
 </head>
 <body data-home-url="/">
     <nav>
         <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
         <h1>Administrador</h1>
+        <p th:text="${empleado.nombre + ' ' + empleado.apellidos}"></p>
         <form th:action="@{/logout}" method="post">
     		<button type="submit" class="logout-btn">Cerrar Sesión</button>
 		</form>
@@ -24,12 +25,21 @@
         <button class="btn" th:onclick="|location.href='@{/configurarTratamientos}'|">Configurar Tratamientos</button>
         <button class="btn" th:onclick="|location.href='@{/verFichajes}'|">Ver Fichajes</button>
         <button class="btn" th:onclick="|location.href='@{/portalEmpleado}'|">Fichar</button>
+        
 		<form action="/reportes/generarReporteUltimoMes/pdf" method="get">
-		    <button type="submit">Descargar PDF Último Mes</button>
+		    <button type="submit">Descargar Contabilidad Último Mes PDF</button>
+		</form>
+		
+		<form action="/reportes/generarReporteFichajeUltimoMes/pdf" method="get">
+		    <button type="submit">Descargar Fichajes Último Mes PDF</button>
 		</form>
 		
 		<form action="/reportes/generarReporteUltimoMes/excel" method="get">
-		    <button type="submit">Descargar Excel Último Mes</button>
+		    <button type="submit">Descargar Contabilidad Último Mes Excel</button>
+		</form>
+		
+		<form action="/reportes/generarReporteFichajeUltimoMes/excel" method="get">
+		    <button type="submit">Descargar Fichajes Último Mes Excel</button>
 		</form>
 		
 		<form action="/reportes/generarReportePorFecha/pdf" method="get">
@@ -50,11 +60,11 @@
 		    </select>
 		    <label for="anio">Año:</label>
 		    <input type="number" name="anio" id="anio" min="2000" max="2100" required>		
-		    <button type="submit">Descargar PDF por Fecha</button>
+		    <button type="submit">Descargar Contabilidad por Fecha PDF</button>
 		</form>
 		
-		<form action="/reportes/generarReportePorFecha/excel" method="get">
-		    <label for="mes">Mes:</label>
+		<form action="/reportes/generarReporteFichajePorFecha/pdf" method="get">
+		   <label for="mes">Mes:</label>
 		    <select name="mes" id="mes" required>
 		        <option value="1">Enero</option>
 		        <option value="2">Febrero</option>
@@ -71,7 +81,49 @@
 		    </select>
 		    <label for="anio">Año:</label>
 		    <input type="number" name="anio" id="anio" min="2000" max="2100" required>		
-		    <button type="submit">Descargar Excel por Fecha</button>
+		    <button type="submit">Descargar Fichajes por Fecha PDF</button>
+		</form>
+		
+		<form action="/reportes/generarReportePorFecha/excel" method="get">
+		    <label for="mes">Mes:</label>
+		    <select name="mes" id="mes" required>
+		        <option value="1">Enero</option>
+		        <option value="2">Febrero</option>
+		        <option value="3">Marzo</option>
+		        <option value="4">Abril</option>
+		        <option value="5">Mayo</option>
+		        <option value="6">Junio</option>
+		        <option value="7">Julio</option>
+		        <option value="8">Agosto</option>
+		        <option value="9">Septiembre</option>
+		        <option value="10">Octubre</option>
+		        <option value="11">Noviembre</option>
+		        <option value="12	">Diciembre</option>
+		    </select>
+		    <label for="anio">Año:</label>
+		    <input type="number" name="anio" id="anio" min="2000" max="2100" required>		
+		    <button type="submit">Descargar Contabilidad por Fecha Excel</button>
+		</form>
+		
+		<form action="/reportes/generarReporteFichajePorFecha/excel" method="get">
+		    <label for="mes">Mes:</label>
+		    <select name="mes" id="mes" required>
+		        <option value="1">Enero</option>
+		        <option value="2">Febrero</option>
+		        <option value="3">Marzo</option>
+		        <option value="4">Abril</option>
+		        <option value="5">Mayo</option>
+		        <option value="6">Junio</option>
+		        <option value="7">Julio</option>
+		        <option value="8">Agosto</option>
+		        <option value="9">Septiembre</option>
+		        <option value="10">Octubre</option>
+		        <option value="11">Noviembre</option>
+		        <option value="12	">Diciembre</option>
+		    </select>
+		    <label for="anio">Año:</label>
+		    <input type="number" name="anio" id="anio" min="2000" max="2100" required>		
+		    <button type="submit">Descargar Fichajes por Fecha Excel</button>
 		</form>
     </div>
 </body>

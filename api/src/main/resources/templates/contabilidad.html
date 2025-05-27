@@ -5,185 +5,188 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <title>Gestionar Contabilidad</title>
 	    <link rel="icon" th:href="@{/img/logo.ico}" type="image/x-icon"/>
-	    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}" />
+	    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
 	    <script th:src="@{/js/script.js}" defer></script>
 	</head>
 	<body data-home-url="/">
 		<nav>
 		    <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo" /></a>
 		    <h1>Gestionar Contabilidad</h1>
+		    <p th:text="${empleado.nombre + ' ' + empleado.apellidos}"></p>
 		    <form th:action="@{/logout}" method="post">
     			<button type="submit" class="logout-btn">Cerrar Sesión</button>
 			</form>
 		</nav>
-		<h2>Tabla de Ingresos</h2>
-		<form action="/contabilidad" method="get">
-		    <label for="filtroEmpleado">Filtrar por empleado:</label>
-		    <select name="filtroEmpleado" id="filtroEmpleado" onchange="this.form.submit()">
-		        <option value="">-- Todos --</option>
-		        <option th:each="empleado : ${empleados}"
-				        th:value="${empleado.dni}"
-				        th:text="|${empleado.nombre} ${empleado.apellidos} (${empleado.dni})|"
-				        th:selected="${filtroEmpleado} == ${empleado.dni}">
-				</option>
-		    </select>
-		    <input type="hidden" name="filtroProveedor" th:value="${filtroProveedor}" />
-		</form>
-		<table border="1">
-		    <thead>
-		        <tr>
-		            <th>ID</th>
-		            <th>Fecha</th>
-		            <th>Fisioterapeuta</th>
-		            <th>Paciente</th>
-		            <th>Tratamiento</th>
-		            <th>Pago</th>
-		            <th>Tarifa</th>
-		            <th>Concepto</th>
-		            <th>Cantidad</th>
-		        </tr>
-		    </thead>
-		    <tbody>
-		        <tr th:each="servicio : ${servicios}">
-		            <td th:text="${servicio.id_servicio}"></td>
-		            <td th:text="${#temporals.format(servicio.fecha_cita, 'yyyy/MM/dd')}"></td>
-		            <td th:text="${servicio.dni_empleado != null ? servicio.dni_empleado.nombre + ' ' + servicio.dni_empleado.apellidos : 'Desconocido'}"></td>
-		            <td th:text="${servicio.dni_paciente != null ? servicio.dni_paciente.nombre + ' ' + servicio.dni_paciente.apellidos : 'Desconocido'}"></td>
-		            <td th:text="${servicio.id_tratamiento.tipo_tratamiento}"></td>
-		            <td th:text="${servicio.modo_pago}"></td>
-		            <td th:text="${servicio.tarifa}"></td>
-		            <td th:text="${servicio.concepto}"></td>
-		            <td th:text="${servicio.num_sesiones}"></td>
-		        </tr>
-		    </tbody>
-		</table>
-		<p><strong>Total Ingresos:</strong> <span th:text="${totalIngresos}"></span> €</p>
-		
-		<h2>Tabla de Gastos</h2>
-		<form action="/contabilidad" method="get">
-		    <label for="filtroProveedor">Filtrar por proveedor:</label>
-		    <select name="filtroProveedor" id="filtroProveedor" onchange="this.form.submit()">
-		        <option value="">-- Todos --</option>
-		        <option th:each="proveedor : ${proveedores}"
-		                th:value="${proveedor}"
-		                th:text="${proveedor}"
-		                th:selected="${filtroProveedor} == ${proveedor}">
-		        </option>
-		    </select>
-		    <input type="hidden" name="filtroEmpleado" th:value="${filtroEmpleado}" />
-		</form>
-		<table border="1">
-		    <thead>
-		        <tr>
-		            <th>ID</th>
-		            <th>Cantidad</th>
-		            <th>Motivo</th>
-		            <th>Proveedor</th>
-		            <th>Fecha</th>
-		        </tr>
-		    </thead>
-		    <tbody>
-			    <tr th:each="gasto : ${gastos}">
-			      <td th:text="${gasto.id_gasto}"></td>
-			      <td th:text="${gasto.cantidad}"></td>
-			      <td th:text="${gasto.motivo}"></td>
-			      <td th:text="${gasto.proveedor}"></td>
-			      <td th:text="${#temporals.format(gasto.fecha, 'yyyy/MM/dd')}"></td>
-			    </tr>
-		  </tbody>
-		</table>
-		<p>Total gastos: <span th:text="${totalGastos}"></span>€</p>
-	    <br>
-	    <p><strong>Beneficio:</strong> <span th:text="${beneficio}"></span> €</p>
-	    
-	    <!-- Al final de la tabla de ingresos (Servicios): -->
-<h3>Gestión Servicios</h3>
-<button onclick="mostrarFormServicio('add')">Añadir Servicio</button>
-<button onclick="mostrarFormServicio('update')">Actualizar Servicio</button>
-<button onclick="mostrarFormServicio('delete')">Borrar Servicio</button>
-
-<form id="formServicio" style="display:none;" method="post" action="">
-  <div id="servicioSelector" style="display:none;">
-    <label>ID Servicio:</label>
-    <select id="selectIdServicio" onchange="rellenarCamposServicio(this.value)">
-      <option value="">-- Selecciona --</option>
-      <option th:each="serv : ${servicios}"
-              th:value="${serv.id_servicio}"
-              th:text="${serv.id_servicio}">
-      </option>
-    </select>
-  </div>
-
-  <input type="hidden" name="id_servicio" id="id_servicio" />
-
-  Fecha: <input type="date" name="fecha_cita" id="fecha_cita" required /><br/>
-
-  DNI Empleado:
-  <select name="dni_empleado" id="dni_empleado">
-    <option value="">-- Selecciona --</option>
-    <option th:each="emp : ${empleados}"
-            th:if="${emp.dni != null}"
-            th:value="${emp.dni}"
-            th:text="|${emp.dni} - ${emp.nombre} ${emp.apellidos}|">
-    </option>
-  </select><br/>
-
-  DNI Paciente:
-  <select name="dni_paciente" id="dni_paciente">
-    <option value="">-- Selecciona --</option>
-    <option th:each="pac : ${pacientes}"
-            th:if="${pac.dni != null}"
-            th:value="${pac.dni}"
-            th:text="|${pac.dni} - ${pac.nombre} ${pac.apellidos}|">
-    </option>
-  </select><br/>
-
-  ID Tratamiento:
-  <select name="id_tratamiento" id="id_tratamiento" required>
-    <option value="">-- Selecciona --</option>
-    <option th:each="trat : ${tratamientos}"
-            th:value="${trat.id_tratamiento}"
-            th:text="${trat.tipo_tratamiento}">
-    </option>
-  </select><br/>
-
-  Modo Pago: <input type="text" name="modo_pago" id="modo_pago" required /><br/>
-  Tarifa: <input type="number" step="0.01" name="tarifa" id="tarifa" required /><br/>
-  Concepto: <input type="text" name="concepto" id="concepto" required /><br/>
-  Número sesiones: <input type="number" name="num_sesiones" id="num_sesiones" required /><br/>
-
-  <button type="submit" id="btnSubmit">Enviar</button>
-  <button type="button" onclick="cerrarForm('formServicio')">Cancelar</button>
-</form>
-
-<!-- Al final de la tabla de gastos: -->
-<h3>Gestión Gastos</h3>
-<button onclick="mostrarFormGasto('add')">Añadir Gasto</button>
-<button onclick="mostrarFormGasto('update')">Actualizar Gasto</button>
-<button onclick="mostrarFormGasto('delete')">Borrar Gasto</button>
-
-<!-- Formulario simplificado para gastos -->
-<form id="formGasto" style="display:none;" method="post" action="">
-  <div id="gastoSelector" style="display:none;">
-    <label>ID Gasto:</label>
-    <select id="selectIdGasto" onchange="rellenarCamposGasto(this.value)">
-      <option value="">-- Selecciona --</option>
-      <option th:each="gasto : ${gastos}"
-              th:value="${gasto.id_gasto}"
-              th:text="${gasto.id_gasto}">
-      </option>
-    </select>
-  </div>
-
-  <input type="hidden" name="id_gasto" id="id_gasto" />
-  Cantidad: <input type="number" step="0.01" name="cantidad" id="cantidad" required /><br/>
-  Motivo: <input type="text" name="motivo" id="motivo" required /><br/>
-  Proveedor: <input type="text" name="proveedor" id="proveedor" required /><br/>
-  Fecha: <input type="date" name="fecha" id="fecha" required /><br/>
-  
-  <button type="submit" id="btnGastoSubmit">Enviar</button>
-  <button type="button" onclick="cerrarForm('formGasto')">Cancelar</button>
-</form>
+		<div class="container">
+			<h2>Tabla de Ingresos</h2>
+			<form action="/contabilidad" method="get">
+			    <label for="filtroEmpleado">Filtrar por empleado:</label>
+			    <select name="filtroEmpleado" id="filtroEmpleado" onchange="this.form.submit()">
+			        <option value="">-- Todos --</option>
+			        <option th:each="empleado : ${empleados}"
+					        th:value="${empleado.dni}"
+					        th:text="|${empleado.nombre} ${empleado.apellidos} (${empleado.dni})|"
+					        th:selected="${filtroEmpleado} == ${empleado.dni}">
+					</option>
+			    </select>
+			    <input type="hidden" name="filtroProveedor" th:value="${filtroProveedor}" />
+			</form>
+			<table border="1">
+			    <thead>
+			        <tr>
+			            <th>ID</th>
+			            <th>Fecha</th>
+			            <th>Fisioterapeuta</th>
+			            <th>Paciente</th>
+			            <th>Tratamiento</th>
+			            <th>Pago</th>
+			            <th>Tarifa</th>
+			            <th>Concepto</th>
+			            <th>Cantidad</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <tr th:each="servicio : ${servicios}">
+			            <td th:text="${servicio.id_servicio}"></td>
+			            <td th:text="${#temporals.format(servicio.fecha_cita, 'yyyy/MM/dd')}"></td>
+			            <td th:text="${servicio.dni_empleado != null ? servicio.dni_empleado.nombre + ' ' + servicio.dni_empleado.apellidos : 'Desconocido'}"></td>
+			            <td th:text="${servicio.dni_paciente != null ? servicio.dni_paciente.nombre + ' ' + servicio.dni_paciente.apellidos : 'Desconocido'}"></td>
+			            <td th:text="${servicio.id_tratamiento.tipo_tratamiento}"></td>
+			            <td th:text="${servicio.modo_pago}"></td>
+			            <td th:text="${servicio.tarifa}"></td>
+			            <td th:text="${servicio.concepto}"></td>
+			            <td th:text="${servicio.num_sesiones}"></td>
+			        </tr>
+			    </tbody>
+			</table>
+			<p><strong>Total Ingresos:</strong> <span th:text="${totalIngresos}"></span> €</p>
+			
+			<h2>Tabla de Gastos</h2>
+			<form action="/contabilidad" method="get">
+			    <label for="filtroProveedor">Filtrar por proveedor:</label>
+			    <select name="filtroProveedor" id="filtroProveedor" onchange="this.form.submit()">
+			        <option value="">-- Todos --</option>
+			        <option th:each="proveedor : ${proveedores}"
+			                th:value="${proveedor}"
+			                th:text="${proveedor}"
+			                th:selected="${filtroProveedor} == ${proveedor}">
+			        </option>
+			    </select>
+			    <input type="hidden" name="filtroEmpleado" th:value="${filtroEmpleado}" />
+			</form>
+			<table border="1">
+			    <thead>
+			        <tr>
+			            <th>ID</th>
+			            <th>Cantidad</th>
+			            <th>Motivo</th>
+			            <th>Proveedor</th>
+			            <th>Fecha</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+				    <tr th:each="gasto : ${gastos}">
+				      <td th:text="${gasto.id_gasto}"></td>
+				      <td th:text="${gasto.cantidad}"></td>
+				      <td th:text="${gasto.motivo}"></td>
+				      <td th:text="${gasto.proveedor}"></td>
+				      <td th:text="${#temporals.format(gasto.fecha, 'yyyy/MM/dd')}"></td>
+				    </tr>
+			  </tbody>
+			</table>
+			<p>Total gastos: <span th:text="${totalGastos}"></span>€</p>
+		    <br>
+		    <p><strong>Beneficio:</strong> <span th:text="${beneficio}"></span> €</p>
+		    
+		    <!-- Al final de la tabla de ingresos (Servicios): -->
+	<h3>Gestión Servicios</h3>
+	<button onclick="mostrarFormServicio('add')">Añadir Servicio</button>
+	<button onclick="mostrarFormServicio('update')">Actualizar Servicio</button>
+	<button onclick="mostrarFormServicio('delete')">Borrar Servicio</button>
+	
+	<form id="formServicio" style="display:none;" method="post" action="">
+	  <div id="servicioSelector" style="display:none;">
+	    <label>ID Servicio:</label>
+	    <select id="selectIdServicio" onchange="rellenarCamposServicio(this.value)">
+	      <option value="">-- Selecciona --</option>
+	      <option th:each="serv : ${servicios}"
+	              th:value="${serv.id_servicio}"
+	              th:text="${serv.id_servicio}">
+	      </option>
+	    </select>
+	  </div>
+	
+	  <input type="hidden" name="id_servicio" id="id_servicio" />
+	
+	  Fecha: <input type="date" name="fecha_cita" id="fecha_cita" required /><br/>
+	
+	  DNI Empleado:
+	  <select name="dni_empleado" id="dni_empleado">
+	    <option value="">-- Selecciona --</option>
+	    <option th:each="emp : ${empleados}"
+	            th:if="${emp.dni != null}"
+	            th:value="${emp.dni}"
+	            th:text="|${emp.dni} - ${emp.nombre} ${emp.apellidos}|">
+	    </option>
+	  </select><br/>
+	
+	  DNI Paciente:
+	  <select name="dni_paciente" id="dni_paciente">
+	    <option value="">-- Selecciona --</option>
+	    <option th:each="pac : ${pacientes}"
+	            th:if="${pac.dni != null}"
+	            th:value="${pac.dni}"
+	            th:text="|${pac.dni} - ${pac.nombre} ${pac.apellidos}|">
+	    </option>
+	  </select><br/>
+	
+	  ID Tratamiento:
+	  <select name="id_tratamiento" id="id_tratamiento" required>
+	    <option value="">-- Selecciona --</option>
+	    <option th:each="trat : ${tratamientos}"
+	            th:value="${trat.id_tratamiento}"
+	            th:text="${trat.tipo_tratamiento}">
+	    </option>
+	  </select><br/>
+	
+	  Modo Pago: <input type="text" name="modo_pago" id="modo_pago" required /><br/>
+	  Tarifa: <input type="number" step="0.01" name="tarifa" id="tarifa" required /><br/>
+	  Concepto: <input type="text" name="concepto" id="concepto" required /><br/>
+	  Número sesiones: <input type="number" name="num_sesiones" id="num_sesiones" required /><br/>
+	
+	  <button type="submit" id="btnSubmit">Enviar</button>
+	  <button type="button" onclick="cerrarForm('formServicio')">Cancelar</button>
+	</form>
+	
+	<!-- Al final de la tabla de gastos: -->
+	<h3>Gestión Gastos</h3>
+	<button onclick="mostrarFormGasto('add')">Añadir Gasto</button>
+	<button onclick="mostrarFormGasto('update')">Actualizar Gasto</button>
+	<button onclick="mostrarFormGasto('delete')">Borrar Gasto</button>
+	
+	<!-- Formulario simplificado para gastos -->
+	<form id="formGasto" style="display:none;" method="post" action="">
+	  <div id="gastoSelector" style="display:none;">
+	    <label>ID Gasto:</label>
+	    <select id="selectIdGasto" onchange="rellenarCamposGasto(this.value)">
+	      <option value="">-- Selecciona --</option>
+	      <option th:each="gasto : ${gastos}"
+	              th:value="${gasto.id_gasto}"
+	              th:text="${gasto.id_gasto}">
+	      </option>
+	    </select>
+	  </div>
+	
+	  <input type="hidden" name="id_gasto" id="id_gasto" />
+	  Cantidad: <input type="number" step="0.01" name="cantidad" id="cantidad" required /><br/>
+	  Motivo: <input type="text" name="motivo" id="motivo" required /><br/>
+	  Proveedor: <input type="text" name="proveedor" id="proveedor" required /><br/>
+	  Fecha: <input type="date" name="fecha" id="fecha" required /><br/>
+	  
+	  <button type="submit" id="btnGastoSubmit">Enviar</button>
+	  <button type="button" onclick="cerrarForm('formGasto')">Cancelar</button>
+	</form>
+</div>
 <script th:inline="javascript">
     /*<![CDATA[*/
     window.serviciosMap = [[${servicios}]];

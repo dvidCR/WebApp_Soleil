@@ -1,5 +1,7 @@
 package com.soleil.api.viewController;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -72,7 +74,7 @@ public class viewController {
                              f.getDni_empleado().getDni().equals(empleado.getDni()) &&
                              f.getFecha().equals(LocalDate.now()))
                 .toList();
-
+        
         model.addAttribute("empleado", empleado);
         model.addAttribute("fichajesHoy", fichajesHoy);
         return "portalEmpleado";
@@ -119,21 +121,11 @@ public class viewController {
     
     @GetMapping("/anadirServicio")
     public String mostrarServiciosDelEmpleado(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        List<Servicio> servicios;
+        List<Servicio> servicios = servicioService.obtenerTodos();
 
         if (userDetails != null) {
-            Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
-            if (empleadoOpt.isPresent()) {
-                Empleado empleado = empleadoOpt.get();
-                servicios = servicioService.obtenerTodos().stream()
-                    .filter(s -> s.getDni_empleado() != null && s.getDni_empleado().getDni().equals(empleado.getDni()))
-                    .toList();
-                model.addAttribute("empleado", empleado);
-            } else {
-                servicios = servicioService.obtenerTodos();
-            }
-        } else {
-            servicios = servicioService.obtenerTodos();
+        	Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+            empleadoOpt.ifPresent(empleado -> model.addAttribute("empleado", empleado));
         }
 
         List<Paciente> pacientes = pacienteService.obtenerTodos();
@@ -171,8 +163,16 @@ public class viewController {
     }
     
     @GetMapping("/configurarUsuarios")
-    public String mostrarUsuario(Model model) {
+    public String mostrarUsuario(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         List<Empleado> empleados = empleadoService.obtenerTodos();
+        
+        Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+        if (empleadoOpt.isEmpty()) {
+            return "redirect:/index";
+        }
+        
+        Empleado empleado = empleadoOpt.get();
+        model.addAttribute("empleado", empleado);
         model.addAttribute("empleados", empleados);
         model.addAttribute("dniSeleccionado", "");
         return "configurarUsuarios";
@@ -212,8 +212,17 @@ public class viewController {
     }
     
     @GetMapping("/configurarPacientes")
-    public String mostrarPaciente(Model model) {
+    public String mostrarPaciente(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         List<Paciente> pacientes = pacienteService.obtenerTodos();
+        
+        Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+        if (empleadoOpt.isEmpty()) {
+            return "redirect:/index";
+        }
+        
+        Empleado empleado = empleadoOpt.get();   
+        
+        model.addAttribute("empleado", empleado);
         model.addAttribute("pacientes", pacientes);
         model.addAttribute("dniSeleccionado", "");
         return "configurarPacientes";
@@ -245,10 +254,18 @@ public class viewController {
     }
     
     @GetMapping("/configurarTratamientos")
-    public String mostrarTratamientos(Model model) {
+    public String mostrarTratamientos(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         List<Tratamiento> tratamientos = tratamientoService.obtenerTodos();
         List<Paciente> pacientes = pacienteService.obtenerTodos();
-
+        
+        Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+        if (empleadoOpt.isEmpty()) {
+            return "redirect:/index";
+        }
+        
+        Empleado empleado = empleadoOpt.get();
+        
+        model.addAttribute("empleado", empleado);
         model.addAttribute("tratamientos", tratamientos);
         model.addAttribute("pacientes", pacientes);
         model.addAttribute("tratamientoSeleccionado", "");
@@ -307,17 +324,35 @@ public class viewController {
     }
 
     @GetMapping("/gestionEmpleado")
-    public String mostrarTablaGestionEmpleado(@RequestParam(name = "filtroEmpleado", required = false) String dniEmpleado, Model model) {
+    public String mostrarTablaGestionEmpleado(@RequestParam(name = "filtroEmpleado", required = false) String dniEmpleado, Model model,  @AuthenticationPrincipal UserDetails userDetails) {
         cargarServiciosFiltrados(dniEmpleado, model, true);
+        
+        Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+        if (empleadoOpt.isEmpty()) {
+            return "redirect:/index";
+        }
+        
+        Empleado empleado = empleadoOpt.get();
+        
+        model.addAttribute("empleado", empleado);
         model.addAttribute("filtroEmpleado", dniEmpleado);
         return "gestionEmpleado";
     }
 
     @GetMapping("/contabilidad")
-    public String mostrarTablaContabilidad(@RequestParam(name = "filtroEmpleado", required = false) String dniEmpleado, @RequestParam(name = "filtroProveedor", required = false) String proveedor, Model model) {
+    public String mostrarTablaContabilidad(@RequestParam(name = "filtroEmpleado", required = false) String dniEmpleado, @RequestParam(name = "filtroProveedor", required = false) String proveedor, Model model,  @AuthenticationPrincipal UserDetails userDetails) {
         cargarServiciosFiltrados(dniEmpleado, model, false);
 
         cargarGastosFiltrados(proveedor, model);
+        
+        Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+        if (empleadoOpt.isEmpty()) {
+            return "redirect:/index";
+        }
+        
+        Empleado empleado = empleadoOpt.get();
+        
+        model.addAttribute("empleado", empleado);
         
         List<String> proveedoresUnicos = gastoService.obtenerTodosProveedoresUnicos();
         model.addAttribute("proveedores", proveedoresUnicos);
@@ -398,11 +433,14 @@ public class viewController {
         double totalIngresos = servicios.stream()
                 .mapToDouble(s -> s.getTarifa() * s.getNum_sesiones())
                 .sum();
+        
+        BigDecimal ingresosRedondeados = BigDecimal.valueOf(totalIngresos).setScale(2, RoundingMode.HALF_UP);
+
 
         List<Empleado> empleados = empleadoService.obtenerTodos();
 
         model.addAttribute("servicios", servicios);
-        model.addAttribute("totalIngresos", totalIngresos);
+        model.addAttribute("totalIngresos", ingresosRedondeados.doubleValue());
         model.addAttribute("empleados", empleados);
     }
 
@@ -418,17 +456,28 @@ public class viewController {
         double totalGastos = gastos.stream()
                 .mapToDouble(Gasto::getCantidad)
                 .sum();
+        
+        BigDecimal ingresosRedondeados = BigDecimal.valueOf(totalGastos).setScale(2, RoundingMode.HALF_UP);
+
 
         model.addAttribute("gastos", gastos);
-        model.addAttribute("totalGastos", totalGastos);
-        
+        model.addAttribute("totalGastos", ingresosRedondeados.doubleValue());       
         model.addAttribute("proveedores", gastoService.obtenerTodosProveedoresUnicos());
     }
     
     @GetMapping("/verFichajes")
-    public String mostrarFichajes(Model model) {
+    public String mostrarFichajes(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         List<Fichaje> fichajes = fichajeService.obtenerTodos();
         List<Empleado> empleados = empleadoService.obtenerTodos();
+        
+        Optional<Empleado> empleadoOpt = empleadoService.obtenerPorUsuario(userDetails.getUsername());
+        if (empleadoOpt.isEmpty()) {
+            return "redirect:/index";
+        }
+        
+        Empleado empleado = empleadoOpt.get();
+        
+        model.addAttribute("empleado", empleado);     
         model.addAttribute("fichajes", fichajes);
         model.addAttribute("empleados", empleados);
         return "verFichajes";

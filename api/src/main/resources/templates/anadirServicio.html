@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Añadir Servicio</title>
+    <title>Añadir Consultas</title>
     <link rel="icon" th:href="@{/img/logo.ico}" type="image/x-icon"/>
-    <link rel="stylesheet" th:href="@{/css/admin.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <script th:src="@{/js/script.js}" defer></script>
 </head>
 <body data-home-url="/">
 <nav>
     <a th:href="@{/portalEmpleado}"><img th:src="@{/img/logo.png}" alt="Logo" /></a>
-    <h1>Gestión de Servicios</h1>
+    <h1>Añadir Consultas</h1>
+    <p th:text="${empleado} ? ${empleado.nombre + ' ' + empleado.apellidos} : 'Empleado'"></p>
     <form th:action="@{/logout}" method="post">
     	<button type="submit" class="logout-btn">Cerrar Sesión</button>
 	</form>
 </nav>
-
+<div class="container">
 <section class="tabla-servicios">
     <h2>Servicios del Empleado</h2>
-    <table border="1" style="width:100%; border-collapse: collapse;">
+    <table border="1">
         <thead>
             <tr>
                 <th>ID</th>
@@ -105,5 +106,6 @@
         <button type="submit">Guardar Servicio</button>
     </form>
 </section>
+</div>
 </body>
 </html>

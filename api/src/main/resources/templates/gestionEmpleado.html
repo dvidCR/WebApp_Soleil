@@ -5,7 +5,7 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <title>Gestionar Trabajo Empleados</title>
 	    <link rel="icon" th:href="@{/img/logo.ico}" type="image/x-icon"/>
-	    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}"/>
+	    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 	    <script th:src="@{/js/empleados.js}" defer></script>
 	    <script th:src="@{/js/script.js}" defer></script>
 	</head>
@@ -13,23 +13,26 @@
 	    <nav>
 	        <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
 	        <h1>Gestionar Trabajo Empleados</h1>
+	        <p th:text="${empleado.nombre + ' ' + empleado.apellidos}"></p>
 	        <form th:action="@{/logout}" method="post">
     			<button type="submit" class="logout-btn">Cerrar Sesión</button>
 			</form>
 	    </nav>
-	    <h2>Gestión Empleados</h2>
-		<form action="/gestionEmpleado" method="get">
-		    <label for="filtroEmpleado">Filtrar por empleado:</label>
-		    <select name="filtroEmpleado" id="filtroEmpleado" onchange="this.form.submit()">
-		        <option value="">-- Todos --</option>
-		        <option th:each="empleado : ${empleados}"
-				        th:value="${empleado.dni}"
-				        th:text="|${empleado.nombre} ${empleado.apellidos} (${empleado.dni})|"
-				        th:selected="${filtroEmpleado} == ${empleado.dni}">
-				</option>
-		    </select>
-		    <input type="hidden" name="filtroProveedor" th:value="${filtroProveedor}" />
-		</form>
+	    <div class="container">
+			<h2>Gestión Empleados</h2>
+		    <form action="/gestionEmpleado" method="get">
+		        <label for="filtroEmpleado">Filtrar por empleado:</label>
+		        <select name="filtroEmpleado" id="filtroEmpleado" onchange="this.form.submit()">
+		            <option value="">-- Todos --</option>
+		            <option th:each="empleado : ${empleados}"
+		                    th:value="${empleado.dni}"
+		                    th:text="|${empleado.nombre} ${empleado.apellidos} (${empleado.dni})|"
+		                    th:selected="${filtroEmpleado} == ${empleado.dni}">
+		            </option>
+		        </select>
+		        <input type="hidden" name="filtroProveedor" th:value="${filtroProveedor}" />
+		    </form>
+		</div>
 		<table border="1">
 		    <thead>
 		        <tr>

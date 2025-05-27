@@ -5,92 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Pacientes</title>
     <link rel="icon" th:href="@{/img/logo.ico}" type="image/x-icon"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     <script th:src="@{/js/script.js}" defer></script>
-    <style>
-        .botonera {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .formulario-section {
-            display: none;
-        }
-        .visible {
-            display: block;
-        }
-    </style>
 </head>
 <body>
+    <!-- Barra superior -->
     <nav>
         <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
         <h1>Configurar Pacientes</h1>
+        <p th:text="${empleado.nombre + ' ' + empleado.apellidos}"></p>
         <form th:action="@{/logout}" method="post">
-    		<button type="submit" class="logout-btn">Cerrar Sesión</button>
-		</form>
+            <button type="submit" class="logout-btn">Cerrar Sesión</button>
+        </form>
     </nav>
-    <div class="botonera">
-        <button onclick="mostrarSeccion('verPacientes')">Ver Pacientes</button>
-        <button onclick="mostrarSeccion('crearPaciente')">Crear Paciente</button>
-        <button onclick="mostrarSeccion('actualizarPaciente')">Actualizar Paciente</button>
-        <button onclick="mostrarSeccion('borrarPaciente')">Borrar Paciente</button>
-    </div>
 
-    <div id="verPacientes" class="formulario-section">
-        <table>
-            <thead>
-                <tr><th>DNI</th><th>Nombre</th><th>Apellidos</th></tr>
-            </thead>
-            <tbody>
-                <tr th:each="pac : ${pacientes}">
-                    <td th:text="${pac.dni}"></td>
-                    <td th:text="${pac.nombre}"></td>
-                    <td th:text="${pac.apellidos}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="container">
+        <div class="botonera">
+            <button onclick="mostrarSeccion('verPacientes')" style="color: white;">Ver Pacientes</button>
+            <button onclick="mostrarSeccion('crearPaciente')" style="color: white;">Crear Paciente</button>
+            <button onclick="mostrarSeccion('actualizarPaciente')" style="color: white;">Actualizar Paciente</button>
+            <button onclick="mostrarSeccion('borrarPaciente')" style="color: white;">Borrar Paciente</button>
+        </div>
 
-    <div id="crearPaciente" class="formulario-section">
-        <form th:action="@{/configurarPacientes}" method="post">
-            <input type="text" name="dni" placeholder="DNI">
-            <input type="text" name="nombre" placeholder="Nombre">
-            <input type="text" name="apellidos" placeholder="Apellidos">
-            <button type="submit">Crear paciente</button>
-        </form>
-    </div>
+        <div id="verPacientes" class="formulario-section">
+            <table>
+                <thead>
+                    <tr><th>DNI</th><th>Nombre</th><th>Apellidos</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pac : ${pacientes}">
+                        <td th:text="${pac.dni}"></td>
+                        <td th:text="${pac.nombre}"></td>
+                        <td th:text="${pac.apellidos}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <div id="actualizarPaciente" class="formulario-section">
-        <select onchange="cargarPaciente(this.value, 'actualizar')">
-            <option value="">Seleccionar paciente</option>
-            <option th:each="pac : ${pacientes}" th:value="${pac.dni}" th:text="${pac.dni} + ' - ' + ${pac.nombre} + ' ' + ${pac.apellidos}"></option>
-        </select>
+        <div id="crearPaciente" class="formulario-section">
+            <form th:action="@{/configurarPacientes}" method="post">
+                <input type="text" name="dni" placeholder="DNI">
+                <input type="text" name="nombre" placeholder="Nombre">
+                <input type="text" name="apellidos" placeholder="Apellidos">
+                <button type="submit">Crear paciente</button>
+            </form>
+        </div>
 
-        <form th:action="@{/configurarPacientes/{dni}(dni=${pacienteSeleccionado})}" method="post">
-            <input type="hidden" name="_method" value="put"/>
+        <div id="actualizarPaciente" class="formulario-section">
 
-            <input type="text" id="dni-input-paciente" placeholder="DNI nuevo">
-			<button type="button" onclick="cambiarDniPaciente()">Cambiar DNI</button>
+            <form th:action="@{/configurarPacientes/{dni}(dni=${pacienteSeleccionado})}" method="post">
+				<select onchange="cargarPaciente(this.value, 'actualizar')">
+				                <option value="">Seleccionar paciente</option>
+				                <option th:each="pac : ${pacientes}" th:value="${pac.dni}" th:text="${pac.dni} + ' - ' + ${pac.nombre} + ' ' + ${pac.apellidos}"></option>
+				            </select>
+                <input type="hidden" name="_method" value="put"/>
 
-            <input type="text" name="nombre" placeholder="Nombre" data-actualizar="nombre">
-            <input type="text" name="apellidos" placeholder="Apellidos" data-actualizar="apellidos">
-            <button type="submit">Actualizar</button>
-        </form>
-    </div>
+                <input type="text" id="dni-input-paciente" placeholder="DNI nuevo">
+                <button type="button" onclick="cambiarDniPaciente()">Cambiar DNI</button>
 
-    <div id="borrarPaciente" class="formulario-section">
-        <select onchange="cargarPaciente(this.value, 'borrar')">
-            <option value="">Seleccionar paciente</option>
-            <option th:each="pac : ${pacientes}" th:value="${pac.dni}" th:text="${pac.dni} + ' - ' + ${pac.nombre} + ' ' + ${pac.apellidos}"></option>
-        </select>
-        <form th:action="@{/configurarPacientes/{dni}(dni=${pacienteSeleccionado})}" method="post">
-            <input type="hidden" name="_method" value="delete"/>
-            <input type="text" placeholder="Dni" data-borrar="dni" readonly>
-            <input type="text" placeholder="Nombre" data-borrar="nombre" readonly>
-            <input type="text" placeholder="Apellidos" data-borrar="apellidos" readonly>
-            <button type="submit" id="borrar-btn">Borrar</button>
-        </form>
+                <input type="text" name="nombre" placeholder="Nombre" data-actualizar="nombre">
+                <input type="text" name="apellidos" placeholder="Apellidos" data-actualizar="apellidos">
+                <button type="submit">Actualizar</button>
+            </form>
+        </div>
+
+        <div id="borrarPaciente" class="formulario-section">
+            <form th:action="@{/configurarPacientes/{dni}(dni=${pacienteSeleccionado})}" method="post">
+				<select onchange="cargarPaciente(this.value, 'borrar')">
+				                <option value="">Seleccionar paciente</option>
+				                <option th:each="pac : ${pacientes}" th:value="${pac.dni}" th:text="${pac.dni} + ' - ' + ${pac.nombre} + ' ' + ${pac.apellidos}"></option>
+				            </select>
+                <input type="hidden" name="_method" value="delete"/>
+                <input type="text" placeholder="Dni" data-borrar="dni" readonly>
+                <input type="text" placeholder="Nombre" data-borrar="nombre" readonly>
+                <input type="text" placeholder="Apellidos" data-borrar="apellidos" readonly>
+                <button type="submit" id="borrar-btn">Borrar</button>
+            </form>
+        </div>
     </div>
 
     <script th:inline="javascript">

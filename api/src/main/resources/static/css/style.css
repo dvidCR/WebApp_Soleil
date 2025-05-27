@@ -1,0 +1,519 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: repeating-linear-gradient(
+        45deg,
+        #f0f0f0,
+        #f0f0f0 20px,
+        #e0e0e0 20px,
+        #e0e0e0 40px
+    );
+    background-attachment: fixed;
+    background-size: 40px 40px;
+    color: #333;
+    padding-bottom: 50px;
+    margin: 0;
+    text-align: center;
+}
+
+/* NAV */
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    width: 100%;
+    height: auto;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    flex-wrap: wrap;
+}
+
+nav img {
+    height: 50px;
+    border-radius: 50%;
+}
+
+nav h1 {
+    flex-grow: 1;
+    text-align: left;
+    margin-left: 20px;
+    font-size: 1.4em;
+    color: #333;
+}
+
+nav p {
+	text-align: center;
+	padding-right: 45px;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 18px;
+}
+
+nav form {
+	align-items: right;
+	width: auto;
+	height: auto;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    color: white;
+    width: 200px;
+    height: auto;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #a71d2a;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.container {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 1000px;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main-content {
+    max-width: 1000px;
+    width: 95%;
+    margin: 120px auto 40px;
+    padding: 20px;
+}
+
+/* BOTONES */
+button,
+.btn,
+.container form button {
+    display: block;
+    width: 450px;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.botonera {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+
+.btn:hover,
+.container form button:hover {
+    transform: scale(1.03);
+    background-color: #0056b3;
+}
+
+.formulario-section {
+    display: none;
+}
+
+.formulario-section.visible {
+    display: block;
+}
+
+.btn:first-child,
+button[onclick*="add"] {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn:first-child:hover,
+button[onclick*="add"]:hover {
+    background-color: #0056b3;
+}
+
+.btn:last-child,
+button[onclick*="update"] {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.btn:last-child:hover,
+button[onclick*="update"]:hover {
+    background-color: #e0a800;
+}
+
+button[onclick*="delete"] {
+    background-color: #dc3545;
+    color: white;
+}
+button[onclick*="delete"]:hover {
+    background-color: #c82333;
+}
+
+/* Botones específicos para tipos de descarga */
+form[action$="pdf"] button {
+    background-color: #ff5722;
+}
+
+form[action$="pdf"] button:hover {
+    background-color: #d84315;
+}
+
+form[action$="excel"] button {
+    background-color: #4caf50;
+}
+
+form[action$="excel"] button:hover {
+    background-color: #388e3c;
+}
+
+/* FORMULARIOS */
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+  	align-items: center;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+form input,
+form select {
+    padding: 14px 12px;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.formulario-servicio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.formulario-servicio h2 {
+    margin-bottom: 20px;
+}
+
+.formulario-servicio form {
+    width: 100%;
+    max-width: 500px;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+label {
+    font-weight: bold;
+    text-align: left;
+    font-size: 1.1rem;
+}
+
+/* TABLAS */
+table {
+    margin: 30px auto;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+table th,
+table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+table th {
+    background-color: rgb(41, 99, 252);
+    color: white;
+}
+
+/* TITULOS */
+h2 {
+    margin-top: 2rem;
+    font-size: 1.5em;
+    color: #444;
+}
+
+h3 {
+    font-size: 1.4rem;
+    margin-top: 2rem;
+    color: #333;
+}
+
+p {
+    font-size: 1.1rem;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+/* --- SELECTS --- */
+select {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin: 10px 5px;
+    width: 250px;
+    max-width: 90%;
+}
+
+/* --- FORMULARIOS EMERGENTES --- */
+#formServicio, #formGasto {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto 0;
+    max-width: 600px;
+    text-align: left;
+}
+
+#formServicio input,
+#formGasto input,
+#formServicio select,
+#formGasto select {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+#formServicio label,
+#formGasto label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: inline-block;
+}
+
+#formServicio button,
+#formGasto button {
+    width: 48%;
+    margin-right: 2%;
+}
+
+#formServicio button:last-child,
+#formGasto button:last-child {
+    background-color: #6c757d;
+    color: white;
+}
+#formServicio button:last-child:hover,
+#formGasto button:last-child:hover {
+    background-color: #5a6268;
+}
+
+#servicioSelector,
+#gastoSelector {
+    margin-bottom: 1rem;
+}
+
+/* --- RESPONSIVE DESIGN --- */
+@media (max-width: 1024px) {    
+	.container,
+    .main-content {
+        width: 90%;
+        margin: 100px auto;
+        padding: 10px;
+        max-width: 95%;
+        gap: 1rem;
+    }
+    
+    nav {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        height: auto;
+        padding: 15px 10px;
+    }
+
+    nav h1 {
+        margin-left: 0;
+        font-size: 1.2rem;
+        margin-top: 8px;
+        flex-grow: unset;
+    }
+
+    nav img {
+        height: 40px;
+    }
+
+    .logout-btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .btn,
+    button {
+        width: 90%;
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .btn,
+    .container form button {
+        font-size: 16px;
+        padding: 12px;
+        width: 100%;
+    }
+
+    form {
+        width: 100%;
+        padding: 15px;
+    }
+
+    table {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    table th, table td {
+        padding: 8px;
+    }
+    
+    h2, h3, p {
+        padding: 0 10px;
+    }
+
+    select {
+        width: 100%;
+    }
+
+    #formServicio,
+    #formGasto {
+        width: 95%;
+        padding: 15px;
+    }
+
+    #formServicio button,
+    #formGasto button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 600px) {	
+	nav {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+    
+    nav img {
+    text-align: center;
+        height: 10px 0;
+    }
+
+    nav h1 {
+        font-size: 1rem;
+    }
+    
+    .logout-btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .container,
+    .main-content {
+        margin-top: 130px;
+        padding: 10px;
+    }
+
+    .btn,
+    .container form button {
+        font-size: 14px;
+        padding: 10px;
+    }
+    
+    .btn,
+    button {
+        font-size: 15px;
+        padding: 10px;
+    }
+
+    table th, table td {
+        padding: 6px;
+        font-size: 0.85rem;
+    }
+
+    select {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    h2, h3 {
+        font-size: 1.2rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    form input,
+    form select {
+        font-size: 1rem;
+        padding: 10px 8px;
+    }
+    
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    table th, table td {
+        padding: 6px;
+        font-size: 0.85rem;
+    }
+
+    h2 {
+        font-size: 1.2em;
+        margin-top: 60px;
+    }
+}
