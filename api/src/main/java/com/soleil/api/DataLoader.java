@@ -27,7 +27,7 @@
 //            admin.setCorreo("admin@soleil.com");
 //            admin.setUsuario("admin");
 //            admin.setContrasena(passwordEncoder.encode("12345678"));
-//            admin.setRol("ADMIN");
+//            admin.setRol("admin");
 //            empleadoRepository.save(admin);
 //            System.out.println("Admin creado!");
 //        }

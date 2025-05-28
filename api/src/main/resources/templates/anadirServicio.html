@@ -21,45 +21,43 @@
 	</div>
 </nav>
 <div class="container">
-<section class="tabla-servicios">
     <h2>Servicios del Empleado</h2>
     <div class="tabla-scroll">
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Fecha</th>
-                <th>DNI Empleado</th>
-                <th>Nombre Empleado</th>
-                <th>Paciente</th>
-                <th>Tratamiento</th>
-                <th>Modo de pago</th>
-                <th>Tarifa</th>
-                <th>Concepto</th>
-                <th>Número de Sesiones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="servicio : ${servicios}">
-                <td th:text="${servicio.id_servicio}"></td>
-                <td th:text="${#temporals.format(servicio.fecha_cita, 'yyyy-MM-dd')}"></td>
-                <td th:text="${servicio.dni_empleado != null ? servicio.dni_empleado.dni : 'Desconocido'}"></td>
-                <td th:text="${servicio.dni_empleado != null ? servicio.dni_empleado.nombre + ' ' + servicio.dni_empleado.apellidos : 'Desconocido'}"></td>
-                <td th:text="${servicio.dni_paciente != null ? servicio.dni_paciente.nombre : 'Desconocido'}"></td>
-                <td th:text="${servicio.id_tratamiento.tipo_tratamiento}"></td>
-                <td th:text="${servicio.modo_pago}"></td>
-                <td th:text="${servicio.tarifa} + ' €'"></td>
-                <td th:text="${servicio.concepto}"></td>
-                <td th:text="${servicio.num_sesiones}"></td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(servicios)}">
-                <td colspan="8" style="text-align:center;">No se encontraron servicios para este empleado.</td>
-            </tr>
-        </tbody>
-    </table>
+	    <table border="1">
+	        <thead>
+	            <tr>
+	                <th>ID</th>
+	                <th>Fecha</th>
+	                <th>DNI Empleado</th>
+	                <th>Nombre Empleado</th>
+	                <th>Paciente</th>
+	                <th>Tratamiento</th>
+	                <th>Modo de pago</th>
+	                <th>Tarifa</th>
+	                <th>Concepto</th>
+	                <th>Número de Sesiones</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr th:each="servicio : ${servicios}">
+	                <td th:text="${servicio.id_servicio}"></td>
+	                <td th:text="${#temporals.format(servicio.fecha_cita, 'yyyy-MM-dd')}"></td>
+	                <td th:text="${servicio.dni_empleado != null ? servicio.dni_empleado.dni : 'Desconocido'}"></td>
+	                <td th:text="${servicio.dni_empleado != null ? servicio.dni_empleado.nombre + ' ' + servicio.dni_empleado.apellidos : 'Desconocido'}"></td>
+	                <td th:text="${servicio.dni_paciente != null ? servicio.dni_paciente.nombre : 'Desconocido'}"></td>
+	                <td th:text="${servicio.id_tratamiento.tipo_tratamiento}"></td>
+	                <td th:text="${servicio.modo_pago}"></td>
+	                <td th:text="${servicio.tarifa} + ' €'"></td>
+	                <td th:text="${servicio.concepto}"></td>
+	                <td th:text="${servicio.num_sesiones}"></td>
+	            </tr>
+	            <tr th:if="${#lists.isEmpty(servicios)}">
+	                <td colspan="8" style="text-align:center;">No se encontraron servicios para este empleado.</td>
+	            </tr>
+	        </tbody>
+	    </table>
     </div>
-</section>
-
+    
 <section class="formulario-servicio">
     <h2>Añadir Nuevo Servicio</h2>
     <form th:action="@{/anadirServicio}" method="post">
