@@ -132,7 +132,7 @@ button,
     cursor: pointer;
     font-weight: bold;
     color: white;
-    background-color: #007bff;
+    background-color: #4CAFCD;
     box-shadow: 0 5px 10px rgba(0,0,0,0.05);
     transition: transform 0.2s ease, background-color 0.3s ease;
 }
@@ -149,7 +149,7 @@ button,
 .btn:hover,
 .container form button:hover {
     transform: scale(1.03);
-    background-color: #0056b3;
+    background-color: #3091ad;
 }
 
 .formulario-section {
@@ -160,43 +160,48 @@ button,
     display: block;
 }
 
-.btn:first-child,
+.contabilidad button {
+	width: 450px;
+    margin-bottom: 25px;
+}
+
+.contabilidad:first-child,
 button[onclick*="add"] {
-    background-color: #007bff;
+    background-color: #6BC2A3;
     color: white;
 }
 
-.btn:first-child:hover,
+.contabilidad:first-child:hover,
 button[onclick*="add"]:hover {
-    background-color: #0056b3;
+    background-color: #55b996;
 }
 
-.btn:last-child,
+.contabilidad:last-child,
 button[onclick*="update"] {
-    background-color: #ffc107;
+    background-color: #F9D65D;
     color: #212529;
 }
 
-.btn:last-child:hover,
+.contabilidad:last-child:hover,
 button[onclick*="update"]:hover {
-    background-color: #e0a800;
+    background-color: #f9d044;
 }
 
 button[onclick*="delete"] {
-    background-color: #dc3545;
+    background-color: #F76C5E;
     color: white;
 }
 button[onclick*="delete"]:hover {
-    background-color: #c82333;
+    background-color: #f55a49;
 }
 
 /* Botones específicos para tipos de descarga */
 form[action$="pdf"] button {
-    background-color: #ff5722;
+    background-color: #FF7043;
 }
 
 form[action$="pdf"] button:hover {
-    background-color: #d84315;
+    background-color: #FF7043;
 }
 
 form[action$="excel"] button {
