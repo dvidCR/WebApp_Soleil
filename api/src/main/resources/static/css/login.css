@@ -79,7 +79,7 @@ input {
 button {
     width: 100%;
     padding: 12px;
-    background-color: rgb(41, 99, 252);
+    background-color: #4CAFCD;
     color: #fff;
     font-weight: bold;
     border: none;
@@ -99,7 +99,7 @@ button {
     max-width: 400px;
     padding: 12px;
     align-items: center;
-    background-color: rgb(41, 99, 252);
+    background-color: #4CAFCD;
     font-weight: bold;
     font-size: 1rem;
     border: none;
@@ -111,7 +111,7 @@ button {
 }
 
 button:hover {
-    background-color: rgb(3, 64, 222);
+    background-color: #3091ad;
 }
 
 /* --- MENSAJE DE ERROR --- */

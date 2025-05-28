@@ -107,9 +107,11 @@
 		    
 		    <!-- Al final de la tabla de ingresos (Servicios): -->
 	<h3>Gestión Servicios</h3>
-	<button onclick="mostrarFormServicio('add')">Añadir Servicio</button>
-	<button onclick="mostrarFormServicio('update')">Actualizar Servicio</button>
-	<button onclick="mostrarFormServicio('delete')">Borrar Servicio</button>
+	<div class="contabilidad">
+		<button onclick="mostrarFormServicio('add')">Añadir Servicio</button>
+		<button onclick="mostrarFormServicio('update')">Actualizar Servicio</button>
+		<button onclick="mostrarFormServicio('delete')">Borrar Servicio</button>
+	</div>
 	
 	<form id="formServicio" style="display:none;" method="post" action="">
 	  <div id="servicioSelector" style="display:none;">
