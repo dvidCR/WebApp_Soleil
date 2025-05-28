@@ -32,7 +32,6 @@ nav {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     position: fixed;
     width: 100%;
-    height: auto;
     top: 0;
     left: 0;
     z-index: 999;
@@ -64,6 +63,23 @@ nav form {
 	align-items: right;
 	width: auto;
 	height: auto;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Contenedor del menú */
+.menu-items {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+    gap: 1rem;
 }
 
 .logout-btn {
@@ -266,6 +282,18 @@ table th {
     color: white;
 }
 
+/* Contenedor para hacer scroll horizontal en móviles */
+.tabla-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Asegura que la tabla tenga un ancho mínimo */
+.tabla-scroll table {
+    min-width: 600px; /* Ajusta si tu tabla necesita más o menos */
+}
+
 /* TITULOS */
 h2 {
     margin-top: 2rem;
@@ -350,170 +378,94 @@ select {
 }
 
 /* --- RESPONSIVE DESIGN --- */
-@media (max-width: 1024px) {    
-	.container,
-    .main-content {
-        width: 90%;
-        margin: 100px auto;
-        padding: 10px;
-        max-width: 95%;
-        gap: 1rem;
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+        font-size: 1.8rem;
+        color: #333;
     }
-    
-    nav {
+
+    .menu-items {
+        display: none;
         flex-direction: column;
-        align-items: center;
+        width: 100%;
+        background-color: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        padding: 10px 0;
+        margin-top: 10px;
         text-align: center;
-        height: auto;
-        padding: 15px 10px;
     }
 
-    nav h1 {
-        margin-left: 0;
-        font-size: 1.2rem;
-        margin-top: 8px;
-        flex-grow: unset;
+    .menu-items.open {
+        display: flex;
     }
 
-    nav img {
-        height: 40px;
+    nav h1,
+    nav p,
+    nav form {
+        text-align: center;
+        width: 100%;
+        margin: 0;
+    }
+
+    .logout-btn {
+        width: 90%;
+        margin: auto;
+        font-size: 1rem;
+        padding: 10px;
     }
 
     .logout-btn {
         width: 100%;
-        margin-top: 10px;
-    }
-    
-    .btn,
-    button {
-        width: 90%;
-        font-size: 16px;
-        padding: 12px;
+        padding: 10px;
+        font-size: 1rem;
     }
 
-    .btn,
-    .container form button {
-        font-size: 16px;
-        padding: 12px;
-        width: 100%;
+    .container {
+        padding: 10px;
     }
 
-    form {
-        width: 100%;
-        padding: 15px;
+    .main-content {
+        margin: 100px auto 20px;
+        padding: 10px;
     }
 
-    table {
-        width: 100%;
-        font-size: 0.9rem;
-    }
-
-    table th, table td {
-        padding: 8px;
-    }
-    
-    h2, h3, p {
-        padding: 0 10px;
-    }
-
-    select {
-        width: 100%;
-    }
-
+    form,
+    .formulario-servicio form,
     #formServicio,
     #formGasto {
-        width: 95%;
+        width: 100%;
+        max-width: 100%;
         padding: 15px;
-    }
-
-    #formServicio button,
-    #formGasto button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}
-
-@media (max-width: 600px) {	
-	nav {
-        flex-direction: column;
-        height: auto;
-        padding: 10px;
-    }
-    
-    nav img {
-    text-align: center;
-        height: 10px 0;
-    }
-
-    nav h1 {
-        font-size: 1rem;
-    }
-    
-    .logout-btn {
-        width: 100%;
-        margin-top: 10px;
-    }
-    
-    .container,
-    .main-content {
-        margin-top: 130px;
-        padding: 10px;
-    }
-
-    .btn,
-    .container form button {
-        font-size: 14px;
-        padding: 10px;
-    }
-    
-    .btn,
-    button {
-        font-size: 15px;
-        padding: 10px;
-    }
-
-    table th, table td {
-        padding: 6px;
-        font-size: 0.85rem;
-    }
-
-    select {
-        font-size: 0.9rem;
-        padding: 8px;
-    }
-
-    button {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-
-    h2, h3 {
-        font-size: 1.2rem;
-    }
-
-    p {
-        font-size: 1rem;
     }
 
     form input,
-    form select {
+    form select,
+    #formServicio input,
+    #formGasto input,
+    #formServicio select,
+    #formGasto select {
         font-size: 1rem;
-        padding: 10px 8px;
-    }
-    
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+        padding: 12px;
     }
 
-    table th, table td {
-        padding: 6px;
-        font-size: 0.85rem;
+    .formulario-servicio h2 {
+        font-size: 1.2rem;
+        text-align: center;
     }
 
-    h2 {
-        font-size: 1.2em;
-        margin-top: 60px;
+    button,
+    .btn,
+    .container form button,
+    #formServicio button,
+    #formGasto button {
+        width: 100%;
+        font-size: 1rem;
+        padding: 12px;
     }
+
+    .botonera {
+        flex-direction: column;
+        gap: 0.5rem;
+    }    
 }

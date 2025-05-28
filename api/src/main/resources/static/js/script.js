@@ -7,6 +7,11 @@ function logout() {
     window.location.href = homeUrl;
 }
 
+function toggleMenu() {
+    const menu = document.getElementById('menuItems');
+    menu.classList.toggle('open');
+}
+
 /**
  * Metodo para fichar tu hora de entrada y salida
  */
