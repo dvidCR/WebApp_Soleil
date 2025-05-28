@@ -10,12 +10,15 @@
 </head>
 <body>
     <nav>
+	    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+		<div class="menu-items" id="menuItems">
         <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
         <h1>Configurar Tratamientos</h1>
         <p th:text="${empleado.nombre + ' ' + empleado.apellidos}"></p>
         <form th:action="@{/logout}" method="post">
             <button type="submit" class="logout-btn">Cerrar Sesión</button>
         </form>
+        </div>
     </nav>
 
     <div class="container">
@@ -27,6 +30,7 @@
         </div>
 
         <div id="verTratamientos" class="formulario-section">
+        	<div class="tabla-scroll">
             <table>
                 <thead>
                     <tr><th>ID</th><th>Tipo</th><th>Descripción</th><th>DNI Paciente</th></tr>
@@ -40,6 +44,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <div id="crearTratamiento" class="formulario-section">

@@ -10,12 +10,15 @@
 	</head>
 	<body data-home-url="/">
 		<nav>
+			<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+			<div class="menu-items" id="menuItems">
 		    <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo" /></a>
 		    <h1>Gestionar Contabilidad</h1>
 		    <p th:text="${empleado.nombre + ' ' + empleado.apellidos}"></p>
 		    <form th:action="@{/logout}" method="post">
     			<button type="submit" class="logout-btn">Cerrar Sesión</button>
 			</form>
+			</div>
 		</nav>
 		<div class="container">
 			<h2>Tabla de Ingresos</h2>
@@ -31,6 +34,7 @@
 			    </select>
 			    <input type="hidden" name="filtroProveedor" th:value="${filtroProveedor}" />
 			</form>
+			<div class="tabla-scroll">
 			<table border="1">
 			    <thead>
 			        <tr>
@@ -59,6 +63,7 @@
 			        </tr>
 			    </tbody>
 			</table>
+			</div>
 			<p><strong>Total Ingresos:</strong> <span th:text="${totalIngresos}"></span> €</p>
 			
 			<h2>Tabla de Gastos</h2>
@@ -74,6 +79,7 @@
 			    </select>
 			    <input type="hidden" name="filtroEmpleado" th:value="${filtroEmpleado}" />
 			</form>
+			<div class="tabla-scroll">
 			<table border="1">
 			    <thead>
 			        <tr>
@@ -94,6 +100,7 @@
 				    </tr>
 			  </tbody>
 			</table>
+			</div>
 			<p>Total gastos: <span th:text="${totalGastos}"></span>€</p>
 		    <br>
 		    <p><strong>Beneficio:</strong> <span th:text="${beneficio}"></span> €</p>

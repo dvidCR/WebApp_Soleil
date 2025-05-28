@@ -9,14 +9,16 @@
     <script th:src="@{/js/script.js}" defer></script>
 </head>
 <body>
-    <!-- Barra superior -->
     <nav>
+    	<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+		<div class="menu-items" id="menuItems">
         <a th:href="@{/admin}"><img th:src="@{/img/logo.png}" alt="Logo"></a>
         <h1>Configurar Pacientes</h1>
         <p th:text="${empleado.nombre + ' ' + empleado.apellidos}"></p>
         <form th:action="@{/logout}" method="post">
             <button type="submit" class="logout-btn">Cerrar Sesión</button>
         </form>
+        </div>
     </nav>
 
     <div class="container">
@@ -28,6 +30,7 @@
         </div>
 
         <div id="verPacientes" class="formulario-section">
+        	<div class="tabla-scroll">
             <table>
                 <thead>
                     <tr><th>DNI</th><th>Nombre</th><th>Apellidos</th></tr>
@@ -40,6 +43,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <div id="crearPaciente" class="formulario-section">

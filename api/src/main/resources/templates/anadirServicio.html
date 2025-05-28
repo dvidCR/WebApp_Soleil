@@ -10,16 +10,20 @@
 </head>
 <body data-home-url="/">
 <nav>
+	<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+	<div class="menu-items" id="menuItems">
     <a th:href="@{/portalEmpleado}"><img th:src="@{/img/logo.png}" alt="Logo" /></a>
     <h1>Añadir Consultas</h1>
     <p th:text="${empleado} ? ${empleado.nombre + ' ' + empleado.apellidos} : 'Empleado'"></p>
     <form th:action="@{/logout}" method="post">
     	<button type="submit" class="logout-btn">Cerrar Sesión</button>
 	</form>
+	</div>
 </nav>
 <div class="container">
 <section class="tabla-servicios">
     <h2>Servicios del Empleado</h2>
+    <div class="tabla-scroll">
     <table border="1">
         <thead>
             <tr>
@@ -53,6 +57,7 @@
             </tr>
         </tbody>
     </table>
+    </div>
 </section>
 
 <section class="formulario-servicio">
